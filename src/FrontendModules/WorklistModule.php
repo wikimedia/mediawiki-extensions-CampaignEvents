@@ -6,9 +6,9 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
@@ -34,6 +34,7 @@ readonly class WorklistModule {
 
 	public function __construct(
 		private WorklistPagesPagerFactory $worklistPagesPagerFactory,
+		private WorklistEventsStore $worklistEventsStore,
 		private WikiLookup $wikiLookup,
 		private LinkRenderer $linkRenderer,
 		private OutputPage $output,
@@ -49,22 +50,18 @@ readonly class WorklistModule {
 		// - the page history URL, for the history control (both empty for a foreign worklist page);
 		// - for a foreign worklist page, that wiki's rest.php URL so the client uses mw.ForeignRest
 		//   (null for a local page).
+		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $this->event );
 		$eventPage = $this->event->getPage();
 		$eventWikiId = $eventPage->getWikiId();
-		$eventPagePrefixedText = $eventPage->getPrefixedText()
-			. '/' . WorklistPageEventIngress::WORKLIST_SUBPAGE;
+		// This is constructed directly because foreign titles can't be formatted anyway.
+		$worklistPagePrefixedText = $eventPage->getPrefixedText() . '/' . WorklistEventsStore::WORKLIST_SUBPAGE;
 		$worklistPageUrl = '';
 		$worklistPageHistoryUrl = '';
 		$worklistWikiRestUrl = null;
 		if ( $eventWikiId === WikiAwareEntity::LOCAL || WikiMap::isCurrentWikiId( $eventWikiId ) ) {
-			$eventTitle = Title::newFromPageIdentity( $eventPage->getPageIdentity() );
-			$worklistTitle = $eventTitle->getSubpage(
-				WorklistPageEventIngress::WORKLIST_SUBPAGE
-			);
-			if ( $worklistTitle ) {
-				$worklistPageUrl = $worklistTitle->getLocalURL();
-				$worklistPageHistoryUrl = $worklistTitle->getLocalURL( [ 'action' => 'history' ] );
-			}
+			$worklistTitle = Title::newFromPageIdentity( $worklistPage );
+			$worklistPageUrl = $worklistTitle->getLocalURL();
+			$worklistPageHistoryUrl = $worklistTitle->getLocalURL( [ 'action' => 'history' ] );
 		} else {
 			$foreignWiki = WikiMap::getWiki( $eventWikiId );
 			if ( $foreignWiki ) {
@@ -81,7 +78,7 @@ readonly class WorklistModule {
 			// Read by the card view when it asks for the dates the articles were added, which
 			// are keyed by event rather than by worklist page.
 			'wgCampaignEventsWorklistEventId' => $this->event->getID(),
-			'wgCampaignEventsWorklistPagePrefixedText' => $eventPagePrefixedText,
+			'wgCampaignEventsWorklistPagePrefixedText' => $worklistPagePrefixedText,
 			// Empty for an event on another wiki, where the subpage cannot be resolved locally; the
 			// frontend hides the history control in that case.
 			'wgCampaignEventsWorklistPageUrl' => $worklistPageUrl,

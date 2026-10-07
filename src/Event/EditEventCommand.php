@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\DomainEvent\EventRegistrationCreatedEvent
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventStore;
 use MediaWiki\Extension\CampaignEvents\EventPage\EventPageCacheUpdater;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUserNotFoundException;
@@ -446,7 +445,7 @@ class EditEventCommand {
 		} elseif ( !$curWorklist && $hasContributionType ) {
 			// Contribution event (not necessarily a new one), do the association if the worklist page exists.
 			$worklistPagePrefixedText = $event->getPage()->getPrefixedText() . '/' .
-				WorklistPageEventIngress::WORKLIST_SUBPAGE;
+				WorklistEventsStore::WORKLIST_SUBPAGE;
 			$worklistForPage = $this->worklistSecondaryStore
 				->getWorklistIDFromPageText( WikiMap::getCurrentWikiId(), $worklistPagePrefixedText );
 			if ( $worklistForPage ) {

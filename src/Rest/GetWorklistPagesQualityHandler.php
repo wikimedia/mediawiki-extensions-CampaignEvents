@@ -9,8 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
-use MediaWiki\Page\PageStoreFactory;
-use MediaWiki\Page\ProperPageIdentity;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -37,8 +36,8 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 		private readonly Config $config,
 		private readonly IEventLookup $eventLookup,
 		private readonly IWorklistArticlesLookup $worklistArticlesLookup,
-		private readonly PageStoreFactory $pageStoreFactory,
 		private readonly ArticleQualityLookup $articleQualityLookup,
+		private readonly WorklistEventsStore $worklistEventsStore,
 	) {
 	}
 
@@ -87,8 +86,8 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 	 * @return list<string>
 	 */
 	private function filterToWorklist( ExistingEventRegistration $event, string $wiki, array $requested ): array {
-		$worklistPage = $this->getWorklistPage( $event );
-		if ( $worklistPage === null ) {
+		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $event );
+		if ( !$worklistPage->exists() ) {
 			return [];
 		}
 
@@ -103,15 +102,6 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 			$requested,
 			static fn ( string $title ): bool => isset( $inWorklist[$title] )
 		) );
-	}
-
-	/** The page holding the event's worklist, or null when it has not been created. */
-	private function getWorklistPage( ExistingEventRegistration $event ): ?ProperPageIdentity {
-		$eventPage = $event->getPage();
-		$worklistPageName = $eventPage->getDBkey() . '/Worklist';
-		return $this->pageStoreFactory
-			->getPageStore( $eventPage->getWikiId() )
-			->getPageByName( $eventPage->getNamespace(), $worklistPageName );
 	}
 
 	/**

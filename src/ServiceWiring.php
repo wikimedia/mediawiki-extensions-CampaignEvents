@@ -339,6 +339,7 @@ return [
 			$services->get( PageURLResolver::SERVICE_NAME ),
 			$services->get( EventContributionsPagerFactory::SERVICE_NAME ),
 			$services->get( WorklistPagesPagerFactory::SERVICE_NAME ),
+			$services->get( WorklistEventsStore::SERVICE_NAME ),
 		);
 	},
 	AddressStore::SERVICE_NAME => static function ( MediaWikiServices $services ): AddressStore {
@@ -600,6 +601,7 @@ return [
 	WorklistEventsStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistEventsStore {
 		return new WorklistEventsStore(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
+			$services->getPageStoreFactory(),
 		);
 	},
 	WorklistSecondaryStore::SERVICE_NAME => static function ( MediaWikiServices $services ): WorklistSecondaryStore {

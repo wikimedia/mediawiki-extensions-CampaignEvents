@@ -8,6 +8,7 @@ use Generator;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\SiteConfiguration;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -119,8 +120,8 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 			$wikiLookup,
 			$services->getTitleFactory(),
 			$services->getLinkBatchFactory(),
-			$services->getPageStoreFactory(),
-			$services->getLinkRendererFactory()
+			$services->getLinkRendererFactory(),
+			CampaignEventsServices::getWorklistEventsStore(),
 		);
 	}
 

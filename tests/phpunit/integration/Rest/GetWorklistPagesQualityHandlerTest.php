@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 
 use MediaWiki\Config\HashConfig;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
@@ -97,8 +98,8 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => $cardViewEnabled ] ),
 			$eventLookup,
 			$articlesLookup,
-			$this->getServiceContainer()->getPageStoreFactory(),
-			$qualityLookup
+			$qualityLookup,
+			CampaignEventsServices::getWorklistEventsStore(),
 		);
 	}
 
@@ -208,8 +209,8 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => true ] ),
 			$eventLookup,
 			$this->createMock( IWorklistArticlesLookup::class ),
-			$this->getServiceContainer()->getPageStoreFactory(),
-			$this->createMock( ArticleQualityLookup::class )
+			$this->createMock( ArticleQualityLookup::class ),
+			CampaignEventsServices::getWorklistEventsStore(),
 		);
 	}
 

@@ -5,17 +5,14 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkRendererFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\LinkBatchFactory;
-use MediaWiki\Page\PageStoreFactory;
-use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
@@ -48,8 +45,8 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		private readonly WikiLookup $wikiLookup,
 		private readonly TitleFactory $titleFactory,
 		private readonly LinkBatchFactory $linkBatchFactory,
-		private readonly PageStoreFactory $pageStoreFactory,
 		private readonly LinkRendererFactory $linkRendererFactory,
+		private readonly WorklistEventsStore $worklistEventsStore,
 	) {
 	}
 
@@ -64,15 +61,15 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
 
 		// A worklist whose page has not been created yet holds no articles.
-		$worklistPage = $this->getWorklistPage( $event );
-		$pages = $worklistPage === null ? [] : $this->worklistArticlesLookup->getWorklistArticles(
+		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $event );
+		$pages = $worklistPage->exists() ? $this->worklistArticlesLookup->getWorklistArticles(
 			$worklistPage,
 			// No limit or offset: the client needs every article, because it paginates them itself.
 			0,
 			0,
 			IWorklistArticlesLookup::DESCENDING,
 			IWorklistArticlesLookup::TIMESTAMP_SORT
-		);
+		) : [];
 		// Resolved once: a worklist can hold thousands of pages, and WikiMap works the current
 		// wiki's ID out from its database domain on every call.
 		$currentWiki = WikiMap::getCurrentWikiId();
@@ -123,22 +120,6 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			'wikis' => (object)$wikiInfo,
 			'pages' => $respVal,
 		] );
-	}
-
-	/**
-	 * The worklist page of an event, which holds the articles: a fixed subpage of the event page,
-	 * and so on the same wiki as it, which is not necessarily this one.
-	 *
-	 * Null when no such page exists, which is the case until the first article is added: the
-	 * worklist page is created by that edit.
-	 */
-	private function getWorklistPage( ExistingEventRegistration $event ): ?ProperPageIdentity {
-		$eventPage = $event->getPage();
-		return $this->pageStoreFactory->getPageStore( $eventPage->getWikiId() )
-			->getPageByName(
-				$eventPage->getNamespace(),
-				$eventPage->getDBkey() . '/' . WorklistPageEventIngress::WORKLIST_SUBPAGE
-			);
 	}
 
 	/**

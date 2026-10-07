@@ -26,6 +26,7 @@ use MediaWiki\Extension\CampaignEvents\Questions\ParticipantAnswersStore;
 use MediaWiki\Extension\CampaignEvents\Time\EventTimeFormatter;
 use MediaWiki\Extension\CampaignEvents\Topics\ITopicRegistry;
 use MediaWiki\Extension\CampaignEvents\TrackingTool\TrackingToolRegistry;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\OutputPage;
@@ -59,6 +60,7 @@ class FrontendModulesFactory {
 		private readonly PageURLResolver $pageURLResolver,
 		private readonly EventContributionsPagerFactory $eventContributionsPagerFactory,
 		private readonly WorklistPagesPagerFactory $worklistPagesPagerFactory,
+		private readonly WorklistEventsStore $worklistEventsStore,
 	) {
 	}
 
@@ -191,6 +193,7 @@ class FrontendModulesFactory {
 	): WorklistModule {
 		return new WorklistModule(
 			$this->worklistPagesPagerFactory,
+			$this->worklistEventsStore,
 			$this->wikiLookup,
 			$linkRenderer,
 			$output,

@@ -53,9 +53,6 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 	PageLatestRevisionChangedListener,
 	PageHistoryVisibilityChangedListener
 {
-	/** Leaf name of the subpage that holds an event's worklist (e.g. "Event:Foo/Worklist"). */
-	public const WORKLIST_SUBPAGE = 'Worklist';
-
 	public function __construct(
 		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly TitleFactory $titleFactory,
@@ -83,7 +80,7 @@ class WorklistPageEventIngress extends DomainEventIngress implements
 	 */
 	private function getEventForWorklistPage( PageIdentity $worklistPage ): ?ExistingEventRegistration {
 		$worklistTitle = $this->titleFactory->newFromPageReference( $worklistPage );
-		if ( $worklistTitle->getSubpageText() !== self::WORKLIST_SUBPAGE ) {
+		if ( $worklistTitle->getSubpageText() !== WorklistEventsStore::WORKLIST_SUBPAGE ) {
 			return null;
 		}
 		return $this->pageEventLookup->getRegistrationForLocalPage( $worklistTitle->getBaseTitle() );

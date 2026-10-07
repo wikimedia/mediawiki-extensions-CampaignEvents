@@ -5,6 +5,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Worklist;
 
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Page\PageStoreFactory;
 
 /**
  * Primary store for the event ↔ worklist association (`ce_worklist_events`).
@@ -15,12 +19,19 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
  * The table stores event ↔ worklist pairs; a unique index on (worklist, event) prevents duplicate
  * pairs, but does not enforce a single worklist per event. Only the operations the current
  * consumers need are exposed here.
+ *
+ * For now, events are associated by default with a worklist in the /Worklist subpage of the event page,
+ * so the database lookup is sometimes skipped in favour of direct title resolution.
  */
 class WorklistEventsStore {
 	public const SERVICE_NAME = 'CampaignEventsWorklistEventsStore';
 
+	/** Leaf name of the subpage that holds an event's worklist (e.g. "Event:Foo/Worklist"). */
+	public const WORKLIST_SUBPAGE = 'Worklist';
+
 	public function __construct(
 		private readonly CampaignsDatabaseHelper $dbHelper,
+		private readonly PageStoreFactory $pageStoreFactory,
 	) {
 	}
 
@@ -98,5 +109,24 @@ class WorklistEventsStore {
 			] )
 			->caller( __METHOD__ )
 			->execute();
+	}
+
+	/**
+	 * Returns the page where the worklist for the given event is stored. The page may not exist.
+	 * This method bypasses associations registered in the ce_worklist_events table.
+	 */
+	public function getWorklistPageForEvent( ExistingEventRegistration $event ): PageIdentity {
+		$eventPage = $event->getPage();
+		$worklistPageNamespace = $eventPage->getNamespace();
+		$worklistPageDBKey = $eventPage->getDBkey() . '/' . self::WORKLIST_SUBPAGE;
+		$worklistPageWiki = $eventPage->getWikiId();
+
+		$worklistPage = $this->pageStoreFactory->getPageStore( $worklistPageWiki )
+			->getPageByName( $worklistPageNamespace, $worklistPageDBKey );
+		if ( !$worklistPage ) {
+			$worklistPage = new PageIdentityValue( 0, $worklistPageNamespace, $worklistPageDBKey, $worklistPageWiki );
+		}
+
+		return $worklistPage;
 	}
 }

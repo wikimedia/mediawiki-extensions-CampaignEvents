@@ -6,6 +6,11 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Worklist;
 
 use Generator;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
+use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -162,5 +167,33 @@ class WorklistEventsStoreTest extends MediaWikiIntegrationTestCase {
 		yield 'The wiki is respected' => [ [ 100, 200 ], 'dewiki', 'Shared Page', [ 100 ] ];
 		yield 'No worklist contains the page' => [ [ 100, 200 ], 'enwiki', 'Missing Page', [] ];
 		yield 'Empty input short-circuits' => [ [], 'enwiki', 'Shared Page', [] ];
+	}
+
+	/** @dataProvider provideGetWorklistPageForEvent */
+	public function testGetWorklistPageForEvent( bool $exists ): void {
+		$store = CampaignEventsServices::getWorklistEventsStore();
+
+		$eventPageTitle = Title::makeTitle( NS_EVENT, 'Test worklist' );
+		$eventPage = $this->getExistingTestPage( $eventPageTitle );
+		$event = $this->createMock( ExistingEventRegistration::class );
+		$event->method( 'getPage' )->willReturn( new MWPageProxy( $eventPage, $eventPageTitle->getPrefixedText() ) );
+
+		$subpageTitle = $eventPageTitle->getSubpage( WorklistEventsStore::WORKLIST_SUBPAGE );
+		if ( $exists ) {
+			$this->getExistingTestPage( $subpageTitle );
+		} else {
+			$this->getNonExistingTestPage( $subpageTitle );
+		}
+
+		$actual = $store->getWorklistPageForEvent( $event );
+		$this->assertSame( $subpageTitle->getArticleID(), $actual->getId() );
+		$this->assertSame( $subpageTitle->getNamespace(), $actual->getNamespace() );
+		$this->assertSame( $subpageTitle->getDBkey(), $actual->getDBkey() );
+		$this->assertSame( PageIdentityValue::LOCAL, $actual->getWikiId() );
+	}
+
+	public static function provideGetWorklistPageForEvent(): Generator {
+		yield 'Exists' => [ true ];
+		yield 'Does not exist' => [ false ];
 	}
 }

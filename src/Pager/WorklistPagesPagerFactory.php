@@ -7,8 +7,8 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\MediaWikiEventIngress\WorklistPageEventIngress;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
@@ -41,7 +41,7 @@ class WorklistPagesPagerFactory {
 		$worklistPage = null;
 		if ( $event->isOnLocalWiki() ) {
 			$worklistPage = $this->titleFactory->newFromText(
-				$event->getPage()->getPrefixedText() . '/' . WorklistPageEventIngress::WORKLIST_SUBPAGE
+				$event->getPage()->getPrefixedText() . '/' . WorklistEventsStore::WORKLIST_SUBPAGE
 			);
 		}
 
