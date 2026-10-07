@@ -54,6 +54,8 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	private static function revisionsResponse( array $titleToRevID ): string {
 		$pages = [];
 		foreach ( $titleToRevID as $title => $revID ) {
+			// The API always sends a title as a string, even one PHP made an int as an array key.
+			$title = (string)$title;
 			$pages[] = $revID === null
 				? [ 'title' => $title, 'missing' => true ]
 				: [ 'title' => $title, 'revisions' => [ [ 'revid' => $revID ] ] ];
@@ -592,6 +594,17 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			[ 'Beaver_dam' ],
 			array_keys( $lookup->getQualityForArticles( self::WIKI, [ 'Beaver_dam' ] ) )
 		);
+	}
+
+	public function testGetQualityForArticles__numericTitle(): void {
+		// PHP turns a key such as "1984" into an int, which must still reach the model as a title.
+		$lookup = $this->newLookup(
+			self::revisionsResponse( [ '1984' => 17 ] ),
+			[ '1984' => self::modelResponse( 0.9, 'GA', [] ) ]
+		);
+
+		$quality = $lookup->getQualityForArticles( self::WIKI, [ '1984' ] );
+		$this->assertSame( 0.9, $quality['1984']['score'] );
 	}
 
 	public function testGetQualityForArticles__wikiWithNoKnownLanguage(): void {

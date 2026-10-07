@@ -304,6 +304,8 @@ class ArticleQualityLookup {
 		$scored = [];
 		$versions = [];
 		foreach ( $client->runMulti( $requests, [], __METHOD__ ) as $title => $request ) {
+			// PHP turns a numeric key into an int, so an article called "1984" comes back as 1984.
+			$title = (string)$title;
 			$revisionID = $revisionIDs[$title];
 			// runMulti hands each request back with its answer under 'response'.
 			$parsed = $this->parseResponse( $request['response'] ?? [], $wiki, $title );
