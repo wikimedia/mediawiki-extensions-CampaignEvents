@@ -59,4 +59,13 @@ interface IWorklistPagesLookup {
 		bool $direction,
 		bool $isBackwards,
 	): array;
+
+	/**
+	 * Returns which of the given pages, all on one wiki, are in the given worklist.
+	 *
+	 * @param string $wiki Wiki ID the pages belong to
+	 * @param list<string> $prefixedTexts
+	 * @return list<string> Those of $prefixedTexts that are in the worklist, in no particular order
+	 */
+	public function filterWorklistPages( string $wiki, array $prefixedTexts ): array;
 }

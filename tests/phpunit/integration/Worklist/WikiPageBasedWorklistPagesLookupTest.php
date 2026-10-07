@@ -2627,4 +2627,43 @@ class WikiPageBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 		// is also considered invalid by this lookup.
 		yield 'Unexpected empty fields' => [ '|', '|' ];
 	}
+
+	public function testFilterWorklistPages(): void {
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->expects( $this->once() )
+			->method( 'getRawWorklistContentCached' )
+			->willReturn( [ 'awiki' => [ 'Beavers' ] ] );
+		$this->setService( WorklistArticleHelper::SERVICE_NAME, $worklistHelper );
+
+		$this->assertSame(
+			[ 'Beavers' ],
+			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers', 'Otters' ] )
+		);
+	}
+
+	public function testFilterWorklistPages__pageDoesNotExist(): void {
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->expects( $this->once() )
+			->method( 'getRawWorklistContentCached' )
+			->willReturn( [] );
+		$this->setService( WorklistArticleHelper::SERVICE_NAME, $worklistHelper );
+
+		$this->assertSame(
+			[],
+			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers' ] )
+		);
+	}
+
+	public function testFilterWorklistPages__pageIsNotAWorklist(): void {
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->expects( $this->once() )
+			->method( 'getRawWorklistContentCached' )
+			->willReturn( null );
+		$this->setService( WorklistArticleHelper::SERVICE_NAME, $worklistHelper );
+
+		$this->assertSame(
+			[],
+			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers' ] )
+		);
+	}
 }

@@ -9,6 +9,8 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
 use MediaWiki\Extension\CampaignEvents\Worklist\DatabaseBasedWorklistPagesLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistPagesLookup as IWL;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageIdentityValue;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
@@ -31,6 +33,8 @@ class DatabaseBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 		$services = $this->getServiceContainer();
 		return new DatabaseBasedWorklistPagesLookup(
 			$services->get( WorklistPagesPagerFactory::SERVICE_NAME ),
+			$services->get( WorklistSecondaryStore::SERVICE_NAME ),
+			$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 			$this->createMock( LinkRenderer::class ),
 			new PageIdentityValue( 123, NS_MAIN, 'Test_worklist', WikiAwareEntity::LOCAL ),
 		);
@@ -1579,5 +1583,42 @@ class DatabaseBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 				IWL::PAGINATION_LAST => null,
 			],
 		];
+	}
+
+	public function testFilterWorklistPages(): void {
+		$worklistID = 7;
+
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->expects( $this->once() )
+			->method( 'getWorklistIDFromPage' )
+			->willReturn( $worklistID );
+		$this->setService( WorklistSecondaryStore::SERVICE_NAME, $worklistStore );
+
+		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
+		$pagesStore->expects( $this->once() )
+			->method( 'filterPagesInWorklist' )
+			->with( $worklistID, 'awiki', [ 'Beavers', 'Otters' ] )
+			->willReturn( [ 'Beavers' ] );
+		$this->setService( WorklistPagesSecondaryStore::SERVICE_NAME, $pagesStore );
+
+		$this->assertSame(
+			[ 'Beavers' ],
+			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers', 'Otters' ] )
+		);
+	}
+
+	public function testFilterWorklistPages__noWorklistForPage(): void {
+		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistStore->method( 'getWorklistIDFromPage' )->willReturn( null );
+		$this->setService( WorklistSecondaryStore::SERVICE_NAME, $worklistStore );
+
+		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
+		$pagesStore->expects( $this->never() )->method( 'filterPagesInWorklist' );
+		$this->setService( WorklistPagesSecondaryStore::SERVICE_NAME, $pagesStore );
+
+		$this->assertSame(
+			[],
+			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers' ] )
+		);
 	}
 }

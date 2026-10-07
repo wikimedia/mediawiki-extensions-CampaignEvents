@@ -44,6 +44,8 @@ class WorklistPagesLookupFactory {
 		if ( $dbIsUpToDate ) {
 			return new DatabaseBasedWorklistPagesLookup(
 				$this->worklistPagesPagerFactory,
+				$this->worklistSecondaryStore,
+				$this->worklistPagesSecondaryStore,
 				$this->linkRenderer,
 				$worklistPage,
 			);

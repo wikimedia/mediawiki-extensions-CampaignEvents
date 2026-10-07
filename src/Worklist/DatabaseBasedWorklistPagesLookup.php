@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Worklist;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Request\FauxRequest;
@@ -38,6 +39,8 @@ class DatabaseBasedWorklistPagesLookup implements IWorklistPagesLookup {
 
 	public function __construct(
 		private readonly WorklistPagesPagerFactory $worklistPagesPagerFactory,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
+		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 		private readonly LinkRenderer $linkRenderer,
 		private readonly PageIdentity $worklistPage,
 	) {
@@ -104,5 +107,20 @@ class DatabaseBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		$mappedOffsets[self::PAGINATION_CUR] = $transformPagerOffset( $pager->getOffsetQuery() );
 
 		return [ 'result' => $res, 'paginationOffsets' => $mappedOffsets ];
+	}
+
+	/** @inheritDoc */
+	public function filterWorklistPages( string $wiki, array $prefixedTexts ): array {
+		$wikiID = $this->worklistPage->getWikiId();
+		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage(
+			Utils::getWikiIDString( $wikiID ),
+			$this->worklistPage->getId( $wikiID )
+		);
+
+		if ( $worklistID === null ) {
+			return [];
+		}
+
+		return $this->worklistPagesSecondaryStore->filterPagesInWorklist( $worklistID, $wiki, $prefixedTexts );
 	}
 }

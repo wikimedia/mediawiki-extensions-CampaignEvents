@@ -610,4 +610,13 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		}
 		return $item;
 	}
+
+	public function filterWorklistPages( string $wiki, array $prefixedTexts ): array {
+		$rawContent = $this->worklistArticleHelper->getRawWorklistContentCached( $this->worklistPage );
+		if ( !$rawContent ) {
+			return [];
+		}
+
+		return array_values( array_intersect( $rawContent[$wiki] ?? [], $prefixedTexts ) );
+	}
 }
