@@ -6,13 +6,14 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPager;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Request\FauxRequest;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\TestingAccessWrapper;
 
@@ -22,22 +23,11 @@ use Wikimedia\TestingAccessWrapper;
  */
 class WorklistPagesPagerTest extends MediaWikiIntegrationTestCase {
 
-	private const EVENT_ID = 1;
 	private const WORKLIST_ID = 1;
 
 	public function addDBData(): void {
 		$db = $this->getDb();
 		$startTS = 1700000000;
-
-		// Associate the worklist with the event; the pager filters pages through this join.
-		$db->newInsertQueryBuilder()
-			->insertInto( 'ce_worklist_events' )
-			->row( [
-				'cewe_cew_id' => self::WORKLIST_ID,
-				'cewe_event_id' => self::EVENT_ID,
-			] )
-			->caller( __METHOD__ )
-			->execute();
 
 		$db->newInsertQueryBuilder()
 			->insertInto( 'ce_worklist_pages' )
@@ -69,34 +59,33 @@ class WorklistPagesPagerTest extends MediaWikiIntegrationTestCase {
 	private function newPager( bool $namedUser, ?PageIdentity $worklistPage = null ): WorklistPagesPager {
 		$services = $this->getServiceContainer();
 
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getID' )->willReturn( self::EVENT_ID );
-		$event->method( 'isOnLocalWiki' )->willReturn( true );
-
 		$context = new RequestContext();
 		$context->setRequest( new FauxRequest( [] ) );
 		$context->setUser(
 			$namedUser ? $this->getTestUser()->getUser() : $services->getUserFactory()->newAnonymous()
 		);
 
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->method( 'getWorklistIDFromPage' )->willReturn( self::WORKLIST_ID );
+
 		return new WorklistPagesPager(
 			$services->get( CampaignsDatabaseHelper::SERVICE_NAME ),
 			$services->getLinkBatchFactory(),
 			$services->getTitleFactory(),
 			$this->createMock( WikiLookup::class ),
+			$worklistSecondaryStore,
 			$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 			$context,
 			$services->getLinkRenderer(),
-			$event,
-			$worklistPage,
+			$worklistPage ?? $this->getLocalWorklistPage(),
 		);
 	}
 
 	private function getLocalWorklistPage(): PageIdentity {
 		return PageIdentityValue::localIdentity(
 			1,
-			1,
-			"worklist test/Worklist"
+			NS_EVENT,
+			"Worklist_test/Worklist"
 		);
 	}
 
@@ -117,6 +106,21 @@ class WorklistPagesPagerTest extends MediaWikiIntegrationTestCase {
 			);
 		}
 		$this->assertSame( 2, $rowCount, 'Both worklist pages linked to the event should be listed' );
+	}
+
+	public function testIneligibleNamedUserSeesActionsColumnForForeignWorklist(): void {
+		$this->setGroupPermissions( [ '*' => [ 'edit' => false ], 'user' => [ 'edit' => false ] ] );
+		$foreignPage = new PageIdentityValue(
+			123,
+			NS_EVENT,
+			'Test event/Worklist',
+			WikiMap::getCurrentWikiId() . '-other'
+		);
+		$pager = $this->newPager( true, $foreignPage );
+		$pager->doQuery();
+		$wrapper = TestingAccessWrapper::newFromObject( $pager );
+
+		$this->assertArrayHasKey( 'actions', $wrapper->getFieldNames() );
 	}
 
 	public function testIneligibleUserSeesNoActionsColumn(): void {

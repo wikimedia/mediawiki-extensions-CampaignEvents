@@ -13,6 +13,7 @@ use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\Title;
 use MediaWiki\WikiMap\WikiMap;
 use OOUI\HtmlSnippet;
@@ -89,7 +90,7 @@ readonly class WorklistModule {
 		$container = new Tag( 'div' );
 		if ( $this->getRequestedView() === self::VIEW_TABLE ) {
 			$container->addClasses( [ 'ext-campaignevents-worklist-table' ] );
-			$container->appendContent( new HtmlSnippet( $this->renderTableView() ) );
+			$container->appendContent( new HtmlSnippet( $this->renderTableView( $worklistPage ) ) );
 		} else {
 			$container->addClasses( [ 'ext-campaignevents-worklist' ] );
 			$container->appendContent( new HtmlSnippet( $this->renderCardView() ) );
@@ -167,11 +168,11 @@ readonly class WorklistModule {
 		);
 	}
 
-	private function renderTableView(): string {
+	private function renderTableView( PageIdentity $worklistPage ): string {
 		$pager = $this->worklistPagesPagerFactory->newPager(
 			$this->output->getContext(),
 			$this->linkRenderer,
-			$this->event
+			$worklistPage,
 		);
 		$pager->setExtraQuery( $this->getPagerExtraQuery() );
 		return $pager->getFullOutput()->getContentHolderText();

@@ -49,13 +49,35 @@ class WorklistPagesSecondaryStore {
 	}
 
 	/**
+	 * Returns query info for listing pages in a given worklist, intended for use in pagers.
+	 *
+	 * @return array{tables: array, fields: array, conds: array}
+	 */
+	public function getQueryInfo( int $worklistID ): array {
+		return [
+			'tables' => [
+				'ce_worklist_pages',
+			],
+			'fields' => [
+				'cewp_id',
+				'cewp_page_prefixedtext',
+				'cewp_wiki',
+				'cewp_timestamp',
+			],
+			'conds' => [
+				'cewp_cew_id' => $worklistID,
+			],
+		];
+	}
+
+	/**
 	 * Returns query info for listing pages in the worklist associated with a given event, intended
 	 * for use in pagers. Pages belong to a worklist (cewp_cew_id), linked to the event via
 	 * ce_worklist_events, so the event filter is applied through that join.
 	 *
 	 * @return array{tables: array, fields: array, conds: array, join_conds: array}
 	 */
-	public function getQueryInfo( int $eventId ): array {
+	public function getQueryInfoForEvent( int $eventId ): array {
 		return [
 			'tables' => [
 				'cewp' => 'ce_worklist_pages',
@@ -284,7 +306,7 @@ class WorklistPagesSecondaryStore {
 	 */
 	public function getPagesMetadataForEvent( int $eventID ): array {
 		$rows = $this->dbHelper->getReplicaConnection()->newSelectQueryBuilder()
-			->queryInfo( $this->getQueryInfo( $eventID ) )
+			->queryInfo( $this->getQueryInfoForEvent( $eventID ) )
 			->orderBy( [ 'cewp_timestamp', 'cewp_id' ], SelectQueryBuilder::SORT_DESC )
 			->limit( self::MAX_PAGES_PER_WORKLIST )
 			->caller( __METHOD__ )

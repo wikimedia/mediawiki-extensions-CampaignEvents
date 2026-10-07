@@ -6,12 +6,12 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\TitleFactory;
 
 /**
@@ -25,6 +25,7 @@ class WorklistPagesPagerFactory {
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly WikiLookup $wikiLookup,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 	) {
 	}
@@ -32,28 +33,17 @@ class WorklistPagesPagerFactory {
 	public function newPager(
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
-		ExistingEventRegistration $event,
+		PageIdentity $worklistPage,
 	): WorklistPagesPager {
-		// Resolve the worklist page for this event when it lives on the local wiki, so the pager can
-		// gate the remove action through MediaWiki's permission system (probablyCan). For a foreign
-		// event the page can't be resolved to a local title, so null is passed and only lightweight
-		// checks apply (the full checks happen at edit time).
-		$worklistPage = null;
-		if ( $event->isOnLocalWiki() ) {
-			$worklistPage = $this->titleFactory->newFromText(
-				$event->getPage()->getPrefixedText() . '/' . WorklistEventsStore::WORKLIST_SUBPAGE
-			);
-		}
-
 		return new WorklistPagesPager(
 			$this->databaseHelper,
 			$this->linkBatchFactory,
 			$this->titleFactory,
 			$this->wikiLookup,
+			$this->worklistSecondaryStore,
 			$this->worklistPagesSecondaryStore,
 			$context,
 			$linkRenderer,
-			$event,
 			$worklistPage,
 		);
 	}

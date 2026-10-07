@@ -6,9 +6,10 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\LinkBatchFactory;
@@ -48,11 +49,11 @@ class WorklistPagesPager extends CodexTablePager {
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly WikiLookup $wikiLookup,
+		private readonly WorklistSecondaryStore $worklistSecondaryStore,
 		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
-		private readonly ExistingEventRegistration $event,
-		private readonly ?PageIdentity $worklistPage = null,
+		private readonly PageIdentity $worklistPage,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getReplicaConnection();
@@ -78,7 +79,13 @@ class WorklistPagesPager extends CodexTablePager {
 	 * @return array<string,mixed>
 	 */
 	public function getQueryInfo(): array {
-		return $this->worklistPagesSecondaryStore->getQueryInfo( $this->event->getID() );
+		$wiki = Utils::getWikiIDString( $this->worklistPage->getWikiId() );
+		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage(
+			$wiki,
+			$this->worklistPage->getId( $this->worklistPage->getWikiId() )
+		);
+		// Use a nonexistent ID to force empty state
+		return $this->worklistPagesSecondaryStore->getQueryInfo( $worklistID ?? -1 );
 	}
 
 	/** @inheritDoc */
@@ -128,16 +135,17 @@ class WorklistPagesPager extends CodexTablePager {
 	 * Whether the performer may remove worklist articles. The rule is: a named (logged-in) user who
 	 * can edit the worklist page may remove articles. When the worklist page is local we defer to
 	 * MediaWiki's permission system via probablyCan( 'edit', ... ), which also accounts for
-	 * page-specific (non-sitewide) blocks. When the worklist page is foreign ($worklistPage is null,
-	 * as it can't be resolved to a local title), permissions can't be evaluated here, so isNamed() is
+	 * page-specific (non-sitewide) blocks. Else, permissions can't be evaluated here, so isNamed() is
 	 * used as a quick proxy and the full checks run at edit time (via ForeignApi). This only controls
 	 * button visibility.
 	 */
 	private function canRemoveArticles(): bool {
 		$performer = $this->getAuthority();
-		$this->canRemoveArticles ??= $performer->isNamed()
-			&& ( $this->worklistPage === null
-				|| $performer->probablyCan( 'edit', $this->worklistPage ) );
+		if ( $this->canRemoveArticles === null ) {
+			$worklistIsLocal = WikiMap::isCurrentWikiId( Utils::getWikiIDString( $this->worklistPage->getWikiId() ) );
+			$this->canRemoveArticles = $performer->isNamed() &&
+				( !$worklistIsLocal || $performer->probablyCan( 'edit', $this->worklistPage ) );
+		}
 		return $this->canRemoveArticles;
 	}
 
