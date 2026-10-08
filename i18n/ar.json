@@ -716,5 +716,6 @@
 	"campaignevents-worklist-content-title-with-interwiki": "يجب ألا تتضمن عناوين الصفحات بادئة خاصة بالمواقع الداخلية. بدلاً من ذلك، قم بتجميع الصفحات حسب الموقع. العنوان المخالف: $1",
 	"campaignevents-worklist-content-title-with-fragment": "يجب ألا تتضمن عناوين الصفحات روابط لأقسام محددة. العنوان المخالف: $1",
 	"campaignevents-worklist-content-title-non-canonical": "تم العثور على عنوان ليس بالشكل المتعارف عليه: تم الحصول على \"$1\"، وكان المتوقع \"$2\".",
+	"namespaceinfo-description-ns1728": "مساحة أسماء لصفحات الأحداث، التي تصف أحداث الحملة ويمكن تفعيل خاصية تسجيل الأحداث فيها [[mw:Special:MyLanguage/Help:Extension:CampaignEvents|event registration]]",
 	"namespaceinfo-description-ns1729": "صفحات نقاش صفحات الأحداث"
 }
