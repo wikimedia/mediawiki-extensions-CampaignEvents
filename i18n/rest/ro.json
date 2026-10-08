@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Alesaru",
-			"Andrei Stroe"
+			"Andrei Stroe",
+			"Strainu"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Nu există niciun eveniment cu acest ID.",
@@ -21,5 +22,6 @@
 	"campaignevents-rest-register-invalid-answer": "Răspuns invalid la întrebarea $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Vă rugăm să vă completați înscrierea la eveniment pe $1, wikiul unde a fost creat evenimentul.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Vă rugăm să vă ștergeți înscrierea la eveniment pe $1, wikiul unde a fost creat evenimentul.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Vă rugăm să redactați emailuri adresate participanților pe $1, wikiul unde a fost creat evenimentul."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Vă rugăm să redactați emailuri adresate participanților pe $1, wikiul unde a fost creat evenimentul.",
+	"campaignevents-rest-contribution-not-found": "Nu există nicio contribuție cu acest ID."
 }
