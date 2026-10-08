@@ -59,8 +59,8 @@
 				:key="article.wiki + '|' + article.title"
 				:article="article"
 				:can-remove="canRemoveArticles"
-				:added="addedFor( article ).added"
-				:added-at="addedFor( article ).addedAt"
+				:added="article.timestampFormatted"
+				:added-at="article.timestamp"
 				:views="viewsFor( article )"
 				:image="imageFor( article )"
 				:description="descriptionFor( article )"
@@ -249,8 +249,6 @@ module.exports = exports = defineComponent( {
 		// Per-article data held against `wiki|title`. A ref rather than a plain object so that
 		// filling one in after its card has rendered redraws that card.
 		const pageData = ref( new Map() );
-		// Keyed by wiki and title, the pair that identifies an article across wikis.
-		const metadata = ref( {} );
 		const currentPage = ref( 1 );
 		const isLoading = ref( true );
 		const errorMessage = ref( '' );
@@ -314,43 +312,6 @@ module.exports = exports = defineComponent( {
 		) );
 
 		/**
-		 * Fill in when the articles on the page being shown were added. The dates come from the
-		 * secondary store rather than the worklist page, so they are a second request, and are
-		 * kept once fetched: the endpoint answers for the whole worklist, so one call covers
-		 * every page.
-		 */
-		function loadMetadata() {
-			// Ask only when some article on the list has no date yet: paging and searching work on
-			// a list already fetched, but adding an article brings in one the store has not been
-			// asked about. An article the store has yet to catch up with keeps us asking, which is
-			// how its date arrives without a reload.
-			const missing = articles.value.some(
-				( article ) => !( article.wiki + '|' + article.title in metadata.value )
-			);
-			if ( !missing ) {
-				return;
-			}
-			worklistPages.fetchMetadata().then( ( fetched ) => {
-				const byArticle = {};
-				fetched.forEach( ( entry ) => {
-					byArticle[ entry.wiki + '|' + entry.title ] = entry;
-				} );
-				metadata.value = Object.assign( {}, metadata.value, byArticle );
-			}, () => {} );
-		}
-
-		/**
-		 * When an article was added, or an empty entry for one the secondary store has not
-		 * caught up with yet.
-		 *
-		 * @param {Object} article
-		 * @return {{added: ?string, addedAt: ?string}}
-		 */
-		function addedFor( article ) {
-			return metadata.value[ article.wiki + '|' + article.title ] || {};
-		}
-
-		/**
 		 * Read the whole worklist, keeping the reader on the page they are on where that page
 		 * still exists. Searching and paging both work on what this returns.
 		 */
@@ -367,7 +328,6 @@ module.exports = exports = defineComponent( {
 				// rather than showing a page that is no longer there.
 				currentPage.value = Math.min( currentPage.value, totalPages.value );
 				isLoading.value = false;
-				loadMetadata();
 			}, ( err, errObj ) => {
 				if ( requestId !== latestRequestId ) {
 					return;
@@ -539,7 +499,6 @@ module.exports = exports = defineComponent( {
 
 		return {
 			visibleArticles,
-			addedFor,
 			viewsFor,
 			imageFor,
 			descriptionFor,

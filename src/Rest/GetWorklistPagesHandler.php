@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistPagesLookup;
@@ -22,8 +23,10 @@ use MediaWiki\Rest\SimpleHandler;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\ParamValidator\ParamValidator;
+use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * GET endpoint listing the articles in an event's worklist.
@@ -86,10 +89,15 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		$linkRenderer = $this->linkRendererFactory->create();
 		$linkRenderer->setExpandURLs( PROTO_RELATIVE );
 
+		$user = $this->getAuthority()->getUser();
+		$language = RequestContext::getMain()->getLanguage();
+
 		$respVal = [];
 		foreach ( $pages as $page ) {
 			$wiki = $page['wiki'];
 			$prefixedText = $page['prefixedtext'];
+			// FIXME: decide on proper placeholders when timestamp isn't available
+			$timestamp = $page['timestamp'] ?? MWTimestamp::now();
 			$respVal[] = [
 				'wiki' => $wiki,
 				// Relative to the wiki answering this request, as the link attributes are. The
@@ -97,6 +105,8 @@ class GetWorklistPagesHandler extends SimpleHandler {
 				// come from the shared tables and do not depend on who answers.
 				'is_local' => $wiki === $currentWiki,
 				'title' => $prefixedText,
+				'timestamp' => MWTimestamp::convert( TS::ISO_8601, $timestamp ),
+				'timestamp_formatted' => $language->userTimeAndDate( $timestamp, $user )
 			] + $this->linkAttributes(
 				$linkRenderer,
 				$wiki === $currentWiki,

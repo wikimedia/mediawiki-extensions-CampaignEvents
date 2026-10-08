@@ -2,7 +2,6 @@
 
 const worklistPages = require( '../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
 
-const EVENT_ID = 71;
 const WORKLIST_PAGE_INFO = {
 	wiki: 'somewiki',
 	namespace: 1728,
@@ -22,6 +21,8 @@ const ONE_ARTICLE_RESPONSE = {
 		wiki: 'awiki',
 		is_local: false,
 		title: 'Beavers',
+		timestamp: '2026-09-03T14:32:00Z',
+		timestamp_formatted: '14:32, 3 September 2026',
 		url: 'https://a.example.org/wiki/Beavers',
 		classes: 'external'
 	} ]
@@ -35,7 +36,6 @@ const ONE_ARTICLE_RESPONSE = {
 const mockRest = ( config ) => {
 	const vars = Object.assign(
 		{
-			wgCampaignEventsWorklistEventId: EVENT_ID,
 			wgCampaignEventsWorklistPageInfo: WORKLIST_PAGE_INFO
 		},
 		config || {}
@@ -118,32 +118,13 @@ describe( 'worklistPages.fetchPages', () => {
 				wikiName: 'A Wiki',
 				apiUrl: 'https://a.example.org/w/api.php',
 				isLocal: false,
+				timestamp: '2026-09-03T14:32:00Z',
+				timestampFormatted: '14:32, 3 September 2026',
 				title: 'Beavers',
 				url: 'https://a.example.org/wiki/Beavers',
 				classes: 'external'
 			} ]
 		} );
-	} );
-
-	it( 'normalises the metadata response for the components', async () => {
-		const get = mockRest();
-		/* eslint-disable camelcase */
-		get.mockResolvedValue( {
-			pages: [ {
-				wiki: 'awiki',
-				title: 'Beavers',
-				added: '14:32, 3 September 2026',
-				added_at: '2026-09-03T14:32:00Z'
-			} ]
-		} );
-		/* eslint-enable camelcase */
-
-		expect( await worklistPages.fetchMetadata() ).toEqual( [ {
-			wiki: 'awiki',
-			title: 'Beavers',
-			added: '14:32, 3 September 2026',
-			addedAt: '2026-09-03T14:32:00Z'
-		} ] );
 	} );
 
 	it( 'reads from this wiki even when the worklist page is on another', async () => {

@@ -52,31 +52,11 @@
 				isLocal: page.is_local,
 				title: page.title,
 				url: page.url,
-				classes: page.classes
+				classes: page.classes,
+				timestamp: page.timestamp,
+				timestampFormatted: page.timestamp_formatted
 			} ) )
 		} ) );
-	}
-
-	/**
-	 * Read when the articles in the worklist were added.
-	 *
-	 * A second request, made once the articles are on screen: the dates live only in the shared
-	 * CampaignEvents tables, and the list is what the reader is waiting for.
-	 *
-	 * @return {jQuery.Promise} Resolves with the articles, each with `wiki`, `title`, `added` (a
-	 *   date formatted for the reader) and `addedAt` (an ISO 8601 timestamp)
-	 */
-	function fetchMetadata() {
-		const eventId = mw.config.get( 'wgCampaignEventsWorklistEventId' );
-		return new mw.Rest().get(
-			'/campaignevents/v0/event_registration/' + encodeURIComponent( eventId ) +
-				'/worklist_pages/metadata'
-		).then( ( response ) => response.pages.map( ( page ) => ( {
-			wiki: page.wiki,
-			title: page.title,
-			added: page.added,
-			addedAt: page.added_at
-		} ) ) );
 	}
 
 	/**
@@ -135,7 +115,6 @@
 
 	module.exports = {
 		fetchPages,
-		fetchMetadata,
 		removeArticle,
 		errorText
 	};

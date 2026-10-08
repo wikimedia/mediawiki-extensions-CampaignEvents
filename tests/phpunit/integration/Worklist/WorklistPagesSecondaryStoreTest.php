@@ -7,10 +7,8 @@ use Generator;
 use InvalidArgumentException;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
-use MediaWiki\Utils\MWTimestamp;
 use MediaWikiIntegrationTestCase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
-use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
  * @covers \MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore
@@ -18,8 +16,6 @@ use Wikimedia\Timestamp\TimestampFormat as TS;
  */
 class WorklistPagesSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 	private const TEST_TIME = '20270707071717';
-	private const EVENT_WITH_PAGES = 1;
-	private const OTHER_EVENT = 2;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -30,17 +26,6 @@ class WorklistPagesSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 		$this->getDB()->newInsertQueryBuilder()
 			->insertInto( 'ce_worklist_pages' )
 			->rows( $this->transformTimestampsForDB( self::getInitialRowsWithPlainTimestamps() ) )
-			->caller( __METHOD__ )
-			->execute();
-
-		// getPagesMetadataForEvent() reaches the pages through this association, so worklist 1001
-		// belongs to event 1 and worklist 1002 to event 2.
-		$this->getDB()->newInsertQueryBuilder()
-			->insertInto( 'ce_worklist_events' )
-			->rows( [
-				[ 'cewe_cew_id' => 1001, 'cewe_event_id' => self::EVENT_WITH_PAGES ],
-				[ 'cewe_cew_id' => 1002, 'cewe_event_id' => self::OTHER_EVENT ],
-			] )
 			->caller( __METHOD__ )
 			->execute();
 	}
@@ -284,40 +269,6 @@ class WorklistPagesSecondaryStoreTest extends MediaWikiIntegrationTestCase {
 			->fetchField();
 
 		$this->assertSame( 0, $remainingRowNum );
-	}
-
-	public function testGetPagesMetadataForEvent(): void {
-		$store = CampaignEventsServices::getWorklistPagesSecondaryStore();
-
-		$metadata = $store->getPagesMetadataForEvent( self::EVENT_WITH_PAGES );
-
-		$this->assertSame(
-			[
-				[ 'wiki' => 'cwiki', 'prefixedtext' => 'Page 11', 'timestamp' => '20260101120000' ],
-				[ 'wiki' => 'bwiki', 'prefixedtext' => 'Page 1', 'timestamp' => '20260101120000' ],
-				[ 'wiki' => 'awiki', 'prefixedtext' => 'Page 2', 'timestamp' => '20260101120000' ],
-				[ 'wiki' => 'awiki', 'prefixedtext' => 'Page 1', 'timestamp' => '20260101120000' ],
-			],
-			array_map(
-				static fn ( array $row ): array => [
-					'wiki' => $row['wiki'],
-					'prefixedtext' => $row['prefixedtext'],
-					'timestamp' => MWTimestamp::convert( TS::MW, $row['timestamp'] ),
-				],
-				$metadata
-			),
-			'Only the pages of the worklist associated with the event, newest first, '
-				. 'each with the timestamp the page was added'
-		);
-	}
-
-	public function testGetPagesMetadataForEvent__noWorklist(): void {
-		$nonexistentEventID = 99999999;
-		$this->assertSame(
-			[],
-			CampaignEventsServices::getWorklistPagesSecondaryStore()
-				->getPagesMetadataForEvent( $nonexistentEventID )
-		);
 	}
 
 	/**

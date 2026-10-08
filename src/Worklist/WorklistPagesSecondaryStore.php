@@ -9,7 +9,6 @@ use MediaWiki\Extension\CampaignEvents\Database\CampaignsDatabaseHelper;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
-use Wikimedia\Rdbms\SelectQueryBuilder;
 
 /**
  * Secondary store for worklist pages, allowing easier global access, pagination, reports, etc. This is meant to mirror
@@ -22,12 +21,6 @@ class WorklistPagesSecondaryStore {
 	public const SERVICE_NAME = 'CampaignEventsWorklistPagesSecondaryStore';
 
 	private const BATCH_SIZE = 500;
-
-	/**
-	 * Upper bound on the rows a single read returns, so that no request can ever read an unbounded
-	 * number of them. Worklists are curated by hand and this is far above any realistic size.
-	 */
-	public const MAX_PAGES_PER_WORKLIST = 5000;
 
 	public function __construct(
 		private readonly CampaignsDatabaseHelper $dbHelper,
@@ -53,34 +46,6 @@ class WorklistPagesSecondaryStore {
 			],
 			'conds' => [
 				'cewp_cew_id' => $worklistID,
-			],
-		];
-	}
-
-	/**
-	 * Returns query info for listing pages in the worklist associated with a given event, intended
-	 * for use in pagers. Pages belong to a worklist (cewp_cew_id), linked to the event via
-	 * ce_worklist_events, so the event filter is applied through that join.
-	 *
-	 * @return array{tables: array, fields: array, conds: array, join_conds: array}
-	 */
-	public function getQueryInfoForEvent( int $eventId ): array {
-		return [
-			'tables' => [
-				'cewp' => 'ce_worklist_pages',
-				'cewe' => 'ce_worklist_events',
-			],
-			'fields' => [
-				'cewp_id',
-				'cewp_page_prefixedtext',
-				'cewp_wiki',
-				'cewp_timestamp',
-			],
-			'conds' => [
-				'cewe.cewe_event_id' => $eventId,
-			],
-			'join_conds' => [
-				'cewe' => [ 'JOIN', 'cewp.cewp_cew_id = cewe.cewe_cew_id' ],
 			],
 		];
 	}
@@ -229,32 +194,5 @@ class WorklistPagesSecondaryStore {
 			] )
 			->caller( __METHOD__ )
 			->fetchFieldValues();
-	}
-
-	/**
-	 * Returns when each article in the event's worklist was added, newest first.
-	 *
-	 * Kept apart from the article list itself, which the card view reads first: the dates are
-	 * not needed to draw the cards, so they are asked for once the cards are on screen.
-	 *
-	 * @return list<array{wiki: string, prefixedtext: string, timestamp: string}>
-	 */
-	public function getPagesMetadataForEvent( int $eventID ): array {
-		$rows = $this->dbHelper->getReplicaConnection()->newSelectQueryBuilder()
-			->queryInfo( $this->getQueryInfoForEvent( $eventID ) )
-			->orderBy( [ 'cewp_timestamp', 'cewp_id' ], SelectQueryBuilder::SORT_DESC )
-			->limit( self::MAX_PAGES_PER_WORKLIST )
-			->caller( __METHOD__ )
-			->fetchResultSet();
-
-		$metadata = [];
-		foreach ( $rows as $row ) {
-			$metadata[] = [
-				'wiki' => $row->cewp_wiki,
-				'prefixedtext' => $row->cewp_page_prefixedtext,
-				'timestamp' => $row->cewp_timestamp,
-			];
-		}
-		return $metadata;
 	}
 }

@@ -17,6 +17,8 @@ const article = ( title, overrides = {} ) => Object.assign( {
 	wiki: LOCAL_WIKI,
 	wikiName: 'My wiki',
 	title: title,
+	timestamp: '2026-09-03T14:32:00Z',
+	timestampFormatted: '14:32, 3 September 2026',
 	url: '/wiki/' + title,
 	classes: ''
 }, overrides );
@@ -102,7 +104,6 @@ describe( 'WorklistApp', () => {
 	beforeEach( () => {
 		jest.useFakeTimers();
 		jest.spyOn( mw.user, 'isNamed' ).mockReturnValue( true );
-		jest.spyOn( worklistPages, 'fetchMetadata' ).mockResolvedValue( [] );
 		jest.spyOn( worklistPages, 'fetchPages' ).mockResolvedValue( page( [ 'Bears' ] ) );
 		jest.spyOn( worklistPages, 'removeArticle' ).mockResolvedValue( {} );
 		jest.spyOn( worklistPageData, 'fetchPageData' ).mockResolvedValue( new Map() );
@@ -460,14 +461,7 @@ describe( 'WorklistApp', () => {
 			.toBe( 'an article elsewhere' );
 	} );
 
-	it( 'fills in when the articles were added, after the list has loaded', async () => {
-		worklistPages.fetchMetadata.mockResolvedValue( [ {
-			wiki: LOCAL_WIKI,
-			title: 'Bears',
-			added: '14:32, 3 September 2026',
-			addedAt: '2026-09-03T14:32:00Z'
-		} ] );
-
+	it( 'shows added time for each article', async () => {
 		const wrapper = mountApp();
 		await settle();
 
@@ -476,61 +470,6 @@ describe( 'WorklistApp', () => {
 		expect( time.text() ).toContain( '14:32, 3 September 2026' );
 	} );
 
-	it( 'leaves an article without a date when the store has no row for it yet', async () => {
-		// The secondary store lags behind the worklist page, so a freshly added article can be
-		// missing from the metadata.
-		worklistPages.fetchMetadata.mockResolvedValue( [] );
-
-		const wrapper = mountApp();
-		await settle();
-
-		expect( wrapper.find( '.ext-campaignevents-worklist-card__added' ).exists() ).toBe( false );
-	} );
-
-	it( 'still shows the articles when the dates cannot be fetched', async () => {
-		worklistPages.fetchMetadata.mockRejectedValue( {} );
-
-		const wrapper = mountApp();
-		await settle();
-
-		expect( wrapper.findAll( '.ext-campaignevents-worklist-card' ) ).toHaveLength( 1 );
-		expect( wrapper.find( '.ext-campaignevents-worklist-card__added' ).exists() ).toBe( false );
-	} );
-
-	it( 'asks again for the dates when an article is added to the list', async () => {
-		worklistPages.fetchMetadata.mockResolvedValue( [ {
-			wiki: LOCAL_WIKI,
-			title: 'Bears',
-			added: '14:32, 3 September 2026',
-			addedAt: '2026-09-03T14:32:00Z'
-		} ] );
-		const wrapper = mountApp();
-		await settle();
-		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 1 );
-
-		// The list comes back with an article the store was never asked about.
-		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Chickens' ] ) );
-		wrapper.vm.reload();
-		await settle();
-
-		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 2 );
-	} );
-
-	it( 'does not ask again when every article already has a date', async () => {
-		worklistPages.fetchMetadata.mockResolvedValue( [ {
-			wiki: LOCAL_WIKI,
-			title: 'Bears',
-			added: '14:32, 3 September 2026',
-			addedAt: '2026-09-03T14:32:00Z'
-		} ] );
-		const wrapper = mountApp();
-		await settle();
-
-		wrapper.vm.reload();
-		await settle();
-
-		expect( worklistPages.fetchMetadata ).toHaveBeenCalledTimes( 1 );
-	} );
 	it( 'fills the view counts in after the cards have rendered', async () => {
 		worklistPageData.fetchPageData.mockResolvedValue(
 			new Map( [ [ LOCAL_WIKI + '|Bears', {
