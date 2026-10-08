@@ -29,7 +29,7 @@
 		"jest-environment-jsdom": "^29.7.0",
 		"mocha": "^10.0.0",
 		"stylelint-config-wikimedia": "0.18.0",
-		"vue": "3.5.14",
+		"vue": "3.5.43",
 		"wdio-mediawiki": "6.3.0"
 	},
 	"eslintIgnore": [
