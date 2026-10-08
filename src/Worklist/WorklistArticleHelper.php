@@ -213,33 +213,6 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 	/**
 	 * @inheritDoc
 	 */
-	public function getWorklistArticles(
-		PageIdentity $page,
-		int $limit,
-		int $offset,
-		string $direction,
-		string $sort
-	): array {
-		// Read the mirror table rather than the page: it is the only place the whole list can be
-		// had in one query, and the endpoint asking for it is keyed by event. This moves to the
-		// page itself, which is the source of truth, once the endpoint is keyed by the page.
-		$worklistID = $this->getWorklistID( $page );
-		if ( $worklistID === null ) {
-			return [];
-		}
-
-		return $this->worklistPagesSecondaryStore->getPagesForWorklist(
-			$worklistID,
-			$limit,
-			$offset,
-			$direction,
-			$sort
-		);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public function filterWorklistArticles( PageIdentity $page, string $wiki, array $prefixedTexts ): array {
 		// Checked against the mirror table rather than the page, so that a handful of titles can be
 		// looked up without reading the whole list. An article added moments ago may not be there

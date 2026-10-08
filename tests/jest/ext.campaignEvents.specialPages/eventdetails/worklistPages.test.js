@@ -3,7 +3,12 @@
 const worklistPages = require( '../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
 
 const EVENT_ID = 71;
-const EXPECTED_PATH = '/campaignevents/v0/event_registration/71/worklist_pages';
+const WORKLIST_PAGE_INFO = {
+	wiki: 'somewiki',
+	namespace: 1728,
+	dbkey: 'My_event/Worklist'
+};
+const EXPECTED_PATH = '/campaignevents/v0/worklist/somewiki/1728/My_event%2FWorklist/pages';
 
 /* eslint-disable camelcase */
 // Responses as the endpoint sends them, in snake_case.
@@ -29,7 +34,10 @@ const ONE_ARTICLE_RESPONSE = {
  */
 const mockRest = ( config ) => {
 	const vars = Object.assign(
-		{ wgCampaignEventsWorklistEventId: EVENT_ID },
+		{
+			wgCampaignEventsWorklistEventId: EVENT_ID,
+			wgCampaignEventsWorklistPageInfo: WORKLIST_PAGE_INFO
+		},
 		config || {}
 	);
 	mw.config.get.mockImplementation( ( name ) => vars[ name ] );

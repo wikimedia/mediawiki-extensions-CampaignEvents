@@ -8,7 +8,6 @@ use Generator;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Event\PageEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistArticleHelper;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContent;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistContentHandler;
@@ -256,58 +255,6 @@ class WorklistArticleHelperTest extends MediaWikiIntegrationTestCase {
 			$worklistSecondaryStore,
 			$worklistPagesSecondaryStore,
 			$services->getWANObjectCache(),
-		);
-	}
-
-	public function testGetWorklistArticles(): void {
-		$articles = [ [ 'wiki' => self::WIKI_ID, 'prefixedtext' => 'Cat' ] ];
-		// The worklist is looked up by page ID, so the page has to exist to have one.
-		$worklistPage = $this->getExistingTestPage( 'My Event/Worklist' )->getTitle();
-
-		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
-		$worklistStore->expects( $this->once() )
-			->method( 'getWorklistIDFromPage' )
-			->with( WikiMap::getCurrentWikiId(), $worklistPage->getId() )
-			->willReturn( 7 );
-		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
-		$pagesStore->expects( $this->once() )
-			->method( 'getPagesForWorklist' )
-			->with(
-				7,
-				0,
-				0,
-				IWorklistArticlesLookup::DESCENDING,
-				IWorklistArticlesLookup::TIMESTAMP_SORT
-			)
-			->willReturn( $articles );
-
-		$this->assertSame(
-			$articles,
-			$this->getHelperWithStores( $worklistStore, $pagesStore )->getWorklistArticles(
-				$worklistPage,
-				0,
-				0,
-				IWorklistArticlesLookup::DESCENDING,
-				IWorklistArticlesLookup::TIMESTAMP_SORT
-			)
-		);
-	}
-
-	public function testGetWorklistArticles__noWorklistForPage(): void {
-		$worklistStore = $this->createMock( WorklistSecondaryStore::class );
-		$worklistStore->method( 'getWorklistIDFromPage' )->willReturn( null );
-		$pagesStore = $this->createMock( WorklistPagesSecondaryStore::class );
-		$pagesStore->expects( $this->never() )->method( 'getPagesForWorklist' );
-
-		$this->assertSame(
-			[],
-			$this->getHelperWithStores( $worklistStore, $pagesStore )->getWorklistArticles(
-				$this->getNonexistingTestPage(),
-				0,
-				0,
-				IWorklistArticlesLookup::DESCENDING,
-				IWorklistArticlesLookup::TIMESTAMP_SORT
-			)
 		);
 	}
 

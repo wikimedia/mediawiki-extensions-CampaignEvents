@@ -31,10 +31,12 @@
 	 * @return {jQuery.Promise} Resolves with { pages }
 	 */
 	function fetchPages() {
-		const eventId = mw.config.get( 'wgCampaignEventsWorklistEventId' );
+		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
 		return new mw.Rest().get(
-			'/campaignevents/v0/event_registration/' + encodeURIComponent( eventId ) +
-				'/worklist_pages'
+			'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
+				'/' + encodeURIComponent( worklistPageInfo.namespace ) +
+				'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
+				'/pages'
 		).then( ( response ) => ( {
 			// The endpoint speaks snake_case, like the extension's other endpoints; the rest of the
 			// frontend does not, so the shape is normalised here rather than in every component.

@@ -5,15 +5,17 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistPagesLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkRendererFactory;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\LinkBatchFactory;
+use MediaWiki\Page\PageStoreFactory;
 use MediaWiki\Parser\Sanitizer;
+use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -21,36 +23,30 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\WikiMap\WikiMap;
+use Wikimedia\ParamValidator\ParamValidator;
 
 /**
  * GET endpoint listing the articles in an event's worklist.
  *
  * Gated on CampaignEventsEnableWorklistCardView, like the card view it feeds.
  *
- * Worklists are public (they are ordinary wiki pages), and so is the Worklist tab on
- * Special:EventDetails, so this endpoint performs no permission checks beyond requiring the event
- * to exist.
- *
  * The whole list is returned in one response rather than page by page: the card view searches and
  * paginates it client-side, which has to happen without a page load, so the client needs every
  * article up front.
  */
 class GetWorklistPagesHandler extends SimpleHandler {
-	use EventIDParamTrait;
-
 	public function __construct(
 		private readonly Config $config,
-		private readonly IEventLookup $eventLookup,
-		private readonly IWorklistArticlesLookup $worklistArticlesLookup,
+		private readonly PageStoreFactory $pageStoreFactory,
 		private readonly WikiLookup $wikiLookup,
 		private readonly TitleFactory $titleFactory,
 		private readonly LinkBatchFactory $linkBatchFactory,
 		private readonly LinkRendererFactory $linkRendererFactory,
-		private readonly WorklistEventsStore $worklistEventsStore,
+		private readonly WorklistPagesLookupFactory $worklistPagesLookupFactory,
 	) {
 	}
 
-	protected function run( int $eventID ): Response {
+	protected function run( string $worklistWikiString, int $namespace, string $title ): Response {
 		if ( !$this->config->get( 'CampaignEventsEnableWorklistCardView' ) ) {
 			// The card view is what reads this, so the endpoint is gated with it: on a wiki where
 			// the feature is off it should look as though it does not exist. Not localised: the
@@ -58,21 +54,28 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			throw new HttpException( 'The worklist card view is not enabled on this wiki', 404 );
 		}
 
-		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
-
-		// A worklist whose page has not been created yet holds no articles.
-		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $event );
-		$pages = $worklistPage->exists() ? $this->worklistArticlesLookup->getWorklistArticles(
-			$worklistPage,
-			// No limit or offset: the client needs every article, because it paginates them itself.
-			0,
-			0,
-			IWorklistArticlesLookup::DESCENDING,
-			IWorklistArticlesLookup::TIMESTAMP_SORT
-		) : [];
-		// Resolved once: a worklist can hold thousands of pages, and WikiMap works the current
-		// wiki's ID out from its database domain on every call.
 		$currentWiki = WikiMap::getCurrentWikiId();
+		// Normalize wiki ID since PageStoreFactory doesn't (T440732)
+		$worklistWiki = $worklistWikiString === $currentWiki ? WikiAwareEntity::LOCAL : $worklistWikiString;
+
+		$worklistPage = $this->pageStoreFactory->getPageStore( $worklistWiki )
+			->getPageByName( $namespace, $title );
+
+		if ( $worklistPage ) {
+			$worklistLookup = $this->worklistPagesLookupFactory->getLookupForWorklist( $worklistPage );
+			$result = $worklistLookup->getWorklistPages(
+				IWorklistPagesLookup::SORT_TIMESTAMP,
+				// No limit or offset: the client needs every article, because it paginates them itself.
+				10_000,
+				null,
+				IWorklistPagesLookup::DIR_DESCENDING,
+				IWorklistPagesLookup::NOT_BACKWARDS,
+			);
+			$pages = $result['result'];
+		} else {
+			$pages = [];
+		}
+
 		$localTitles = $this->preloadLocalTitles( $pages, $currentWiki );
 		$wikis = array_values( array_unique( array_column( $pages, 'wiki' ) ) );
 		$wikiNames = $this->wikiLookup->getLocalizedNames( $wikis );
@@ -199,7 +202,7 @@ class GetWorklistPagesHandler extends SimpleHandler {
 	 * A title the local wiki cannot parse is skipped rather than fatal: worklist content validates
 	 * titles on write, so this should not happen, but one bad row must not fail the whole list.
 	 *
-	 * @param list<array{wiki: string, prefixedtext: string}> $pages
+	 * @param list<array{wiki: string, prefixedtext: string, timestamp: int|null}> $pages
 	 * @return array<string,Title>
 	 */
 	private function preloadLocalTitles( array $pages, string $currentWiki ): array {
@@ -225,6 +228,22 @@ class GetWorklistPagesHandler extends SimpleHandler {
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return $this->getIDParamSetting();
+		return [
+			'wiki' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			'namespace' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			'title' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+		];
 	}
 }

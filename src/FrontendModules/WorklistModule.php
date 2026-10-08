@@ -9,6 +9,7 @@ use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
@@ -55,8 +56,15 @@ readonly class WorklistModule {
 		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $this->event );
 		$eventPage = $this->event->getPage();
 		$eventWikiId = $eventPage->getWikiId();
-		// This is constructed directly because foreign titles can't be formatted anyway.
+
+		// Names are constructed directly because foreign titles can't be formatted anyway.
+		$worklistPageInfo = [
+			'wiki' => Utils::getWikiIDString( $eventWikiId ),
+			'namespace' => $eventPage->getNamespace(),
+			'dbkey' => $eventPage->getDBkey() . '/' . WorklistEventsStore::WORKLIST_SUBPAGE,
+		];
 		$worklistPagePrefixedText = $eventPage->getPrefixedText() . '/' . WorklistEventsStore::WORKLIST_SUBPAGE;
+
 		$worklistPageUrl = '';
 		$worklistPageHistoryUrl = '';
 		$worklistWikiRestUrl = null;
@@ -80,6 +88,7 @@ readonly class WorklistModule {
 			// Read by the card view when it asks for the dates the articles were added, which
 			// are keyed by event rather than by worklist page.
 			'wgCampaignEventsWorklistEventId' => $this->event->getID(),
+			'wgCampaignEventsWorklistPageInfo' => $worklistPageInfo,
 			'wgCampaignEventsWorklistPagePrefixedText' => $worklistPagePrefixedText,
 			// Empty for an event on another wiki, where the subpage cannot be resolved locally; the
 			// frontend hides the history control in that case.
