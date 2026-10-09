@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ezagren"
+		]
+	},
+	"group-event-organizer": "Panggawi acara",
+	"group-event-organizer-member": "{{GENDER:$1|panggawi acara}}",
+	"grouppage-event-organizer": "{{ns:project}}:Panggawi acara",
+	"campaignevents-notification-registration-details-organizers-header": "Panggawi acara"
+}
