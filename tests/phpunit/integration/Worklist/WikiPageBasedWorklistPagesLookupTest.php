@@ -48,6 +48,101 @@ class WikiPageBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 		);
 	}
 
+	public function testGetWorklistPages__noWorklistDatabaseRecord() {
+		$worklistSecondaryStore = $this->createMock( WorklistSecondaryStore::class );
+		$worklistSecondaryStore->method( 'getWorklistIDFromPage' )->willReturn( null );
+		$this->setService( WorklistSecondaryStore::SERVICE_NAME, $worklistSecondaryStore );
+
+		$results = $this->getLookup()->getWorklistPages(
+			IWL::SORT_TIMESTAMP,
+			100_000,
+			null,
+			IWL::DIR_ASCENDING,
+			IWL::NOT_BACKWARDS
+		);
+
+		$this->assertSame(
+			[
+				'result' => [
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 1',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 2',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 3',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 4',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 5',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 6',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'awiki',
+						'prefixedtext' => 'Page 99',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'bwiki',
+						'prefixedtext' => 'Page 1',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'bwiki',
+						'prefixedtext' => 'Page 4',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'bwiki',
+						'prefixedtext' => 'Page 100',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'bwiki',
+						'prefixedtext' => 'Page 101',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'bwiki',
+						'prefixedtext' => 'Page 102',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'zwiki',
+						'prefixedtext' => 'Page 1',
+						'timestamp' => null,
+					],
+					[
+						'wiki' => 'zwiki',
+						'prefixedtext' => 'Page 200',
+						'timestamp' => null,
+					],
+				],
+				'paginationOffsets' => [
+					IWL::PAGINATION_CUR => null,
+				],
+			],
+			$results,
+		);
+	}
+
 	public static function provideGetWorklistPages(): Generator {
 		yield 'Timestamp descending, first page, missing rows only' => [
 			IWL::SORT_TIMESTAMP,

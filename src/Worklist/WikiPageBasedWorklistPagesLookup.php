@@ -64,11 +64,6 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		$wikiIDString = Utils::getWikiIDString( $this->worklistPage->getWikiId() );
 		$pageID = $this->worklistPage->getId( $this->worklistPage->getWikiId() );
 		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage( $wikiIDString, $pageID );
-		if ( $worklistID === null ) {
-			// XXX Maybe this could happen if someone calls this real quick after saving the page, before the
-			// DeferredUpdate has run?
-			throw new LogicException( 'Worklist page with content should have primary record in the DB' );
-		}
 
 		$sortFields = self::INTERNAL_SORT_FIELDS[$sort];
 
@@ -115,7 +110,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	/**
 	 * Returns results by querying the wikipage directly, then adding ancillary data from the database.
 	 *
-	 * @param int $worklistID
+	 * @param int|null $worklistID
 	 * @param array<string,string[]> $rawContent
 	 * @param non-empty-list<string> $sortFields
 	 * @param positive-int $limit
@@ -126,7 +121,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}>
 	 */
 	private function getResultsFromContent(
-		int $worklistID,
+		?int $worklistID,
 		array $rawContent,
 		array $sortFields,
 		int $limit,
@@ -310,11 +305,22 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	/**
 	 * Given a flat list from the wikipage, hydrate it with DB data.
 	 *
-	 * @param int $worklistID
+	 * @param int|null $worklistID
 	 * @param array<string,array{id:int,wiki:string,prefixedtext:string}> $rawResult
 	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}>
 	 */
-	private function hydrateResultWithDBData( int $worklistID, array $rawResult ): array {
+	private function hydrateResultWithDBData( ?int $worklistID, array $rawResult ): array {
+		if ( $worklistID === null ) {
+			// This should typically not be null, as the deferred update that creates the worklist entity can be
+			// expected to run immediately. Still, it might in principle be possible for it not to run, or to error out,
+			// or the read here might be from a lagged replica. So, in that case, return placeholders only.
+			/**
+			 * @param array{id:int,wiki:string,prefixedtext:string} $item
+			 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}
+			 */
+			$placeholderFiller = static fn ( array $item ): array => self::hydrateResultItem( $item, null );
+			return array_map( $placeholderFiller, $rawResult );
+		}
 		$queryInfo = $this->worklistPagesSecondaryStore->getQueryInfo( $worklistID );
 		$dbr = $this->databaseHelper->getReplicaConnection();
 		$dbConcat = $dbr->buildConcat( [ 'cewp_wiki', $dbr->addQuotes( '|' ), 'cewp_page_prefixedtext' ] );
@@ -349,7 +355,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * @phpcs:disable Generic.Files.LineLength
 	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}> $result
 	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}|null $extraItem
-	 * @param int $worklistID
+	 * @param int|null $worklistID
 	 * @param array<string,string[]> $rawContent
 	 * @param non-empty-list<string> $sortFields
 	 * @param int $effectiveLimit
@@ -363,7 +369,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	private function getPaginationOffsetsFromResult(
 		array $result,
 		?array $extraItem,
-		int $worklistID,
+		?int $worklistID,
 		array $rawContent,
 		array $sortFields,
 		int $effectiveLimit,
