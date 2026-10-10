@@ -74,7 +74,6 @@ const mountApp = ( config = {} ) => {
 	mw.config = {
 		get: ( key ) => Object.assign( {
 			wgDBname: LOCAL_WIKI,
-			wgCampaignEventsWorklistEventId: 73,
 			wgCampaignEventsWorklistPageHistoryUrl: '/w/index.php?title=X&action=history'
 		}, config )[ key ]
 	};

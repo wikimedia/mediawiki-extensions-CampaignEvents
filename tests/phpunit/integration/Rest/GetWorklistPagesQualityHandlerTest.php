@@ -5,19 +5,16 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Rest;
 
 use MediaWiki\Config\HashConfig;
-use MediaWiki\DAO\WikiAwareEntity;
-use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\Store\EventNotFoundException;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
-use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Rest\GetWorklistPagesQualityHandler;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistPagesLookup;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\RequestData;
 use MediaWiki\Tests\Rest\Handler\HandlerTestTrait;
+use MediaWiki\Title\Title;
+use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -28,65 +25,59 @@ use MediaWikiIntegrationTestCase;
 class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 	use HandlerTestTrait;
 
-	private const EVENT_ID = 42;
 	private const WIKI = 'awiki';
 	private const EVENT_PAGE_DBKEY = 'My_event';
+	private const WORKLIST_PAGE_NAMESPACE = NS_EVENT;
 	private const WORKLIST_PAGE_DBKEY = 'My_event/Worklist';
 
 	protected function setUp(): void {
 		parent::setUp();
 		// The handler resolves the worklist page through the page store, so it has to exist.
-		$this->getExistingTestPage( self::WORKLIST_PAGE_DBKEY );
+		$this->getExistingTestPage( Title::makeTitle( self::WORKLIST_PAGE_NAMESPACE, self::WORKLIST_PAGE_DBKEY ) );
 	}
 
-	private static function reqData( array $titles, string $wiki = self::WIKI ): array {
+	private function reqData( array $titles, string $wiki = self::WIKI, array $pathOverrides = [] ): array {
 		return [
-			'pathParams' => [ 'id' => self::EVENT_ID ],
+			'pathParams' => array_replace( [
+				'worklistwiki' => WikiMap::getCurrentWikiId(),
+				'namespace' => self::WORKLIST_PAGE_NAMESPACE,
+				'title' => self::WORKLIST_PAGE_DBKEY
+			], $pathOverrides ),
 			'queryParams' => [ 'wiki' => $wiki, 'titles' => implode( '|', $titles ) ],
 		];
 	}
 
 	/**
-	 * @param list<array{wiki: string, prefixedtext: string}> $storedPages In the worklist
+	 * @param list<array{wiki: string, prefixedtext: string}>|null $storedPages In the worklist, null to assert they
+	 *   are not even checked.
 	 * @param array $quality What the model reports, keyed by prefixed text
-	 * @param bool $eventExists
 	 * @param bool $cardViewEnabled
 	 * @return GetWorklistPagesQualityHandler
 	 */
 	private function newHandler(
-		array $storedPages,
+		?array $storedPages,
 		array $quality = [],
-		bool $eventExists = true,
 		bool $cardViewEnabled = true
 	): GetWorklistPagesQualityHandler {
-		$eventPage = $this->createMock( MWPageProxy::class );
-		$eventPage->method( 'getNamespace' )->willReturn( NS_MAIN );
-		$eventPage->method( 'getDBkey' )->willReturn( self::EVENT_PAGE_DBKEY );
-		$eventPage->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getPage' )->willReturn( $eventPage );
-
-		$eventLookup = $this->createMock( IEventLookup::class );
-		if ( $eventExists ) {
-			$eventLookup->method( 'getEventByID' )->willReturn( $event );
-		} else {
-			$eventLookup->method( 'getEventByID' )
-				->willThrowException( $this->createMock( EventNotFoundException::class ) );
-		}
-
-		$articlesLookup = $this->createMock( IWorklistArticlesLookup::class );
-		// Filters as the store does: the titles asked about that are in the worklist for that wiki.
-		$articlesLookup->method( 'filterWorklistArticles' )->willReturnCallback(
-			static function ( $page, string $wiki, array $titles ) use ( $storedPages ): array {
-				$stored = [];
-				foreach ( $storedPages as $storedPage ) {
-					if ( $storedPage['wiki'] === $wiki ) {
-						$stored[$storedPage['prefixedtext']] = true;
+		if ( $storedPages !== null ) {
+			$worklistPagesLookup = $this->createMock( IWorklistPagesLookup::class );
+			// Filters as the store does: the titles asked about that are in the worklist for that wiki.
+			$worklistPagesLookup->method( 'filterWorklistPages' )->willReturnCallback(
+				static function ( string $wiki, array $titles ) use ( $storedPages ): array {
+					$stored = [];
+					foreach ( $storedPages as $storedPage ) {
+						if ( $storedPage['wiki'] === $wiki ) {
+							$stored[$storedPage['prefixedtext']] = true;
+						}
 					}
+					return array_values( array_filter( $titles, static fn ( $title ) => isset( $stored[$title] ) ) );
 				}
-				return array_values( array_filter( $titles, static fn ( $title ) => isset( $stored[$title] ) ) );
-			}
-		);
+			);
+		} else {
+			$worklistPagesLookup = $this->createNoOpMock( IWorklistPagesLookup::class );
+		}
+		$worklistLookupFactory = $this->createMock( WorklistPagesLookupFactory::class );
+		$worklistLookupFactory->method( 'getLookupForWorklist' )->willReturn( $worklistPagesLookup );
 
 		$qualityLookup = $this->createMock( ArticleQualityLookup::class );
 		$qualityLookup->method( 'getQualityForArticles' )->willReturnCallback(
@@ -96,14 +87,13 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 		);
 
 		$wikiLookup = $this->createMock( WikiLookup::class );
-		$wikiLookup->method( 'getAllWikis' )->willReturn( [ self::WIKI ] );
+		$wikiLookup->method( 'getAllWikis' )->willReturn( [ WikiMap::getCurrentWikiId(), self::WIKI ] );
 
 		return new GetWorklistPagesQualityHandler(
 			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => $cardViewEnabled ] ),
-			$eventLookup,
-			$articlesLookup,
+			$this->getServiceContainer()->getPageStoreFactory(),
+			$worklistLookupFactory,
 			$qualityLookup,
-			CampaignEventsServices::getWorklistEventsStore(),
 			$wikiLookup,
 		);
 	}
@@ -120,7 +110,7 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
-			new RequestData( self::reqData( [ 'Beavers' ] ) )
+			new RequestData( $this->reqData( [ 'Beavers' ] ) )
 		);
 
 		$this->assertSame(
@@ -148,7 +138,7 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
-			new RequestData( self::reqData( [ 'Beavers', 'Something else entirely' ] ) )
+			new RequestData( $this->reqData( [ 'Beavers', 'Something else entirely' ] ) )
 		);
 
 		$this->assertSame( [ 'Beavers' ], array_column( $respData['articles'], 'title' ) );
@@ -164,7 +154,7 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
-			new RequestData( self::reqData( [ 'Beavers' ] ) )
+			new RequestData( $this->reqData( [ 'Beavers' ] ) )
 		);
 
 		$this->assertSame( [], $respData['articles'] );
@@ -182,59 +172,34 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
-			new RequestData( self::reqData( [ 'Beavers', 'Otters' ] ) )
+			new RequestData( $this->reqData( [ 'Beavers', 'Otters' ] ) )
 		);
 
 		$this->assertSame( [ 'Beavers' ], array_column( $respData['articles'], 'title' ) );
 	}
 
 	public function testRun__noWorklistPage(): void {
-		// The event's /Worklist subpage has never been created, so it holds nothing to score.
-		$handler = $this->newHandlerForEventPage( 'Event_with_no_worklist' );
+		$nonexistentWorklist = $this->getNonexistingTestPage();
+		$pathOverrides = [
+			'namespace' => $nonexistentWorklist->getNamespace(),
+			'title' => $nonexistentWorklist->getDBkey(),
+		];
+
+		$handler = $this->newHandler( null );
 
 		$respData = $this->executeHandlerAndGetBodyData(
 			$handler,
-			new RequestData( self::reqData( [ 'Beavers' ] ) )
+			new RequestData( $this->reqData( [ 'Beavers' ], pathOverrides: $pathOverrides ) )
 		);
 
 		$this->assertSame( [], $respData['articles'] );
 	}
 
-	private function newHandlerForEventPage( string $eventPageDBkey ): GetWorklistPagesQualityHandler {
-		$eventPage = $this->createMock( MWPageProxy::class );
-		$eventPage->method( 'getNamespace' )->willReturn( NS_MAIN );
-		$eventPage->method( 'getDBkey' )->willReturn( $eventPageDBkey );
-		$eventPage->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
-		$event = $this->createMock( ExistingEventRegistration::class );
-		$event->method( 'getPage' )->willReturn( $eventPage );
-		$eventLookup = $this->createMock( IEventLookup::class );
-		$eventLookup->method( 'getEventByID' )->willReturn( $event );
-
-		$wikiLookup = $this->createMock( WikiLookup::class );
-		$wikiLookup->method( 'getAllWikis' )->willReturn( [ self::WIKI ] );
-
-		return new GetWorklistPagesQualityHandler(
-			new HashConfig( [ 'CampaignEventsEnableWorklistCardView' => true ] ),
-			$eventLookup,
-			$this->createMock( IWorklistArticlesLookup::class ),
-			$this->createMock( ArticleQualityLookup::class ),
-			CampaignEventsServices::getWorklistEventsStore(),
-			$wikiLookup,
-		);
-	}
-
 	public function testRun__cardViewDisabled(): void {
-		$handler = $this->newHandler( [], [], true, false );
+		$handler = $this->newHandler( null, [], false );
 
 		$this->expectException( HttpException::class );
 		$this->expectExceptionCode( 404 );
-		$this->executeHandler( $handler, new RequestData( self::reqData( [ 'Beavers' ] ) ) );
-	}
-
-	public function testRun__eventNotFound(): void {
-		$handler = $this->newHandler( [], [], false );
-
-		$this->expectException( HttpException::class );
-		$this->executeHandler( $handler, new RequestData( self::reqData( [ 'Beavers' ] ) ) );
+		$this->executeHandler( $handler, new RequestData( $this->reqData( [ 'Beavers' ] ) ) );
 	}
 }

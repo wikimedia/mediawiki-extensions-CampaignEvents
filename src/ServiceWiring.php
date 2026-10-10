@@ -598,8 +598,6 @@ return [
 				$services->getRevisionStoreFactory(),
 				$services->getTitleFormatter(),
 				$services->getTitleParser(),
-				$services->get( WorklistSecondaryStore::SERVICE_NAME ),
-				$services->get( WorklistPagesSecondaryStore::SERVICE_NAME ),
 				$services->getWANObjectCache(),
 			);
 		},

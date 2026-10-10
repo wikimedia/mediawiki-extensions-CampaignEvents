@@ -5,15 +5,17 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\Rest;
 
 use MediaWiki\Config\Config;
-use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
-use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
+use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\IWorklistArticlesLookup;
-use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
+use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageStoreFactory;
+use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
+use MediaWiki\WikiMap\WikiMap;
 use Wikimedia\ParamValidator\ParamValidator;
 
 /**
@@ -31,19 +33,16 @@ use Wikimedia\ParamValidator\ParamValidator;
  * and any title on any wiki could be made to cost a model run.
  */
 class GetWorklistPagesQualityHandler extends SimpleHandler {
-	use EventIDParamTrait;
-
 	public function __construct(
 		private readonly Config $config,
-		private readonly IEventLookup $eventLookup,
-		private readonly IWorklistArticlesLookup $worklistArticlesLookup,
+		private readonly PageStoreFactory $pageStoreFactory,
+		private readonly WorklistPagesLookupFactory $worklistPagesLookupFactory,
 		private readonly ArticleQualityLookup $articleQualityLookup,
-		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly WikiLookup $wikiLookup,
 	) {
 	}
 
-	protected function run( int $eventID ): Response {
+	protected function run( string $worklistWikiString, int $namespace, string $title ): Response {
 		if ( !$this->config->get( 'CampaignEventsEnableWorklistCardView' ) ) {
 			// Gated with the card view that reads it, so that on a wiki where the feature is off
 			// the endpoint looks as though it does not exist. Not localised: the flag is
@@ -51,12 +50,20 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 			throw new HttpException( 'The worklist card view is not enabled on this wiki', 404 );
 		}
 
-		$event = $this->getRegistrationOrThrow( $this->eventLookup, $eventID );
+		// Normalize wiki ID since PageStoreFactory doesn't (T440732)
+		$worklistWiki = WikiMap::isCurrentWikiId( $worklistWikiString ) ? WikiAwareEntity::LOCAL : $worklistWikiString;
+		$worklistPage = $this->pageStoreFactory->getPageStore( $worklistWiki )
+			->getPageByName( $namespace, $title );
+
+		if ( !$worklistPage ) {
+			return $this->getResponseFactory()->createJson( [ 'articles' => [] ] );
+		}
+
 		$params = $this->getValidatedParams();
 		$wiki = $params['wiki'];
 		$requested = $params['titles'];
 
-		$inWorklist = $this->filterToWorklist( $event, $wiki, $requested );
+		$inWorklist = $this->filterToWorklist( $worklistPage, $wiki, $requested );
 		$quality = $inWorklist
 			? $this->articleQualityLookup->getQualityForArticles( $wiki, $inWorklist )
 			: [];
@@ -82,21 +89,18 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 	/**
 	 * The requested titles that really are in this event's worklist, in the order asked for.
 	 *
-	 * @param ExistingEventRegistration $event
+	 * @param PageIdentity $worklistPage
 	 * @param string $wiki
 	 * @param list<string> $requested
 	 * @return list<string>
 	 */
-	private function filterToWorklist( ExistingEventRegistration $event, string $wiki, array $requested ): array {
-		$worklistPage = $this->worklistEventsStore->getWorklistPageForEvent( $event );
-		if ( !$worklistPage->exists() ) {
-			return [];
-		}
+	private function filterToWorklist( PageIdentity $worklistPage, string $wiki, array $requested ): array {
+		$worklistLookup = $this->worklistPagesLookupFactory->getLookupForWorklist( $worklistPage );
 
 		// Only the requested titles are looked up, not the whole worklist: a screen of cards asks
 		// about a few dozen at most, whatever the size of the list.
 		$inWorklist = array_fill_keys(
-			$this->worklistArticlesLookup->filterWorklistArticles( $worklistPage, $wiki, $requested ),
+			$worklistLookup->filterWorklistPages( $wiki, $requested ),
 			true
 		);
 
@@ -110,7 +114,22 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 	 * @inheritDoc
 	 */
 	public function getParamSettings(): array {
-		return $this->getIDParamSetting() + [
+		return [
+			'worklistwiki' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			'namespace' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
+			'title' => [
+				Handler::PARAM_SOURCE => 'path',
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
 			'wiki' => [
 				static::PARAM_SOURCE => 'query',
 				ParamValidator::PARAM_TYPE => $this->wikiLookup->getAllWikis(),

@@ -4,8 +4,12 @@ const worklistQuality = require(
 	'../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistQuality.js'
 );
 
-const EVENT_ID = 42;
-const PATH = '/campaignevents/v0/event_registration/42/worklist_pages/quality';
+const WORKLIST_PAGE_INFO = {
+	wiki: 'somewiki',
+	namespace: 1728,
+	dbkey: 'My_event/Worklist'
+};
+const PATH = '/campaignevents/v0/worklist/somewiki/1728/My_event%2FWorklist/pages/quality';
 
 const article = ( title, wiki = 'awiki' ) => ( { wiki: wiki, title: title } );
 
@@ -24,7 +28,7 @@ function mockRest() {
 	const get = jest.fn();
 	mw.Rest = jest.fn( () => ( { get: get } ) );
 	mw.config.get = jest.fn( ( key ) => (
-		key === 'wgCampaignEventsWorklistEventId' ? EVENT_ID : null
+		key === 'wgCampaignEventsWorklistPageInfo' ? WORKLIST_PAGE_INFO : null
 	) );
 	return get;
 }

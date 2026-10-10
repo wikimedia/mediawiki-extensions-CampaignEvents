@@ -85,9 +85,6 @@ readonly class WorklistModule {
 			}
 		}
 		$this->output->addJsConfigVars( [
-			// Read by the card view when it asks for the dates the articles were added, which
-			// are keyed by event rather than by worklist page.
-			'wgCampaignEventsWorklistEventId' => $this->event->getID(),
 			'wgCampaignEventsWorklistPageInfo' => $worklistPageInfo,
 			'wgCampaignEventsWorklistPagePrefixedText' => $worklistPagePrefixedText,
 			// Empty for an event on another wiki, where the subpage cannot be resolved locally; the

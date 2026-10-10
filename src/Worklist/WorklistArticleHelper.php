@@ -10,7 +10,6 @@ use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Message\Message;
-use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPage;
 use MediaWiki\Request\DerivativeRequest;
@@ -35,7 +34,7 @@ use Wikimedia\Rdbms\IDBAccessObject;
  * The page is saved through the internal edit API rather than a raw PageUpdater, so that all of
  * core's edit logic (permission checks, blocks, edit-conflict detection, AbuseFilter, ...) runs.
  */
-class WorklistArticleHelper implements IWorklistArticlesLookup {
+class WorklistArticleHelper {
 	public const SERVICE_NAME = 'CampaignEventsWorklistArticleHelper';
 
 	private const ACTION_ADD = 'add';
@@ -45,8 +44,6 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		private readonly RevisionStoreFactory $revisionStoreFactory,
 		private readonly TitleFormatter $titleFormatter,
 		private readonly TitleParser $titleParser,
-		private readonly WorklistSecondaryStore $worklistSecondaryStore,
-		private readonly WorklistPagesSecondaryStore $worklistPagesSecondaryStore,
 		private readonly WANObjectCache $wanCache,
 	) {
 	}
@@ -208,35 +205,6 @@ class WorklistArticleHelper implements IWorklistArticlesLookup {
 		}
 
 		return $data;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function filterWorklistArticles( PageIdentity $page, string $wiki, array $prefixedTexts ): array {
-		// Checked against the mirror table rather than the page, so that a handful of titles can be
-		// looked up without reading the whole list. An article added moments ago may not be there
-		// yet, until the job copying it over has run.
-		$worklistID = $this->getWorklistID( $page );
-		if ( $worklistID === null ) {
-			return [];
-		}
-
-		return $this->worklistPagesSecondaryStore->filterPagesInWorklist( $worklistID, $wiki, $prefixedTexts );
-	}
-
-	/**
-	 * The ID of the worklist held by the given page, or null if it has none.
-	 *
-	 * Found by page ID rather than by title, because a title is formatted with the local namespace
-	 * names and the page may belong to another wiki.
-	 */
-	private function getWorklistID( PageIdentity $page ): ?int {
-		$wikiID = $page->getWikiId();
-		return $this->worklistSecondaryStore->getWorklistIDFromPage(
-			Utils::getWikiIDString( $wikiID ),
-			$page->getId( $wikiID )
-		);
 	}
 
 	/**

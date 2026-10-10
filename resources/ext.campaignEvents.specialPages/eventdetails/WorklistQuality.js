@@ -123,7 +123,8 @@
 			byWiki.get( article.wiki ).push( article.title );
 		} );
 
-		const eventId = mw.config.get( 'wgCampaignEventsWorklistEventId' );
+		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
+
 		/**
 		 * Ask one wiki, then the next.
 		 *
@@ -141,8 +142,10 @@
 			const wiki = remaining[ 0 ][ 0 ];
 			const titles = remaining[ 0 ][ 1 ];
 			return new mw.Rest().get(
-				'/campaignevents/v0/event_registration/' + encodeURIComponent( eventId ) +
-					'/worklist_pages/quality',
+				'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
+					'/' + encodeURIComponent( worklistPageInfo.namespace ) +
+					'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
+					'/pages/quality',
 				{ wiki: wiki, titles: titles.join( '|' ) }
 			).then( ( response ) => {
 				( response.articles || [] ).forEach( ( entry ) => {
