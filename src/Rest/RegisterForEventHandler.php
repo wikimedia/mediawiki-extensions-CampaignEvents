@@ -112,10 +112,6 @@ class RegisterForEventHandler extends SimpleHandler {
 	}
 
 	/**
-	 * @return array<string,array<string,mixed>>
-	 */
-
-	/**
 	 * @inheritDoc
 	 * @return array<string, mixed>
 	 */
@@ -138,6 +134,7 @@ class RegisterForEventHandler extends SimpleHandler {
 		return __DIR__ . '/Schema/ModifiedResult.json';
 	}
 
+	/** @inheritDoc */
 	public function getBodyParamSettings(): array {
 		return [
 			'is_private' => [
