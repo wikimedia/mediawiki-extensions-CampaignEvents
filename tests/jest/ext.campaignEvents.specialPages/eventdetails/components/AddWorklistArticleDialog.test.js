@@ -7,10 +7,12 @@ const { nextTick } = require( 'vue' );
 const AddWorklistArticleDialog = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue' );
 
 const ADD_BUTTON = '.ext-campaignevents-event-details-worklist-add-button';
+const DIVIDER = '.ext-campaignevents-event-details-worklist-add-dialog-divider';
 
 const DEFAULT_CONFIG = {
 	wgCampaignEventsWorklistPagePrefixedText: 'Event:My Event/Worklist',
 	wgWikiID: 'awiki',
+	wgSiteName: 'A Wiki',
 	wgCampaignEventsWorklistWikiRestUrl: null
 };
 
@@ -285,9 +287,73 @@ describe( 'AddWorklistArticleDialog', () => {
 			await nextTick();
 
 			expect( search( wrapper ).exists() ).toBe( false );
+			// Nor is its label, or the divider that sets it apart from the list.
+			expect( wrapper.text() ).not.toContain( 'campaignevents-event-details-worklist-add-dialog-search-label' );
+			expect( wrapper.find( DIVIDER ).exists() ).toBe( false );
 			// The textarea is still there for typing titles in.
 			expect( wrapper.find( '.ext-campaignevents-event-details-worklist-add-dialog-textarea' ).exists() ).toBe( true );
 		} );
+	} );
+
+	it( 'names the current wiki in the search label and placeholder', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		expect( wrapper.text() ).toContain( 'campaignevents-event-details-worklist-add-dialog-search-label (A Wiki)' );
+		expect( wrapper.getComponent( { name: 'WorklistArticleSearch' } ).props( 'placeholder' ) )
+			.toBe( '(campaignevents-event-details-worklist-add-dialog-search-input-placeholder, A Wiki)' );
+	} );
+
+	it( 'names the selected wiki in the search label and placeholder when there is a choice', async () => {
+		const wrapper = mountDialog( {
+			wgCampaignEventsWorklistWikiOptions: [
+				wikiOption( 'awiki' ),
+				// Searchable, or there is no search to label.
+				Object.assign( wikiOption( 'bwiki' ), { apiUrl: 'https://b.example/w/api.php' } )
+			]
+		} );
+		await openDialog( wrapper );
+
+		wrapper.vm.selectedWiki = 'bwiki';
+		await nextTick();
+
+		expect( wrapper.text() ).toContain( 'campaignevents-event-details-worklist-add-dialog-search-label (bwiki name)' );
+		expect( wrapper.getComponent( { name: 'WorklistArticleSearch' } ).props( 'placeholder' ) )
+			.toBe( '(campaignevents-event-details-worklist-add-dialog-search-input-placeholder, bwiki name)' );
+	} );
+
+	it( 'separates the search from the list of titles with a divider', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		const html = wrapper.html();
+		const divider = wrapper.find( DIVIDER );
+		expect( divider.text() ).toBe( 'campaignevents-event-details-worklist-add-dialog-or' );
+		expect( html.indexOf( 'ext-campaignevents-event-details-worklist-add-dialog-search' ) )
+			.toBeLessThan( html.indexOf( 'ext-campaignevents-event-details-worklist-add-dialog-divider' ) );
+		expect( html.indexOf( 'ext-campaignevents-event-details-worklist-add-dialog-divider' ) )
+			.toBeLessThan( html.indexOf( 'ext-campaignevents-event-details-worklist-add-dialog-textarea' ) );
+	} );
+
+	it( 'labels the list of titles and explains its format', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		expect( wrapper.text() ).toContain( 'campaignevents-event-details-worklist-add-dialog-list-label' );
+		expect( wrapper.text() ).toContain( 'campaignevents-event-details-worklist-add-dialog-list-description' );
+	} );
+
+	it( 'leaves room for several titles in the list', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		expect( wrapper.find( '.ext-campaignevents-event-details-worklist-add-dialog-textarea textarea' )
+			.attributes( 'rows' ) ).toBe( '5' );
+	} );
+
+	it( 'stacks the dialog actions, so the add button spans the dialog', () => {
+		const wrapper = mountDialog();
+		expect( wrapper.getComponent( { name: 'CdxDialog' } ).props( 'stackedActions' ) ).toBe( true );
 	} );
 
 	it( 'disables submitting once the user types over the selected wiki', async () => {

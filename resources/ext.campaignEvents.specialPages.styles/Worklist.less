@@ -225,3 +225,27 @@
 .ext-campaignevents-event-details-worklist-add-dialog-search__new-title {
 	color: @color-link-red;
 }
+
+// The wiki selector in the "Add to worklist" dialog spans the dialog, like its other fields. A
+// Codex select is otherwise only as wide as its content.
+.ext-campaignevents-event-details-worklist-add-dialog-wiki {
+	width: 100%;
+}
+
+// "or" between the two ways of adding articles in the "Add to worklist" dialog, centred on a
+// line. Not a Codex component; the dialog is teleported to the body, so this is not nested under
+// the worklist.
+.ext-campaignevents-event-details-worklist-add-dialog-divider {
+	display: flex;
+	align-items: center;
+	gap: @spacing-75;
+	margin-top: @spacing-100;
+	color: @color-subtle;
+
+	&::before,
+	&::after {
+		content: '';
+		flex: 1;
+		border-top: @border-width-base @border-style-base @border-color-subtle;
+	}
+}

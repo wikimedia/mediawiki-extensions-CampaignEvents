@@ -44,6 +44,13 @@ module.exports = exports = defineComponent( {
 		api: {
 			type: Object,
 			default: null
+		},
+		/**
+		 * Placeholder for the input, naming the wiki searched.
+		 */
+		placeholder: {
+			type: String,
+			default: ''
 		}
 	},
 	emits: [ 'choose' ],
@@ -53,7 +60,6 @@ module.exports = exports = defineComponent( {
 		);
 		const selected = ref( null );
 		const inputValue = ref( '' );
-		const placeholder = mw.msg( 'campaignevents-event-details-worklist-add-dialog-search-placeholder' );
 
 		// The dialog removes the search when it closes; a search still in flight is not needed.
 		onUnmounted( clear );
@@ -123,7 +129,6 @@ module.exports = exports = defineComponent( {
 			inputValue,
 			suggestions,
 			newTitle,
-			placeholder,
 			onInput,
 			onSelected,
 			onKeydown

@@ -15,6 +15,7 @@
 		:title="$i18n( 'campaignevents-event-details-worklist-add-dialog-title' ).text()"
 		:use-close-button="true"
 		:primary-action="primaryAction"
+		:stacked-actions="true"
 		@primary="onSubmit"
 	>
 		<div v-if="isPrivateParticipant">
@@ -32,31 +33,49 @@
 			:options="wikiOptions"
 		></worklist-wiki-selector>
 
+		<!-- Searching is one way of adding articles, and listing their titles the other. The
+			search is missing when the selected wiki can't be searched, and the divider with it. -->
+		<template v-if="searchApi">
+			<cdx-field>
+				<template #label>
+					{{
+						$i18n(
+							'campaignevents-event-details-worklist-add-dialog-search-label',
+							siteName
+						).text()
+					}}
+				</template>
+
+				<!-- Picking a result appends it to the textarea below. Searches the selected
+					wiki, and is recreated when that changes. -->
+				<worklist-article-search
+					:key="selectedWiki"
+					:api="searchApi"
+					:placeholder="searchPlaceholder"
+					@choose="appendTitle"
+				></worklist-article-search>
+			</cdx-field>
+
+			<div class="ext-campaignevents-event-details-worklist-add-dialog-divider">
+				{{ $i18n( 'campaignevents-event-details-worklist-add-dialog-or' ).text() }}
+			</div>
+		</template>
+
 		<cdx-field>
 			<template #label>
-				{{
-					$i18n( 'campaignevents-event-details-worklist-add-dialog-article-label' ).text()
-				}}
+				{{ $i18n( 'campaignevents-event-details-worklist-add-dialog-list-label' ).text() }}
 			</template>
-
-			<!-- Picking a result appends it to the textarea below. Searches the selected wiki,
-				and is recreated when that changes; missing when the wiki can't be searched. -->
-			<worklist-article-search
-				v-if="searchApi"
-				:key="selectedWiki"
-				:api="searchApi"
-				@choose="appendTitle"
-			></worklist-article-search>
-		</cdx-field>
-		<cdx-field>
-			<template #help-text>
+			<template #description>
 				{{
-					$i18n( 'campaignevents-event-details-worklist-add-dialog-article-help' ).text()
+					$i18n(
+						'campaignevents-event-details-worklist-add-dialog-list-description'
+					).text()
 				}}
 			</template>
 			<cdx-text-area
 				v-model="articlesText"
 				class="ext-campaignevents-event-details-worklist-add-dialog-textarea"
+				rows="5"
 				:placeholder="
 					$i18n( 'campaignevents-event-details-worklist-add-dialog-placeholder' ).text()
 				"
@@ -106,6 +125,19 @@ module.exports = exports = defineComponent( {
 		const isPrivateParticipant = !!mw.config.get( 'wgCampaignEventsWorklistIsPrivateParticipant' );
 
 		const { wikiOptions, showWikiSelector, selectedWiki, searchApi } = useWorklistWikiOptions();
+		// The name of the wiki searched. Without a choice of wiki that is the current one, named
+		// as the wiki names itself; with one, its option label tells it apart from the others.
+		const siteName = computed( () => {
+			if ( !showWikiSelector ) {
+				return mw.config.get( 'wgSiteName' );
+			}
+			const option = wikiOptions.find( ( item ) => item.value === selectedWiki.value );
+			return option ? option.label : '';
+		} );
+		const searchPlaceholder = computed( () => mw.msg(
+			'campaignevents-event-details-worklist-add-dialog-search-input-placeholder',
+			siteName.value
+		) );
 
 		const primaryAction = computed( () => ( {
 			label: mw.msg( 'campaignevents-event-details-worklist-add-dialog-submit' ),
@@ -241,6 +273,8 @@ module.exports = exports = defineComponent( {
 			showWikiSelector,
 			selectedWiki,
 			searchApi,
+			siteName,
+			searchPlaceholder,
 			primaryAction,
 			appendTitle,
 			onSubmit,
