@@ -87,4 +87,19 @@ describe( 'RemoveWorklistArticleDialog', () => {
 		const wrapper = mountDialog();
 		expect( wrapper.vm.$options.emits ).toEqual( [ 'confirm-delete', 'cancel' ] );
 	} );
+
+	it( 'does not warn a participant who is not private', () => {
+		mw.config.get = () => null;
+		const wrapper = mountDialog();
+		expect( wrapper.html() ).not.toContain( 'campaignevents-worklist-private-participant-warning' );
+	} );
+
+	it( 'warns a private participant that their username will be public', () => {
+		mw.config.get = ( key ) => key === 'wgCampaignEventsWorklistIsPrivateParticipant';
+		const wrapper = mountDialog();
+		const warning = wrapper.findComponent( { name: 'CdxMessage' } );
+		expect( warning.exists() ).toBe( true );
+		expect( warning.props( 'type' ) ).toBe( 'warning' );
+		expect( warning.text() ).toContain( 'campaignevents-worklist-private-participant-warning' );
+	} );
 } );

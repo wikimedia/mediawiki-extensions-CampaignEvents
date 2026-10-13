@@ -7,8 +7,11 @@ namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
 use MediaWiki\Extension\CampaignEvents\Event\ExistingEventRegistration;
+use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
+use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\MWEntity\WikiLookup;
 use MediaWiki\Extension\CampaignEvents\Pager\WorklistPagesPagerFactory;
+use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
 use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Html\Html;
@@ -39,6 +42,8 @@ readonly class WorklistModule {
 		private WorklistPagesPagerFactory $worklistPagesPagerFactory,
 		private WorklistEventsStore $worklistEventsStore,
 		private WikiLookup $wikiLookup,
+		private CampaignsCentralUserLookup $centralUserLookup,
+		private ParticipantsStore $participantsStore,
 		private LinkRenderer $linkRenderer,
 		private OutputPage $output,
 		private ExistingEventRegistration $event,
@@ -92,6 +97,9 @@ readonly class WorklistModule {
 			'wgCampaignEventsWorklistPageUrl' => $worklistPageUrl,
 			'wgCampaignEventsWorklistPageHistoryUrl' => $worklistPageHistoryUrl,
 			'wgCampaignEventsWorklistWikiRestUrl' => $worklistWikiRestUrl,
+			// Editing the worklist is a public page edit, so the add and remove dialogs warn a
+			// private participant that it will reveal their username.
+			'wgCampaignEventsWorklistIsPrivateParticipant' => $this->isPrivateParticipant(),
 		] );
 		// Only named users can add articles, so only they need the (potentially long) list of wikis.
 		if ( $this->output->getUser()->isNamed() ) {
@@ -150,6 +158,23 @@ readonly class WorklistModule {
 			];
 		}
 		return $options;
+	}
+
+	/**
+	 * Whether the current user is registered for the event as a private participant.
+	 */
+	private function isPrivateParticipant(): bool {
+		try {
+			$centralUser = $this->centralUserLookup->newFromAuthority( $this->output->getAuthority() );
+		} catch ( UserNotGlobalException ) {
+			return false;
+		}
+		$participant = $this->participantsStore->getEventParticipant(
+			$this->event->getID(),
+			$centralUser,
+			true
+		);
+		return $participant?->isPrivateRegistration() ?? false;
 	}
 
 	/**

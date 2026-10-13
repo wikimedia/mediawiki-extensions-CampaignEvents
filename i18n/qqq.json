@@ -577,6 +577,7 @@
 	"campaignevents-worklist-remove-confirm-body": "Body text of the confirmation dialog shown before removing a page from the worklist on [[Special:EventDetails]].",
 	"campaignevents-worklist-remove-confirm-action": "Label of the destructive primary button that confirms removing a page in the worklist removal confirmation dialog on [[Special:EventDetails]].\n{{Identical|Remove}}",
 	"campaignevents-worklist-remove-confirm-cancel": "Label of the button that dismisses the worklist removal confirmation dialog on [[Special:EventDetails]] without removing the page.\n{{Identical|Cancel}}",
+	"campaignevents-worklist-private-participant-warning": "Warning shown to a participant with a private registration in the dialogs for adding articles to and removing articles from the event worklist on [[Special:EventDetails]], since editing the worklist reveals their username publicly.",
 	"campaignevents-worklist-remove-success": "Success notification shown after a page is successfully removed from the worklist on [[Special:EventDetails]].",
 	"campaignevents-worklist-remove-error": "Error notification shown when removing a page from the worklist via the API fails on [[Special:EventDetails]].\nParameters:\n* $1 - the error message returned by the API.",
 	"invitationlist": "Description of [[Special:InvitationList]]",

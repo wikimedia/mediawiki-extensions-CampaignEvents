@@ -17,6 +17,15 @@
 		:primary-action="primaryAction"
 		@primary="onSubmit"
 	>
+		<div v-if="isPrivateParticipant">
+			<cdx-message
+				class="ext-campaignevents-event-details-worklist-private-warning"
+				type="warning"
+			>
+				{{ $i18n( 'campaignevents-worklist-private-participant-warning' ).text() }}
+			</cdx-message>
+		</div>
+
 		<worklist-wiki-selector
 			v-if="showWikiSelector"
 			v-model:selected="selectedWiki"
@@ -92,6 +101,9 @@ module.exports = exports = defineComponent( {
 		const hasMessage = ref( false );
 		const message = ref( '' );
 		const messageType = ref( 'error' );
+		// Adding articles edits the public worklist page, which reveals a private participant's
+		// username, so warn them before they save.
+		const isPrivateParticipant = !!mw.config.get( 'wgCampaignEventsWorklistIsPrivateParticipant' );
 
 		const { wikiOptions, showWikiSelector, selectedWiki, searchApi } = useWorklistWikiOptions();
 
@@ -221,6 +233,7 @@ module.exports = exports = defineComponent( {
 		return {
 			open,
 			articlesText,
+			isPrivateParticipant,
 			hasMessage,
 			message,
 			messageType,

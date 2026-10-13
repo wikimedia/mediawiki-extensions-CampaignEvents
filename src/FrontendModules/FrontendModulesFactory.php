@@ -195,6 +195,8 @@ class FrontendModulesFactory {
 			$this->worklistPagesPagerFactory,
 			$this->worklistEventsStore,
 			$this->wikiLookup,
+			$this->centralUserLookup,
+			$this->participantsStore,
 			$linkRenderer,
 			$output,
 			$event,

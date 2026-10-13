@@ -307,4 +307,33 @@ describe( 'AddWorklistArticleDialog', () => {
 		expect( wrapper.vm.primaryAction.disabled ).toBe( true );
 		expect( restAjax ).not.toHaveBeenCalled();
 	} );
+
+	it( 'does not warn a participant who is not private', async () => {
+		const wrapper = mountDialog();
+		await openDialog( wrapper );
+
+		expect( wrapper.vm.isPrivateParticipant ).toBe( false );
+		expect( wrapper.html() ).not.toContain( 'campaignevents-worklist-private-participant-warning' );
+	} );
+
+	it( 'warns a private participant that their username will be public', async () => {
+		const wrapper = mountDialog( { wgCampaignEventsWorklistIsPrivateParticipant: true } );
+		await openDialog( wrapper );
+
+		const warning = wrapper.findComponent( { name: 'CdxMessage' } );
+		expect( warning.exists() ).toBe( true );
+		expect( warning.props( 'type' ) ).toBe( 'warning' );
+		expect( warning.text() ).toContain( 'campaignevents-worklist-private-participant-warning' );
+	} );
+
+	it( 'shows the private participant warning before the article fields', async () => {
+		const wrapper = mountDialog( { wgCampaignEventsWorklistIsPrivateParticipant: true } );
+		await openDialog( wrapper );
+
+		const html = wrapper.html();
+		expect( html.indexOf( 'ext-campaignevents-event-details-worklist-private-warning' ) )
+			.toBeGreaterThan( -1 );
+		expect( html.indexOf( 'ext-campaignevents-event-details-worklist-private-warning' ) )
+			.toBeLessThan( html.indexOf( 'cdx-field' ) );
+	} );
 } );

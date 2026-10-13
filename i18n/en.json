@@ -570,6 +570,7 @@
 	"campaignevents-worklist-remove-confirm-body": "This page will be removed from the worklist.",
 	"campaignevents-worklist-remove-confirm-action": "Remove",
 	"campaignevents-worklist-remove-confirm-cancel": "Cancel",
+	"campaignevents-worklist-private-participant-warning": "Your username will be publicly visible if you contribute to the public event worklist.",
 	"campaignevents-worklist-remove-success": "The page was removed from the worklist.",
 	"campaignevents-worklist-remove-error": "The page could not be removed from the worklist. $1",
 	"invitationlist": "Invitation list",
