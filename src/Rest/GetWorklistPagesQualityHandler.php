@@ -110,6 +110,11 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 		) );
 	}
 
+	/** @inheritDoc */
+	protected function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/PageQuality.json';
+	}
+
 	/**
 	 * @inheritDoc
 	 */

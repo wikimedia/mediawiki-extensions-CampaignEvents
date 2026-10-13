@@ -50,7 +50,7 @@
 			"post": {
 				"operationId": "createEventRegistration",
 				"summary": "Create event registration",
-				"description": "Creates a new campaign event registration. The authenticated user must have permission to enable event registrations. Returns the ID of the newly created event.",
+				"x-i18n-description": "campaignevents-rest-create-registration-desc",
 				"tags": [ "Events" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EnableEventRegistrationHandler",
@@ -73,7 +73,7 @@
 			"get": {
 				"operationId": "getEventRegistration",
 				"summary": "Get event registration",
-				"description": "Returns full details of a single event registration identified by its numeric ID. Sensitive fields such as meeting URLs are only returned to organizers and participants with the appropriate permissions.",
+				"x-i18n-description": "campaignevents-rest-get-registration-desc",
 				"tags": [ "Events" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetEventRegistrationHandler",
@@ -90,7 +90,7 @@
 			"put": {
 				"operationId": "updateEventRegistration",
 				"summary": "Update event registration",
-				"description": "Updates an existing event registration. The authenticated user must be an organizer of the event or have the appropriate permissions. All required fields must be included in the request body.",
+				"x-i18n-description": "campaignevents-rest-update-registration-desc",
 				"tags": [ "Events" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\UpdateEventRegistrationHandler",
@@ -112,7 +112,7 @@
 			"delete": {
 				"operationId": "deleteEventRegistration",
 				"summary": "Delete event registration",
-				"description": "Permanently deletes an event registration. The authenticated user must have permission to delete the event. This action cannot be undone.",
+				"x-i18n-description": "campaignevents-rest-delete-registration-desc",
 				"tags": [ "Events" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventRegistrationHandler",
@@ -127,7 +127,7 @@
 			"put": {
 				"operationId": "registerForEvent",
 				"summary": "Register current user for event",
-				"description": "Registers the currently authenticated user as a participant in the specified event. The registration can be public or private. Answers to participant questions may also be submitted. The event must be hosted on the local wiki.",
+				"x-i18n-description": "campaignevents-rest-register-for-event-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RegisterForEventHandler",
@@ -143,7 +143,7 @@
 			"delete": {
 				"operationId": "cancelOwnEventRegistration",
 				"summary": "Cancel own event registration",
-				"description": "Cancels the currently authenticated user's participation in the specified event.",
+				"x-i18n-description": "campaignevents-rest-cancel-own-registration-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\CancelEventRegistrationHandler",
@@ -156,7 +156,7 @@
 			"get": {
 				"operationId": "getOwnRegistrationInfo",
 				"summary": "Get own registration info",
-				"description": "Returns registration details for the currently authenticated user in the specified event, including privacy setting and any answers submitted to participant questions.",
+				"x-i18n-description": "campaignevents-rest-get-own-registration-info-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetOwnRegistrationInfoHandler",
@@ -173,7 +173,7 @@
 			"get": {
 				"operationId": "listEventOrganizers",
 				"summary": "List event organizers",
-				"description": "Returns a paginated list of organizers for the specified event. Each entry includes the organizer's user ID, username, roles, and user page path. Use the `last_organizer_id` parameter for pagination.",
+				"x-i18n-description": "campaignevents-rest-event-list-organizers-desc",
 				"tags": [ "Organizers" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOrganizersHandler",
@@ -189,7 +189,7 @@
 			"put": {
 				"operationId": "setEventOrganizers",
 				"summary": "Set event organizers",
-				"description": "Replaces the organizer list for the specified event with the provided list of usernames. The authenticated user must have permission to edit the event. The event must be hosted on the local wiki.",
+				"x-i18n-description": "campaignevents-rest-event-set-organizers-desc",
 				"tags": [ "Organizers" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\SetOrganizersHandler",
@@ -204,7 +204,7 @@
 			"get": {
 				"operationId": "listEventParticipants",
 				"summary": "List event participants",
-				"description": "Returns a paginated list of participants for the specified event. Private participants are only visible to organizers and users with the appropriate permissions. Use `last_participant_id` for pagination and `username_filter` to search by username.",
+				"x-i18n-description": "campaignevents-rest-event-list-participants-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListParticipantsHandler",
@@ -224,7 +224,7 @@
 			"delete": {
 				"operationId": "removeEventParticipants",
 				"summary": "Remove participants from event",
-				"description": "Removes one or more participants from the specified event. The authenticated user must have permission to manage participants. Specify `user_ids` to remove particular users, or use `invert_users` to remove all participants except those listed. The event must be on the local wiki.",
+				"x-i18n-description": "campaignevents-rest-event-remove-participants-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\RemoveParticipantsFromEventHandler",
@@ -239,7 +239,7 @@
 			"get": {
 				"operationId": "listEventsByOrganizer",
 				"summary": "List events by organizer",
-				"description": "Returns a list of event registrations for which the specified central user is an organizer. The `userid` path parameter is the user's global central user ID.",
+				"x-i18n-description": "campaignevents-rest-list-events-by-organizer-desc",
 				"tags": [ "Organizers" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByOrganizerHandler",
@@ -254,6 +254,7 @@
 			"get": {
 				"operationId": "listEventsByParticipant",
 				"summary": "List events by participant",
+				"x-i18n-description": "campaignevents-rest-list-events-by-participant-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListEventsByParticipantHandler",
@@ -268,7 +269,7 @@
 			"get": {
 				"operationId": "listOwnEventsForEdit",
 				"summary": "List events for contribution association",
-				"description": "Returns a list of events in which the currently authenticated user is a participant and that are eligible for contribution association. Used internally to populate the post-edit contribution prompt.",
+				"x-i18n-description": "campaignevents-rest-list-own-events-for-edit-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListOwnEventsForEditHandler",
@@ -286,7 +287,7 @@
 			"post": {
 				"operationId": "emailEventParticipants",
 				"summary": "Send email to event participants",
-				"description": "Sends an email to participants of the specified event. The authenticated user must have permission to email participants. Specify `user_ids` to target particular participants, or use `invert_users` to email all except those listed. The event must be on the local wiki.",
+				"x-i18n-description": "campaignevents-rest-email-participants-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EmailUsersHandler",
@@ -303,7 +304,7 @@
 			"get": {
 				"operationId": "getParticipantQuestions",
 				"summary": "Get participant questions",
-				"description": "Returns the set of questions that can be presented to participants when they register for an event. Optionally filtered to a specific set of question IDs via the `question_ids` query parameter.",
+				"x-i18n-description": "campaignevents-rest-get-participant-questions-desc",
 				"tags": [ "Participants" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetParticipantQuestionsHandler",
@@ -319,7 +320,7 @@
 			"get": {
 				"operationId": "getFormattedTime",
 				"summary": "Get localised time strings for date range",
-				"description": "Returns localised time, date, and datetime strings for the given start and end timestamps in the specified language. Intended for internal use by the CampaignEvents front-end to render event times correctly per the viewer's language.",
+				"x-i18n-description": "campaignevents-rest-get-formatted-time-desc",
 				"tags": [ "Utilities" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetFormattedTimeHandler",
@@ -334,7 +335,7 @@
 			"put": {
 				"operationId": "associateRevisionWithEvent",
 				"summary": "Associate revision with event",
-				"description": "Associates a specific wiki revision with the given event for contribution tracking purposes. The revision is identified by its wiki ID and revision ID. This schedules a background job to validate and record the contribution.",
+				"x-i18n-description": "campaignevents-rest-associate-revision-with-event-desc",
 				"tags": [ "Contributions" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\EventContributionsHandler",
@@ -350,7 +351,7 @@
 			"delete": {
 				"operationId": "deleteEventContribution",
 				"summary": "Delete event contribution record",
-				"description": "Removes a specific event contribution record by its ID. The authenticated user must have permission to delete contributions for the associated event.",
+				"x-i18n-description": "campaignevents-rest-delete-event-contribution-desc",
 				"tags": [ "Contributions" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\DeleteEventContributionHandler",
@@ -365,7 +366,7 @@
 		"/worklist/{title}/pages": {
 			"patch": {
 				"summary": "Add or remove worklist pages",
-				"description": "Applies a delta to a worklist's page list: pages to add and/or remove, grouped by wiki. The worklist is identified by its page title.",
+				"x-i18n-description": "campaignevents-rest-patch-worklist-pages-desc",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\PatchWorklistPagesHandler",
@@ -378,7 +379,7 @@
 		"/worklist/{wiki}/{namespace}/{title}/pages": {
 			"get": {
 				"summary": "List the pages in an event's worklist",
-				"description": "Get a list of pages in a worklist, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). Data that belongs to a wiki rather than to a page, such as its localised name and the URL of its api.php (null when that wiki cannot be resolved), is returned once in a `wikis` map keyed by wiki ID, which each page refers to by its `wiki`.",
+				"description": "Get a list of pages in a worklist, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). Data that belongs to a wiki rather than to a page, such as its localized name and the URL of its api.php (null when that wiki cannot be resolved), is returned once in a `wikis` map keyed by wiki ID, which each page refers to by its `wiki`.",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesHandler",
@@ -397,7 +398,7 @@
 		"/worklist/{worklistwiki}/{namespace}/{title}/pages/quality": {
 			"get": {
 				"summary": "Quality scores for pages in an event's worklist",
-				"description": "Returns the quality of the requested pages, as scored by the Wikimedia Foundation's language-agnostic articlequality model: an overall score between 0 and 1, the class the model assigns, and the per-element scores behind it (references, wikilinks, headings, media, infobox, categories, sources and length). Asked for a screenful of pages at a time rather than a whole worklist, because the model scores one revision per request and fetches the article to do it. Pages that are not in the worklist are ignored, as are pages the model cannot score, so the response may name fewer pages than were asked for.",
+				"x-i18n-description": "campaignevents-rest-get-worklist-pages-quality-desc",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesQualityHandler",
@@ -414,7 +415,7 @@
 		"/event_discovery/discoverable_events": {
 			"get": {
 				"summary": "List discoverable events for a page",
-				"description": "Returns the open events whose worklist contains the given page and for which the authenticated user (a non-participant who has not opted out) should be shown the event discovery dialog, recording the once-per-user-and-event suppression as it does so. Used by the front-end to trigger the discovery dialog after a VisualEditor save, where the server-side BeforePageDisplay hook does not run.",
+				"x-i18n-description": "campaignevents-rest-list-discoverable-events-desc",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\ListDiscoverableEventsForPageHandler",

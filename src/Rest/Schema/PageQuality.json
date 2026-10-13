@@ -1,0 +1,86 @@
+{
+	"description": "Quality results for pages in a worklist",
+	"type": "object",
+	"required": [
+		"articles"
+	],
+	"properties": {
+		"articles": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"wiki",
+					"title",
+					"score",
+					"label",
+					"elements"
+				],
+				"properties": {
+					"wiki": {
+						"type": "string",
+						"description": "Wiki of the page",
+						"example": "xywiki"
+					},
+					"title": {
+						"type": "string",
+						"description": "Title of the page",
+						"example": "Some page title"
+					},
+					"score": {
+						"type": "number",
+						"description": "Quality score of the page, between 0 and 1.",
+						"example": 0.12345
+					},
+					"label": {
+						"type": "string",
+						"description": "Class assigned by the model.",
+						"example": "Stub"
+					},
+					"elements": {
+						"type": "object",
+						"properties": {
+							"characters": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the length of the article."
+							},
+							"refs": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of references in the article."
+							},
+							"wikilinks": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of wikilinks in the article."
+							},
+							"categories": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of categories in the article."
+							},
+							"media": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of media files in the article."
+							},
+							"headings": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of section headings in the article in relation with its length."
+							},
+							"sources": {
+								"type": "number",
+								"description": "Score between 0 and 1 for the number of sources in the article."
+							},
+							"infobox": {
+								"type": "boolean",
+								"description": "Whether the article has an infobox."
+							},
+							"messagebox": {
+								"type": "boolean",
+								"description": "Whether the article has a messagebox."
+							}
+						},
+						"description": "Fine-grained scores that determine the article quality."
+					}
+				}
+			}
+		}
+	}
+}

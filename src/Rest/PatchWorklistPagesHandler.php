@@ -9,6 +9,7 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\ParamValidator\TypeDef\TitleDef;
 use MediaWiki\Permissions\PermissionStatus;
+use MediaWiki\Rest\Handler;
 use MediaWiki\Rest\LocalizedHttpException;
 use MediaWiki\Rest\Response;
 use MediaWiki\Rest\SimpleHandler;
@@ -101,6 +102,7 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 				ParamValidator::PARAM_TYPE => 'title',
 				TitleDef::PARAM_RETURN_OBJECT => true,
 				ParamValidator::PARAM_REQUIRED => true,
+				Handler::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-worklist-title' ),
 			],
 		];
 	}
