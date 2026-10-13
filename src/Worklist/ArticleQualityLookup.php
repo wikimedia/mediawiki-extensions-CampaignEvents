@@ -285,7 +285,6 @@ class ArticleQualityLookup {
 		foreach ( $revisionIDs as $title => $revisionID ) {
 			$headers = [
 				'Content-Type' => 'application/json',
-				'User-Agent' => $this->httpRequestFactory->getUserAgent(),
 			];
 			if ( $this->hostHeader !== null && $this->hostHeader !== '' ) {
 				// Some inference services route on this and will not answer without it. An empty

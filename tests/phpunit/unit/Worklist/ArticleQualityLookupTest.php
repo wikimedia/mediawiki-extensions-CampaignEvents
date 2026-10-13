@@ -7,7 +7,6 @@ namespace MediaWiki\Extension\CampaignEvents\Tests\Unit\Worklist;
 use ArrayIterator;
 use Generator;
 use MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup;
-use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageSelectQueryBuilder;
 use MediaWiki\Page\PageStore;
@@ -17,6 +16,7 @@ use MediaWiki\Site\SiteLookup;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\Title\TitleValue;
 use MediaWikiUnitTestCase;
+use MockHttpTrait;
 use Psr\Log\NullLogger;
 use Wikimedia\Http\MultiHttpClient;
 use Wikimedia\ObjectCache\HashBagOStuff;
@@ -29,6 +29,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @covers \MediaWiki\Extension\CampaignEvents\Worklist\ArticleQualityLookup
  */
 class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
+	use MockHttpTrait;
+
 	private const WIKI = 'awiki';
 	private const ENDPOINT = 'https://inference.example.org/v1/models/articlequality:predict';
 
@@ -104,9 +106,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			}
 		);
 
-		$httpRequestFactory = $this->createMock( HttpRequestFactory::class );
-		$httpRequestFactory->method( 'createMultiClient' )->willReturn( $multiClient );
-		$httpRequestFactory->method( 'getUserAgent' )->willReturn( 'TestAgent' );
+		$httpRequestFactory = $this->makeMockHttpRequestFactory( $multiClient );
 
 		$siteLookup = $this->createMock( SiteLookup::class );
 		if ( $langCode === null ) {
@@ -167,9 +167,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		$lookup = $this->newLookup(
 			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
-			null,
-			'en',
-			$endpoint
+			endpoint: $endpoint
 		);
 
 		$this->assertSame( [], $lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] ) );
@@ -187,10 +185,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		$lookup = $this->newLookup(
 			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
-			null,
-			'en',
-			self::ENDPOINT,
-			'articlequality.example.wikimedia.org'
+			hostHeader: 'articlequality.example.wikimedia.org',
 		);
 
 		$lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] );
@@ -206,10 +201,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		$lookup = $this->newLookup(
 			[ 'Beavers' => 17 ],
 			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
-			null,
-			'en',
-			self::ENDPOINT,
-			$hostHeader
+			hostHeader: $hostHeader,
 		);
 
 		$lookup->getQualityForArticles( 'awiki', [ 'Beavers' ] );
@@ -468,10 +460,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			[ 'Otters' => 18 ],
 			[ 'Otters' => self::modelResponse( 0.5, 'C', [], '1' ) ],
 			$cache,
-			'en',
-			self::ENDPOINT,
-			null,
-			function () use ( $cache ) {
+			whileRequesting: function () use ( $cache ) {
 				$this->scoreAll( $cache, [ 'Voles' => 19 ], 0.9, '2' );
 			}
 		)->getQualityForArticles( self::WIKI, [ 'Otters' ] );
