@@ -46,25 +46,11 @@ const articleTitles = ( count ) => Array.from(
  */
 const worklistOf = ( count ) => page( articleTitles( count ) );
 
-const PAGE_BUTTON = '.ext-campaignevents-worklist-pagination__page';
-
-/**
- * The page numbers on offer, with a gap written as the character the markup renders.
- *
- * @param {Object} wrapper
- * @return {string[]}
- */
-const offered = ( wrapper ) => wrapper
-	.findAll( '.ext-campaignevents-worklist-pagination__item' )
-	.map( ( item ) => item.text() );
-
-const currentPage = ( wrapper ) => wrapper.findAll( PAGE_BUTTON )
-	.filter( ( button ) => button.attributes( 'aria-current' ) === 'page' )
-	.map( ( button ) => button.text() );
-
 const PAGINATION = '.ext-campaignevents-worklist-pagination';
-const nextButton = ( wrapper ) => wrapper.get( PAGINATION + '__next' );
+const firstButton = ( wrapper ) => wrapper.get( PAGINATION + '__first' );
 const prevButton = ( wrapper ) => wrapper.get( PAGINATION + '__prev' );
+const nextButton = ( wrapper ) => wrapper.get( PAGINATION + '__next' );
+const lastButton = ( wrapper ) => wrapper.get( PAGINATION + '__last' );
 
 /**
  * @param {Object} [config]
@@ -169,53 +155,35 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
 	} );
 
-	it( 'offers a numbered button for every page', async () => {
+	it( 'offers fixed pagination buttons', async () => {
 		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
 		const wrapper = mountApp();
 		await settle();
 
-		expect( offered( wrapper ) ).toEqual( [ '1', '2', '3' ] );
-		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
+		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( lastButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 	} );
 
-	it( 'jumps straight to a page the reader picks', async () => {
+	it( 'can go to the next page', async () => {
 		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
 		const wrapper = mountApp();
 		await settle();
 		worklistPages.fetchPages.mockClear();
 
-		await wrapper.findAll( PAGE_BUTTON )[ 2 ].trigger( 'click' );
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+
+		await nextButton( wrapper ).trigger( 'click' );
 		await settle();
 
-		expect( currentPage( wrapper ) ).toEqual( [ '3' ] );
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+
 		expect( wrapper.findAll( CARD )[ 0 ].text() )
-			.toContain( 'Article ' + ( ARTICLES_PER_PAGE * 2 + 1 ) );
+			.toContain( 'Article ' + ( ARTICLES_PER_PAGE + 1 ) );
 		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
-	} );
-
-	it( 'leaves out a run of pages once there are too many to show', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 20 ) );
-		const wrapper = mountApp();
-		await settle();
-
-		expect( offered( wrapper ) ).toEqual( [ '1', '2', '3', '4', '5', '(ellipsis)', '20' ] );
-
-		await wrapper.findAll( PAGE_BUTTON ).find( ( b ) => b.text() === '5' ).trigger( 'click' );
-		await settle();
-
-		// The control count is held steady, so the row does not resize as the reader moves.
-		expect( offered( wrapper ) ).toEqual( [ '1', '(ellipsis)', '4', '5', '6', '(ellipsis)', '20' ] );
-	} );
-
-	it( 'keeps the gap out of the accessibility tree', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 20 ) );
-		const wrapper = mountApp();
-		await settle();
-
-		expect(
-			wrapper.get( '.ext-campaignevents-worklist-pagination__ellipsis' )
-				.attributes( 'aria-hidden' )
-		).toBe( 'true' );
 	} );
 
 	it( 'names the icon-only paging buttons for assistive technology', async () => {
@@ -224,10 +192,14 @@ describe( 'WorklistApp', () => {
 		await settle();
 
 		// The chevrons say nothing on their own, so the name has to come from the label.
+		expect( firstButton( wrapper ).attributes( 'aria-label' ) )
+			.toContain( 'worklist-first-page' );
 		expect( prevButton( wrapper ).attributes( 'aria-label' ) )
 			.toContain( 'worklist-previous-page' );
 		expect( nextButton( wrapper ).attributes( 'aria-label' ) )
 			.toContain( 'worklist-next-page' );
+		expect( lastButton( wrapper ).attributes( 'aria-label' ) )
+			.toContain( 'worklist-last-page' );
 	} );
 
 	it( 'names the pagination landmark', async () => {
@@ -245,11 +217,18 @@ describe( 'WorklistApp', () => {
 		const wrapper = mountApp();
 		await settle();
 
+		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( lastButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+
 		await nextButton( wrapper ).trigger( 'click' );
 		await settle();
-		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+
+		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
+		expect( lastButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 	} );
 
 	it( 'drops back a page when removing an article empties the one shown', async () => {
@@ -425,7 +404,7 @@ describe( 'WorklistApp', () => {
 
 		// Back on the first page of the filtered results, not the second page of the old ones.
 		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
-		expect( currentPage( wrapper ) ).toEqual( [ '1' ] );
+		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 	} );
 	it( 'shows the description of each article once it arrives', async () => {
 		worklistPageData.fetchPageData.mockResolvedValue( new Map( [

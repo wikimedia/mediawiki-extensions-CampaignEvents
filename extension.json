@@ -406,8 +406,10 @@
 						"cdxIconChartLine",
 						"cdxIconHistory",
 						"cdxIconLightbulbOutline",
-						"cdxIconNext",
+						"cdxIconMoveFirst",
 						"cdxIconPrevious",
+						"cdxIconNext",
+						"cdxIconMoveLast",
 						"cdxIconTrash"
 					]
 				}
@@ -532,10 +534,11 @@
 				"campaignevents-event-details-worklist-card-signals",
 				"campaignevents-event-details-worklist-search-placeholder",
 				"campaignevents-event-details-worklist-search-no-results",
+				"campaignevents-event-details-worklist-first-page",
 				"campaignevents-event-details-worklist-previous-page",
 				"campaignevents-event-details-worklist-next-page",
-				"campaignevents-event-details-worklist-pagination-label",
-				"ellipsis"
+				"campaignevents-event-details-worklist-last-page",
+				"campaignevents-event-details-worklist-pagination-label"
 			]
 		},
 		"ext.campaignEvents.specialPages.styles": {

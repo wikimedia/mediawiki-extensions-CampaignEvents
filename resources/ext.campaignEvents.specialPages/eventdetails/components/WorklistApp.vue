@@ -76,53 +76,44 @@
 			:aria-label="paginationLabel"
 		>
 			<cdx-button
+				class="ext-campaignevents-worklist-pagination__first"
+				weight="quiet"
+				:disabled="isLoading || !hasFirstPage"
+				:aria-label="$i18n( 'campaignevents-event-details-worklist-first-page' ).text()"
+				:title="$i18n( 'campaignevents-event-details-worklist-first-page' ).text()"
+				@click="firstPage"
+			>
+				<cdx-icon :icon="cdxIconMoveFirst"></cdx-icon>
+			</cdx-button>
+			<cdx-button
 				class="ext-campaignevents-worklist-pagination__prev"
+				weight="quiet"
 				:disabled="isLoading || !hasPreviousPage"
-				:aria-label="previousLabel"
-				:title="previousLabel"
+				:aria-label="$i18n( 'campaignevents-event-details-worklist-previous-page' ).text()"
+				:title="$i18n( 'campaignevents-event-details-worklist-previous-page' ).text()"
 				@click="previousPage"
 			>
 				<cdx-icon :icon="cdxIconPrevious"></cdx-icon>
 			</cdx-button>
-
-			<ul class="ext-campaignevents-worklist-pagination__list">
-				<li
-					v-for="( item, index ) in pageItems"
-					:key="index"
-					class="ext-campaignevents-worklist-pagination__item"
-				>
-					<!-- The gap stands for pages that are not offered; it names nothing a reader
-						needs, so it is left out of the accessibility tree. -->
-					<span
-						v-if="item === ELLIPSIS"
-						class="ext-campaignevents-worklist-pagination__ellipsis"
-						aria-hidden="true"
-					>{{ ellipsisText }}</span>
-					<cdx-button
-						v-else
-						class="ext-campaignevents-worklist-pagination__page"
-						:class="{
-							'ext-campaignevents-worklist-pagination__page--current':
-								item === currentPage
-						}"
-						weight="quiet"
-						:disabled="isLoading"
-						:aria-current="item === currentPage ? 'page' : undefined"
-						@click="goToPage( item )"
-					>
-						{{ formatNumber( item ) }}
-					</cdx-button>
-				</li>
-			</ul>
-
 			<cdx-button
 				class="ext-campaignevents-worklist-pagination__next"
+				weight="quiet"
 				:disabled="isLoading || !hasNextPage"
-				:aria-label="nextLabel"
-				:title="nextLabel"
+				:aria-label="$i18n( 'campaignevents-event-details-worklist-next-page' ).text()"
+				:title="$i18n( 'campaignevents-event-details-worklist-next-page' ).text()"
 				@click="nextPage"
 			>
 				<cdx-icon :icon="cdxIconNext"></cdx-icon>
+			</cdx-button>
+			<cdx-button
+				class="ext-campaignevents-worklist-pagination__last"
+				weight="quiet"
+				:disabled="isLoading || !hasLastPage"
+				:aria-label="$i18n( 'campaignevents-event-details-worklist-last-page' ).text()"
+				:title="$i18n( 'campaignevents-event-details-worklist-last-page' ).text()"
+				@click="lastPage"
+			>
+				<cdx-icon :icon="cdxIconMoveLast"></cdx-icon>
 			</cdx-button>
 		</nav>
 
@@ -146,7 +137,7 @@
 <script>
 const { defineComponent, ref, computed, watch, onMounted } = require( 'vue' );
 const { CdxButton, CdxIcon, CdxMessage, CdxSearchInput } = require( '../../../codex.js' );
-const { cdxIconHistory, cdxIconNext, cdxIconPrevious } = require( '../../../icons.json' );
+const { cdxIconHistory, cdxIconMoveFirst, cdxIconPrevious, cdxIconNext, cdxIconMoveLast } = require( '../../../icons.json' );
 const AddWorklistArticleDialog = require( './AddWorklistArticleDialog.vue' );
 const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue' );
 const WorklistArticleCard = require( './WorklistArticleCard.vue' );
@@ -157,11 +148,6 @@ const worklistQuality = require( '../WorklistQuality.js' );
 // Enough cards to make paging rare on a wide screen without a long first load. The grid takes
 // as many columns as the viewport allows, so no page size can promise a full last row.
 const ARTICLES_PER_PAGE = 24;
-// The fewest pages offered either side of the current one before a gap is drawn instead; a run
-// anchored to the first or last page shows more than this.
-const PAGE_SIBLINGS = 1;
-/** Marks a run of pages that is not offered, rather than a page number. */
-const ELLIPSIS = 'ellipsis';
 const SKELETON_CARDS = 6;
 
 // The history control navigates, so it has to be a link. Codex has no button that renders as one,
@@ -173,57 +159,6 @@ const HISTORY_BUTTON_CLASSES = [
 	'cdx-button--fake-button--enabled',
 	'cdx-button--icon-only'
 ];
-
-/**
- * @param {number} from
- * @param {number} to
- * @return {number[]}
- */
-function range( from, to ) {
-	const pages = [];
-	for ( let page = from; page <= to; page++ ) {
-		pages.push( page );
-	}
-	return pages;
-}
-
-/**
- * The page numbers to offer, with `ELLIPSIS` where a run of them is left out.
- *
- * Every result holds the same number of items, so that the controls do not change width
- * underneath the pointer. Once there are more pages than fit, the run offered is either centred
- * on the current page, with a gap and an end page on each side, or — near either end, where a gap
- * would hide no more than the page it replaces — anchored to that end, with a single gap and the
- * far end page. An anchored run therefore reaches further than PAGE_SIBLINGS, which is what keeps
- * the count the same.
- *
- * @param {number} currentPage
- * @param {number} totalPages
- * @return {Array<number|string>}
- */
-function buildPageItems( currentPage, totalPages ) {
-	// First and last page, the current page and its siblings, and a gap on each side.
-	const maxVisible = PAGE_SIBLINGS * 2 + 5;
-	if ( totalPages <= maxVisible ) {
-		return range( 1, totalPages );
-	}
-
-	// An anchored run gives up one of those items to its single gap and one to the far end page.
-	const anchoredRun = maxVisible - 2;
-	const left = Math.max( currentPage - PAGE_SIBLINGS, 1 );
-	const right = Math.min( currentPage + PAGE_SIBLINGS, totalPages );
-	// A gap is only worth drawing where it hides more than the page it replaces.
-	const gapOnLeft = left > 2;
-	const gapOnRight = right < totalPages - 1;
-
-	if ( !gapOnLeft ) {
-		return range( 1, anchoredRun ).concat( [ ELLIPSIS, totalPages ] );
-	}
-	if ( !gapOnRight ) {
-		return [ 1, ELLIPSIS ].concat( range( totalPages - anchoredRun + 1, totalPages ) );
-	}
-	return [ 1, ELLIPSIS ].concat( range( left, right ), [ ELLIPSIS, totalPages ] );
-}
 
 /**
  * The card presentation of an event's worklist, which replaces the placeholder cards the server
@@ -299,11 +234,10 @@ module.exports = exports = defineComponent( {
 		const showPagination = computed(
 			() => !errorMessage.value && !showSkeleton.value && totalPages.value > 1
 		);
+		const hasFirstPage = computed( () => currentPage.value > 1 );
 		const hasPreviousPage = computed( () => currentPage.value > 1 );
 		const hasNextPage = computed( () => currentPage.value < totalPages.value );
-		const pageItems = computed(
-			() => buildPageItems( currentPage.value, totalPages.value )
-		);
+		const hasLastPage = computed( () => currentPage.value < totalPages.value );
 		// An empty list means something different once the reader has filtered it.
 		const emptyStateMessage = computed( () => mw.msg(
 			searchTerm.value.trim() ?
@@ -393,16 +327,20 @@ module.exports = exports = defineComponent( {
 			return known ? known.band : null;
 		}
 
-		function nextPage() {
-			currentPage.value = Math.min( currentPage.value + 1, totalPages.value );
+		function firstPage() {
+			currentPage.value = 1;
 		}
 
 		function previousPage() {
 			currentPage.value = Math.max( currentPage.value - 1, 1 );
 		}
 
-		function goToPage( page ) {
-			currentPage.value = Math.min( Math.max( page, 1 ), totalPages.value );
+		function nextPage() {
+			currentPage.value = Math.min( currentPage.value + 1, totalPages.value );
+		}
+
+		function lastPage() {
+			currentPage.value = totalPages.value;
 		}
 
 		/**
@@ -508,14 +446,13 @@ module.exports = exports = defineComponent( {
 			isLoading,
 			errorMessage,
 			searchTerm,
-			currentPage,
-			pageItems,
-			ELLIPSIS,
 			showSkeleton,
 			showPagination,
 			emptyStateMessage,
+			hasFirstPage,
 			hasPreviousPage,
 			hasNextPage,
+			hasLastPage,
 			isRemoveDialogOpen,
 			isRemoving,
 			canAddArticles,
@@ -526,19 +463,16 @@ module.exports = exports = defineComponent( {
 			historyButtonClasses: HISTORY_BUTTON_CLASSES,
 			searchPlaceholder: mw.msg( 'campaignevents-event-details-worklist-search-placeholder' ),
 			paginationLabel: mw.msg( 'campaignevents-event-details-worklist-pagination-label' ),
-			ellipsisText: mw.msg( 'ellipsis' ),
-			previousLabel: mw.msg( 'campaignevents-event-details-worklist-previous-page' ),
-			nextLabel: mw.msg( 'campaignevents-event-details-worklist-next-page' ),
-			// Page numbers belong to the controls rather than to the worklist, so they take the
-			// digits of the reader's language.
-			formatNumber: ( page ) => String( mw.language.convertNumber( page ) ),
 			skeletonCards: SKELETON_CARDS,
 			cdxIconHistory,
+			cdxIconMoveFirst,
 			cdxIconPrevious,
 			cdxIconNext,
-			nextPage,
+			cdxIconMoveLast,
+			firstPage,
 			previousPage,
-			goToPage,
+			nextPage,
+			lastPage,
 			onRemoveRequested,
 			confirmRemove,
 			cancelRemove,
