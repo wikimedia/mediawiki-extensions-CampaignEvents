@@ -2666,4 +2666,59 @@ class WikiPageBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers' ] )
 		);
 	}
+
+	protected function getExpectedFilteredResult(): array {
+		return [
+			[
+				'wiki' => 'awiki',
+				'prefixedtext' => 'Page 1',
+				'timestamp' => '1',
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 1',
+				'timestamp' => '1',
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 101',
+				'timestamp' => '10',
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 100',
+				'timestamp' => null,
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 102',
+				'timestamp' => null,
+			],
+			[
+				'wiki' => 'zwiki',
+				'prefixedtext' => 'Page 1',
+				'timestamp' => null,
+			],
+		];
+	}
+
+	public function testGetWorklistPages__filterNonASCII() {
+		$worklistHelper = $this->createMock( WorklistArticleHelper::class );
+		$worklistHelper->method( 'getRawWorklistContentCached' )
+			->willReturn( [ 'awiki' => [ 'ÀèÉìÒù' ] ] );
+		$this->setService( WorklistArticleHelper::SERVICE_NAME, $worklistHelper );
+
+		$lookup = $this->getLookup();
+		$this->assertCount(
+			1,
+			$lookup->getWorklistPages(
+				IWL::SORT_TIMESTAMP,
+				99999,
+				null,
+				IWL::DIR_ASCENDING,
+				IWL::NOT_BACKWARDS,
+				'èÉÌò',
+			)['result'],
+		);
+	}
 }

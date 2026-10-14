@@ -34,6 +34,7 @@ class WorklistPagesPagerFactory {
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		PageIdentity $worklistPage,
+		?string $titleFilter = null,
 	): WorklistPagesPager {
 		return new WorklistPagesPager(
 			$this->databaseHelper,
@@ -45,6 +46,7 @@ class WorklistPagesPagerFactory {
 			$context,
 			$linkRenderer,
 			$worklistPage,
+			$titleFilter,
 		);
 	}
 }

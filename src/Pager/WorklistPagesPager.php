@@ -54,6 +54,7 @@ class WorklistPagesPager extends CodexTablePager {
 		IContextSource $context,
 		LinkRenderer $linkRenderer,
 		private readonly PageIdentity $worklistPage,
+		private readonly ?string $titleFilter = null,
 	) {
 		// Set the database before calling the parent constructor, otherwise it'll use the local one.
 		$this->mDb = $databaseHelper->getReplicaConnection();
@@ -85,7 +86,15 @@ class WorklistPagesPager extends CodexTablePager {
 			$this->worklistPage->getId( $this->worklistPage->getWikiId() )
 		);
 		// Use a nonexistent ID to force empty state
-		return $this->worklistPagesSecondaryStore->getQueryInfo( $worklistID ?? -1 );
+		$queryInfo = $this->worklistPagesSecondaryStore->getQueryInfo( $worklistID ?? -1 );
+
+		if ( $this->titleFilter !== null ) {
+			$queryInfo['conds'][] = Utils::buildCaseInsensitiveSubstringSearchDBCondition(
+				$this->mDb, 'cewp_page_prefixedtext', $this->titleFilter
+			);
+		}
+
+		return $queryInfo;
 	}
 
 	/** @inheritDoc */

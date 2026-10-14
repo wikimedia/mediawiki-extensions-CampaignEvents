@@ -54,13 +54,19 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		?string $offset,
 		bool $direction,
 		bool $isBackwards,
+		?string $titleFilter = null,
 	): array {
 		Assert::parameter( $limit > 0, '$limit', 'must be positive' );
 
 		$rawContent = $this->worklistArticleHelper->getRawWorklistContentCached( $this->worklistPage );
+		if ( $rawContent && $titleFilter !== null ) {
+			$rawContent = $this->filterContentByTitle( $rawContent, $titleFilter );
+		}
+
 		if ( !$rawContent ) {
 			return [ 'result' => [], 'paginationOffsets' => [] ];
 		}
+
 		$wikiIDString = Utils::getWikiIDString( $this->worklistPage->getWikiId() );
 		$pageID = $this->worklistPage->getId( $this->worklistPage->getWikiId() );
 		$worklistID = $this->worklistSecondaryStore->getWorklistIDFromPage( $wikiIDString, $pageID );
@@ -105,6 +111,24 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		);
 
 		return [ 'result' => self::cleanResult( $result ), 'paginationOffsets' => $paginationOffsets ];
+	}
+
+	/**
+	 * @param array<string,string[]> $content
+	 * @param string $search
+	 * @return array<string,string[]>
+	 */
+	private function filterContentByTitle( array $content, string $search ): array {
+		$ret = [];
+		foreach ( $content as $wiki => $titles ) {
+			foreach ( $titles as $title ) {
+				if ( mb_stripos( $title, $search ) !== false ) {
+					$ret[$wiki] ??= [];
+					$ret[$wiki][] = $title;
+				}
+			}
+		}
+		return $ret;
 	}
 
 	/**

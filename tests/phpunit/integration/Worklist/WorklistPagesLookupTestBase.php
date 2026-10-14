@@ -170,4 +170,24 @@ abstract class WorklistPagesLookupTestBase extends MediaWikiIntegrationTestCase 
 		$manyFields = '||||||||||||||||||||';
 		yield 'Lots of fields' => [ $manyFields, $manyFields ];
 	}
+
+	public function testGetWorklistPages__filter() {
+		$lookup = $this->getLookup();
+		$this->assertArrayEquals(
+			static::getExpectedFilteredResult(),
+			$lookup->getWorklistPages(
+				IWorklistPagesLookup::SORT_TIMESTAMP,
+				99999,
+				null,
+				IWorklistPagesLookup::DIR_ASCENDING,
+				IWorklistPagesLookup::NOT_BACKWARDS,
+				'GE 1',
+			)['result'],
+			false,
+			true
+		);
+	}
+
+	/** Returns expected pages when filtering by "GE 1" and sorting by timestamp ascending */
+	abstract protected function getExpectedFilteredResult(): array;
 }

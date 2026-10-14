@@ -13,6 +13,7 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageIdentityValue;
+use Wikimedia\ScopedCallback;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 use Wikimedia\Timestamp\TimestampFormat;
 
@@ -1619,6 +1620,65 @@ class DatabaseBasedWorklistPagesLookupTest extends WorklistPagesLookupTestBase {
 		$this->assertSame(
 			[],
 			$this->getLookup()->filterWorklistPages( 'awiki', [ 'Beavers' ] )
+		);
+	}
+
+	protected function getExpectedFilteredResult(): array {
+		return [
+			[
+				'wiki' => 'awiki',
+				'prefixedtext' => 'Page 1',
+				'timestamp' => '1',
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 1',
+				'timestamp' => '1',
+			],
+			[
+				'wiki' => 'bwiki',
+				'prefixedtext' => 'Page 101',
+				'timestamp' => '10',
+			],
+		];
+	}
+
+	public function testGetWorklistPages__filterNonASCII() {
+		$this->markTestSkippedIfDbType( 'sqlite' );
+
+		$this->getDb()->newInsertQueryBuilder()
+			->insertInto( 'ce_worklist_pages' )
+			->row( [
+				'cewp_cew_id' => self::WORKLIST_ID,
+				'cewp_user_id' => 1,
+				'cewp_wiki' => 'xwiki',
+				'cewp_page_prefixedtext' => 'ÀèÉìÒù',
+				'cewp_timestamp' => $this->getDb()->timestamp( 99 ),
+			] )
+			->caller( __METHOD__ )
+			->execute();
+		$insertID = $this->getDb()->insertId();
+		$fname = __METHOD__;
+		// The table is populated in addDBDataOnce, so we need to drop the extra row ourselves
+		$restoreScoped = new ScopedCallback( function () use ( $insertID, $fname ) {
+			$this->getDb()->newDeleteQueryBuilder()
+				->deleteFrom( 'ce_worklist_pages' )
+				->where( [ 'cewp_id' => $insertID ] )
+				->caller( $fname )
+				->execute();
+		} );
+
+		$lookup = $this->getLookup();
+		$this->assertCount(
+			1,
+			$lookup->getWorklistPages(
+				IWL::SORT_TIMESTAMP,
+				99999,
+				null,
+				IWL::DIR_ASCENDING,
+				IWL::NOT_BACKWARDS,
+				'èÉÌò',
+			)['result'],
 		);
 	}
 }

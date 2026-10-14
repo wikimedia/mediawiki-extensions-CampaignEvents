@@ -47,6 +47,8 @@ interface IWorklistPagesLookup {
 	 * @param bool $direction {@link self::DIR_ASCENDING} or {@link self::DIR_DESCENDING}
 	 * @param bool $isBackwards {@link self::BACKWARDS} or {@link self::NOT_BACKWARDS}, when set we start listing
 	 *   results from the last page, but still in the specified direction.
+	 * @param string|null $titleFilter If provided, only titles including this string will be returned. The search is
+	 *   case-insensitive if possible, but it may sometimes degrade to case-sensitive, depending on the implementation.
 	 * @return array{
 	 *     result:list<array{wiki:string,prefixedtext:string,timestamp:int|null}>,
 	 *     paginationOffsets:array{prev?:string|null,next?:string|null,cur?:string|null,first?:string|null,last?:string|null}
@@ -58,6 +60,7 @@ interface IWorklistPagesLookup {
 		?string $offset,
 		bool $direction,
 		bool $isBackwards,
+		?string $titleFilter = null,
 	): array;
 
 	/**

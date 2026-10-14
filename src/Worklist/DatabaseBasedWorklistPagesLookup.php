@@ -55,6 +55,7 @@ class DatabaseBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		?string $offset,
 		bool $direction,
 		bool $isBackwards,
+		?string $titleFilter = null,
 	): array {
 		Assert::parameter( $limit > 0, '$limit', 'must be positive' );
 
@@ -71,6 +72,7 @@ class DatabaseBasedWorklistPagesLookup implements IWorklistPagesLookup {
 			$context,
 			$this->linkRenderer,
 			$this->worklistPage,
+			$titleFilter,
 		);
 		$pager->setLimit( $limit );
 		// Refresh the limit, as the pager has an upper bound of 5000.
