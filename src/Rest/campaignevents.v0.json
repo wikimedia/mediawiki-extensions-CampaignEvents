@@ -379,7 +379,7 @@
 		"/worklist/{wiki}/{namespace}/{title}/pages": {
 			"get": {
 				"summary": "List the pages in an event's worklist",
-				"description": "Get a list of pages in a worklist, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). Data that belongs to a wiki rather than to a page, such as its localized name and the URL of its api.php (null when that wiki cannot be resolved), is returned once in a `wikis` map keyed by wiki ID, which each page refers to by its `wiki`.",
+				"x-i18n-description": "campaignevents-rest-get-worklist-pages-desc",
 				"tags": [ "Worklists" ],
 				"handler": {
 					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetWorklistPagesHandler",

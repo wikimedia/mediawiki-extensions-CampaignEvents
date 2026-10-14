@@ -108,6 +108,11 @@
 	"campaignevents-rest-associate-revision-with-event-desc": "Description of the REST API endpoint for associating an edit with an event. Shown in the REST API sandbox.",
 	"campaignevents-rest-delete-event-contribution-desc": "Description of the REST API endpoint for dissociating an edit from an event. Shown in the REST API sandbox.",
 	"campaignevents-rest-patch-worklist-pages-desc": "Description of the REST API endpoint for updating worklist contents. Shown in the REST API sandbox.",
+	"campaignevents-rest-get-worklist-pages-desc": "Description of the REST API endpoint for getting a list of pages in a worklist. Shown in the REST API sandbox.",
+	"campaignevents-rest-get-worklist-param-desc-limit": "Description of the 'limit' query parameter for the GET worklist pages REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-get-worklist-param-desc-offset": "Description of the 'offset' query parameter for the GET worklist pages REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-get-worklist-param-desc-backwards": "Description of the 'backwards' query parameter for the GET worklist pages REST API endpoint. Shown in the REST API sandbox.",
+	"campaignevents-rest-get-worklist-param-desc-title-filter": "Description of the 'title_filter' query parameter for the GET worklist pages REST API endpoint. Shown in the REST API sandbox.",
 	"campaignevents-rest-get-worklist-pages-quality-desc": "Description of the REST API endpoint for getting quality scores of pages in a worklist. Shown in the REST API sandbox.",
 	"campaignevents-rest-list-discoverable-events-desc": "Description of the REST API endpoint for listing events that can be suggested to the user. Shown in the REST API sandbox."
 }

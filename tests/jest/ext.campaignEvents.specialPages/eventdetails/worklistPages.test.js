@@ -11,7 +11,7 @@ const EXPECTED_PATH = '/campaignevents/v0/worklist/somewiki/1728/My_event%2FWork
 
 /* eslint-disable camelcase */
 // Responses as the endpoint sends them, in snake_case.
-const EMPTY_RESPONSE = { wikis: {}, pages: [] };
+const EMPTY_RESPONSE = { wikis: {}, pages: [], pagination_offsets: {} };
 const ONE_ARTICLE_RESPONSE = {
 	// The wiki's name is sent once for the whole response, not on every page.
 	wikis: {
@@ -25,7 +25,10 @@ const ONE_ARTICLE_RESPONSE = {
 		timestamp_formatted: '14:32, 3 September 2026',
 		url: 'https://a.example.org/wiki/Beavers',
 		classes: 'external'
-	} ]
+	} ],
+	pagination_offsets: {
+		cur: 'foo'
+	}
 };
 /* eslint-enable camelcase */
 
@@ -103,16 +106,20 @@ describe( 'worklistPages.fetchPages', () => {
 	it( 'reads the articles in the event\'s worklist', async () => {
 		const get = mockRest();
 
-		await worklistPages.fetchPages();
+		await worklistPages.fetchPages( 50, '1|2', false, 'Filter' );
 
-		expect( get ).toHaveBeenCalledWith( EXPECTED_PATH );
+		expect( get ).toHaveBeenCalledWith(
+			EXPECTED_PATH,
+			// eslint-disable-next-line camelcase
+			{ limit: 50, offset: '1|2', backwards: false, title_filter: 'Filter' }
+		);
 	} );
 
 	it( 'normalises the response for the components', async () => {
 		const get = mockRest();
 		get.mockResolvedValue( ONE_ARTICLE_RESPONSE );
 
-		await expect( worklistPages.fetchPages() ).resolves.toStrictEqual( {
+		await expect( worklistPages.fetchPages( 50, null, false, null ) ).resolves.toStrictEqual( {
 			pages: [ {
 				wiki: 'awiki',
 				wikiName: 'A Wiki',
@@ -123,7 +130,10 @@ describe( 'worklistPages.fetchPages', () => {
 				title: 'Beavers',
 				url: 'https://a.example.org/wiki/Beavers',
 				classes: 'external'
-			} ]
+			} ],
+			paginationOffsets: {
+				cur: 'foo'
+			}
 		} );
 	} );
 
@@ -132,11 +142,11 @@ describe( 'worklistPages.fetchPages', () => {
 		const restGet = mockRest( { wgCampaignEventsWorklistWikiRestUrl: foreignRestUrl } );
 		mw.ForeignRest = jest.fn();
 
-		await worklistPages.fetchPages();
+		await worklistPages.fetchPages( 50, null, false, null );
 
 		// The articles are in the shared tables, so any wiki answers the same. Asking here makes
 		// the response's idea of a local page the reader's own, rather than the worklist page's.
-		expect( restGet ).toHaveBeenCalledWith( EXPECTED_PATH );
+		expect( restGet ).toHaveBeenCalledWith( EXPECTED_PATH, expect.anything() );
 		expect( mw.ForeignRest ).not.toHaveBeenCalled();
 	} );
 

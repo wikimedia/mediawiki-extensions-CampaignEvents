@@ -1,0 +1,104 @@
+{
+	"description": "Paginated list of worklist pages",
+	"type": "object",
+	"required": [
+		"wikis",
+		"pages",
+		"paginationOffsets"
+	],
+	"properties": {
+		"wikis": {
+			"type": "object",
+			"description": "Information for wiki whose pages appear in the list, keyed by wiki ID.",
+			"additionalProperties": {
+				"type": "object",
+				"required": [ "name", "api_url" ],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Localized wiki name"
+					},
+					"api_url": {
+						"type": "string",
+						"description": "Action API URL for this wiki"
+					}
+				}
+			}
+		},
+		"pages": {
+			"type": "array",
+			"description": "Pages contained in the worklist",
+			"items": {
+				"type": "object",
+				"required": [
+					"wiki",
+					"is_local",
+					"title",
+					"timestamp",
+					"timestamp_formatted",
+					"url",
+					"classes"
+				],
+				"properties": {
+					"wiki": {
+						"type": "string",
+						"description": "ID of the wiki where this page lives"
+					},
+					"is_local": {
+						"type": "boolean",
+						"description": "Whether this is a local page"
+					},
+					"title": {
+						"type": "string",
+						"description": "Full title of the page"
+					},
+					"timestamp": {
+						"type": "string",
+						"description": "ISO-8601 timestamp of when the page was added to the worklist"
+					},
+					"timestamp_formatted": {
+						"type": "string",
+						"description": "Timestamp of when the page was added to the worklist, formatted for the current user"
+					},
+					"url": {
+						"type": "string",
+						"description": "URL to the page"
+					},
+					"classes": {
+						"type": "string",
+						"description": "CSS classes to add to a link to this page"
+					}
+				}
+			}
+		},
+		"paginationOffsets": {
+			"description": "Pagination offsets to use to get other pages of the result set. These are set iff it would make sense to go from the currently-requested result page to the page in question.",
+			"type": "object",
+			"properties": {
+				"first": {
+					"nullable": true,
+					"description": "Set iff the user can navigate to the first page. The value is always null in that case.",
+					"example": null
+				},
+				"prev": {
+					"type": "string",
+					"description": "Offset to go to the previous page, if available"
+				},
+				"cur": {
+					"type": "string",
+					"nullable": true,
+					"description": "Offset of the current page, if available"
+				},
+				"next": {
+					"type": "string",
+					"description": "Offset to go to the next page, if available"
+				},
+				"last": {
+					"nullable": true,
+					"description": "Set iff the user can navigate to the last page. The value is always null in that case.",
+					"example": null
+				}
+			}
+		}
+	}
+}

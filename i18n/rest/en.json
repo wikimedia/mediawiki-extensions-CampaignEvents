@@ -105,6 +105,11 @@
 	"campaignevents-rest-associate-revision-with-event-desc": "Associates a specific wiki revision with the given event for contribution tracking purposes. The association is processed and finalized asynchronously.",
 	"campaignevents-rest-delete-event-contribution-desc": "Removes a specific event contribution record by its ID. The authenticated user must have permission to remove this contribution from its associated event.",
 	"campaignevents-rest-patch-worklist-pages-desc": "Applies a delta to a worklist's page list: pages to add and/or remove, grouped by wiki.",
+	"campaignevents-rest-get-worklist-pages-desc": "Get a list of pages in a worklist, each with the URL and CSS classes its link would have in the server-rendered worklist table (a red link for a page still to be created, an external link for another wiki). Data that belongs to a wiki rather than to a page, such as its localized name and the URL of its api.php (null when that wiki cannot be resolved), is returned once in a `wikis` map keyed by wiki ID, which each page refers to by its `wiki`.",
+	"campaignevents-rest-get-worklist-param-desc-limit": "Maximum number of pages to return.",
+	"campaignevents-rest-get-worklist-param-desc-offset": "Pagination offset to get a specific page of the result set, as returned by a previous request to this endpoint.",
+	"campaignevents-rest-get-worklist-param-desc-backwards": "Whether to list results backwards (for example, to get the last result page).",
+	"campaignevents-rest-get-worklist-param-desc-title-filter": "If provided, return only pages whose title includes this string.",
 	"campaignevents-rest-get-worklist-pages-quality-desc": "Returns the quality of the requested pages, contained in a worklist, as scored by the Wikimedia Foundation's language-agnostic articlequality model. Pages that are not in the worklist are ignored, as are pages the model cannot score, so the response may name fewer pages than were asked for.",
 	"campaignevents-rest-list-discoverable-events-desc": "Returns the open events whose worklist contains the given page and for which the authenticated user (a non-participant who has not opted out) should be shown the event discovery dialog, recording the once-per-user-and-event suppression as it does so."
 }

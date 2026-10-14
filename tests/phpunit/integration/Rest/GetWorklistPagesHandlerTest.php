@@ -40,13 +40,14 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 	private const LOCAL_SCRIPT_PATH = '/w';
 	private const LOCAL_API_URL = self::LOCAL_SERVER . self::LOCAL_SCRIPT_PATH . '/api.php';
 
-	private function getRequestData(): RequestData {
+	private function getRequestData( array $queryParams = [] ): RequestData {
 		return new RequestData( [
 			'pathParams' => [
 				'wiki' => WikiMap::getCurrentWikiId(),
 				'namespace' => NS_EVENT,
 				'title' => 'Test worklist'
 			],
+			'queryParams' => $queryParams,
 		] );
 	}
 
@@ -134,7 +135,7 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		);
 
 		// An empty worklist still names no wikis, so the map comes back alongside the pages.
-		$this->assertSame( [ 'wikis' => [], 'pages' => [] ], $respData );
+		$this->assertSame( [ 'wikis' => [], 'pages' => [], 'pagination_offsets' => [] ], $respData );
 	}
 
 	public function testRun__localPages(): void {
@@ -384,6 +385,45 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		);
 
 		// An empty worklist still names no wikis, so the map comes back alongside the pages.
-		$this->assertSame( [ 'wikis' => [], 'pages' => [] ], $respData );
+		$this->assertSame( [ 'wikis' => [], 'pages' => [], 'pagination_offsets' => [] ], $respData );
+	}
+
+	public function testRun__paginationParametersArePassedThrough(): void {
+		$limit = 1234;
+		$offset = 'Foo|Bar';
+		$backwards = true;
+		$titleFilter = 'Some filter';
+
+		$respOffsets = [
+			IWorklistPagesLookup::PAGINATION_CUR => '|7',
+			IWorklistPagesLookup::PAGINATION_PREV => '|5',
+			IWorklistPagesLookup::PAGINATION_NEXT => '10|11',
+			IWorklistPagesLookup::PAGINATION_FIRST => null,
+			IWorklistPagesLookup::PAGINATION_LAST => null,
+		];
+		$lookup = $this->createMock( IWorklistPagesLookup::class );
+		$lookup->expects( $this->once() )
+			->method( 'getWorklistPages' )
+			->with(
+				IWorklistPagesLookup::SORT_TIMESTAMP,
+				$limit,
+				$offset,
+				IWorklistPagesLookup::DIR_DESCENDING,
+				$backwards,
+				$titleFilter,
+			)
+			->willReturn( [ 'result' => [], 'paginationOffsets' => $respOffsets ] );
+
+		$respData = $this->executeHandlerAndGetBodyData(
+			$this->newHandlerWithLookup( $lookup ),
+			$this->getRequestData( [
+				'limit' => $limit,
+				'offset' => $offset,
+				'backwards' => $backwards,
+				'title_filter' => $titleFilter
+			] )
+		);
+
+		$this->assertSame( $respOffsets, $respData['pagination_offsets'] );
 	}
 }

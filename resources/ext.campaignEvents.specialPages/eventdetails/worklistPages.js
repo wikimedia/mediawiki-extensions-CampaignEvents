@@ -28,15 +28,29 @@
 	 * local is decided by the wiki answering: asking here makes that the reader's own wiki, so a
 	 * page on it is named as theirs and links to it carry its red-link status.
 	 *
-	 * @return {jQuery.Promise} Resolves with { pages }
+	 * @param {number} limit
+	 * @param {string|null} offset
+	 * @param {boolean} backwards
+	 * @param {string|null} titleFilter
+	 * @return {jQuery.Promise} Resolves with { pages, paginationOffsets }
 	 */
-	function fetchPages() {
+	function fetchPages( limit, offset, backwards, titleFilter ) {
 		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
+		const reqParams = {
+			limit: limit,
+			offset: offset,
+			backwards: backwards
+		};
+		if ( titleFilter !== null ) {
+			// eslint-disable-next-line camelcase
+			reqParams.title_filter = titleFilter;
+		}
 		return new mw.Rest().get(
 			'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
 				'/' + encodeURIComponent( worklistPageInfo.namespace ) +
 				'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
-				'/pages'
+				'/pages',
+			reqParams
 		).then( ( response ) => ( {
 			// The endpoint speaks snake_case, like the extension's other endpoints; the rest of the
 			// frontend does not, so the shape is normalised here rather than in every component.
@@ -55,7 +69,8 @@
 				classes: page.classes,
 				timestamp: page.timestamp,
 				timestampFormatted: page.timestamp_formatted
-			} ) )
+			} ) ),
+			paginationOffsets: response.pagination_offsets
 		} ) );
 	}
 

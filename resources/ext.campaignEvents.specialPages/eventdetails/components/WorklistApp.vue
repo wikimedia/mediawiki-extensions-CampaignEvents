@@ -253,7 +253,7 @@ module.exports = exports = defineComponent( {
 			const requestId = ++latestRequestId;
 			isLoading.value = true;
 			errorMessage.value = '';
-			worklistPages.fetchPages().then( ( response ) => {
+			worklistPages.fetchPages( 10000, null, false, null ).then( ( response ) => {
 				if ( requestId !== latestRequestId ) {
 					return;
 				}

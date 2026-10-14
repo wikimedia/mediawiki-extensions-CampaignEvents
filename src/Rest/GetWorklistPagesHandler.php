@@ -25,7 +25,9 @@ use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
+use Wikimedia\Message\MessageValue;
 use Wikimedia\ParamValidator\ParamValidator;
+use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
@@ -57,6 +59,8 @@ class GetWorklistPagesHandler extends SimpleHandler {
 			throw new HttpException( 'The worklist card view is not enabled on this wiki', 404 );
 		}
 
+		$params = $this->getValidatedParams();
+
 		$currentWiki = WikiMap::getCurrentWikiId();
 		// Normalize wiki ID since PageStoreFactory doesn't (T440732)
 		$worklistWiki = $worklistWikiString === $currentWiki ? WikiAwareEntity::LOCAL : $worklistWikiString;
@@ -66,19 +70,21 @@ class GetWorklistPagesHandler extends SimpleHandler {
 
 		if ( $worklistPage ) {
 			$worklistLookup = $this->worklistPagesLookupFactory->getLookupForWorklist( $worklistPage );
+			// Convert empty string to null, assuming that's what the client meant.
+			$cleanedFilter = $params['title_filter'] !== '' ? $params['title_filter'] : null;
 			$result = $worklistLookup->getWorklistPages(
 				IWorklistPagesLookup::SORT_TIMESTAMP,
-				// No limit or offset: the client needs every article, because it paginates them itself.
-				10_000,
-				null,
+				$params['limit'],
+				$params['offset'],
 				IWorklistPagesLookup::DIR_DESCENDING,
-				IWorklistPagesLookup::NOT_BACKWARDS,
+				$params['backwards'] ? IWorklistPagesLookup::BACKWARDS : IWorklistPagesLookup::NOT_BACKWARDS,
+				$cleanedFilter,
 			);
-			$pages = $result['result'];
 		} else {
-			$pages = [];
+			$result = [ 'result' => [], 'paginationOffsets' => [] ];
 		}
 
+		$pages = $result['result'];
 		$localTitles = $this->preloadLocalTitles( $pages, $currentWiki );
 		$wikis = array_values( array_unique( array_column( $pages, 'wiki' ) ) );
 		$wikiNames = $this->wikiLookup->getLocalizedNames( $wikis );
@@ -129,9 +135,10 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		}
 
 		return $this->getResponseFactory()->createJson( [
-			// Cast so that a worklist with no pages still yields an object, not an empty list.
+			// Cast arrays to objects so that the JSON-encoded values remain objects, not arrays, for empty worklists.
 			'wikis' => (object)$wikiInfo,
 			'pages' => $respVal,
+			'pagination_offsets' => (object)$result['paginationOffsets'],
 		] );
 	}
 
@@ -254,6 +261,45 @@ class GetWorklistPagesHandler extends SimpleHandler {
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			// TODO: Expose sort type and direction if needed
+			'limit' => [
+				Handler::PARAM_SOURCE => 'query',
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_DEFAULT => 50,
+				IntegerDef::PARAM_MIN => 1,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-get-worklist-param-desc-limit' ),
+			],
+			'offset' => [
+				Handler::PARAM_SOURCE => 'query',
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_DEFAULT => null,
+				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-get-worklist-param-desc-offset' ),
+			],
+			'backwards' => [
+				Handler::PARAM_SOURCE => 'query',
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_DEFAULT => false,
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-get-worklist-param-desc-backwards'
+				),
+			],
+			'title_filter' => [
+				Handler::PARAM_SOURCE => 'query',
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_DEFAULT => null,
+				static::PARAM_DESCRIPTION => new MessageValue(
+					'campaignevents-rest-get-worklist-param-desc-title-filter'
+				),
+			],
 		];
+	}
+
+	/** @inheritDoc */
+	public function getResponseBodySchemaFileName( string $method ): ?string {
+		return __DIR__ . '/Schema/WorklistPages.json';
 	}
 }
