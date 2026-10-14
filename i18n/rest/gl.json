@@ -76,5 +76,11 @@
 	"campaignevents-rest-response-organizers-updated": "Actualizáronse os organizadores.",
 	"campaignevents-rest-response-email-accepted": "Aceptouse o traballo de envío de correo electrónico. A contaxe de correos reflicte o número de correos enviados.",
 	"campaignevents-rest-response-contribution-accepted": "Aceptouse o traballo de asociación de contribucións.",
-	"campaignevents-rest-response-contribution-deleted": "Eliminouse o rexistro de contribucións ao evento."
+	"campaignevents-rest-response-contribution-deleted": "Eliminouse o rexistro de contribucións ao evento.",
+	"campaignevents-rest-response-400": "A solicitude contén parámetros non válidos.",
+	"campaignevents-rest-response-403": "O usuario non ten permiso para realizar esta acción.",
+	"campaignevents-rest-response-404-user-not-found": "O usuario especificado non existe.",
+	"campaignevents-rest-response-404-not-participant": "A inscrición ao evento non existe ou o usuario actual non está inscrito nel.",
+	"campaignevents-rest-response-404-contribution-not-found": "O rexistro de contribución especificado non existe.",
+	"campaignevents-rest-response-worklist-updated": "Actualizáronse as páxinas da lista de traballo."
 }

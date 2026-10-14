@@ -76,5 +76,11 @@
 	"campaignevents-rest-response-organizers-updated": "Qabanqaabiyeyaasha waa la cusboonaysiiyay.",
 	"campaignevents-rest-response-email-accepted": "Hawsha dirista iimaylka waa la aqbalay. Tirada la diray waxay ka tarjumaysaa iimayllada la diray.",
 	"campaignevents-rest-response-contribution-accepted": "Hawsha isku xirka wax ku biirinta waa la aqbalay.",
-	"campaignevents-rest-response-contribution-deleted": "Diiwaanka wax ku biirinta dhacdada waa la tirtiray."
+	"campaignevents-rest-response-contribution-deleted": "Diiwaanka wax ku biirinta dhacdada waa la tirtiray.",
+	"campaignevents-rest-response-400": "Codsigu wuxuu ka kooban yahay xuduudo aan sax ahayn.",
+	"campaignevents-rest-response-403": "Isticmaaluhu ma haysto oggolaanshaha uu ku fulin karo tallaabadan.",
+	"campaignevents-rest-response-404-user-not-found": "Isticmaalaha la cayimay ma jiro.",
+	"campaignevents-rest-response-404-not-participant": "Diiwaangelinta dhacdadu ma jirto, ama isticmaalaha hadda ma aha mid u diiwaangashan.",
+	"campaignevents-rest-response-404-contribution-not-found": "Diiwaanka wax ku biirinta ee la cayimay ma jiro.",
+	"campaignevents-rest-response-worklist-updated": "Bogagga liiska hawlaha waa la cusboonaysiiyay."
 }

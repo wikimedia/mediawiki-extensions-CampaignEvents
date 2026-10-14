@@ -22,5 +22,7 @@
 	"campaignevents-rest-register-invalid-answer": "Risposta non valida alla domanda $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Completa la tua registrazione all'evento su $1, il wiki dove l'evento è stato creato.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Cancella la tua registrazione all'evento su $1, il wiki dove l'evento è stato creato.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Scrivi una email ai partecipanti su $1, il wiki dove l'evento è stato creato."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Scrivi una email ai partecipanti su $1, il wiki dove l'evento è stato creato.",
+	"campaignevents-rest-response-400": "La richiesta contiene parametri non validi.",
+	"campaignevents-rest-response-404-user-not-found": "L'utente indicato non esiste."
 }

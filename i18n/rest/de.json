@@ -22,5 +22,11 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Bitte lösche deine Veranstaltungs-Registrierung auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Bitte sende den Teilnehmenden eine E-Mail auf $1, dem Wiki, in dem die Veranstaltung erstellt wurde.",
 	"campaignevents-rest-contribution-not-found": "Es gibt keinen Beitrag mit dieser ID.",
-	"campaignevents-rest-delete-contribution-permission-denied": "Du bist nicht berechtigt, diesen Beitrag zu löschen."
+	"campaignevents-rest-delete-contribution-permission-denied": "Du bist nicht berechtigt, diesen Beitrag zu löschen.",
+	"campaignevents-rest-param-desc-id": "Die numerische ID der Veranstaltungsregistrierung.",
+	"campaignevents-rest-param-desc-contribution-id": "Die numerische ID des zu löschenden Veranstaltungsbeitragsdatensatzes.",
+	"campaignevents-rest-param-desc-userid": "Die globale zentrale Benutzer-ID des Benutzers.",
+	"campaignevents-rest-param-desc-event-page": "Titel der Seite für diese Veranstaltung im lokalen Wiki.",
+	"campaignevents-rest-param-desc-timezone": "Zeitzonenkennung für die Veranstaltungszeiten in einem beliebigen Format, das von der PHP-Funktion DateTimeZone akzeptiert wird.",
+	"campaignevents-rest-param-desc-start-time": "Veranstaltugsstartzeit im MediaWiki-Zeitstempelformat (YYYYMMDDHHmmss), lokal zur durch den Parameter timezone angegebenen Zeitzone."
 }
