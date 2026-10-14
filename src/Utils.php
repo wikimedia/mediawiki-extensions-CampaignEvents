@@ -13,6 +13,10 @@ use MediaWiki\Extension\CampaignEvents\Questions\EventAggregatedAnswersStore;
 use MediaWiki\User\UserTimeCorrection;
 use MediaWiki\Utils\MWTimestamp;
 use MediaWiki\WikiMap\WikiMap;
+use RuntimeException;
+use Wikimedia\Rdbms\IExpression;
+use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Rdbms\RawSQLExpression;
 use Wikimedia\Timestamp\TimestampFormat as TS;
 
 /**
@@ -109,5 +113,28 @@ class Utils {
 			$bNormalized = $bNormalized ?: $b;
 			return strcasecmp( $aNormalized, $bNormalized );
 		} );
+	}
+
+	/**
+	 * Builds an expression for case-insensitive substring search in a database for use on binary strings.
+	 * This functionality is intentionally not provided by core, see T310558. Keep in mind that the LIKE search
+	 * cannot use any index, so this should only be used on somewhat-limited sets of records.
+	 * Also, this is best-effort and not guaranteed to work for every possible input. For instance, it does not
+	 * work for non-ASCII characters in SQLite.
+	 */
+	public static function buildCaseInsensitiveSubstringSearchDBCondition(
+		IReadableDatabase $db,
+		string $column,
+		string $value
+	): IExpression {
+		$dbType = $db->getType();
+		$quotedCol = $db->addIdentifierQuotes( $column );
+		$lowerCol = match ( $dbType ) {
+			'mysql' => "LOWER( CONVERT( $quotedCol USING utf8mb4 ) ) ",
+			'sqlite', 'postgres' => "LOWER( $quotedCol ) ",
+			default => throw new RuntimeException( "Unrecognized DB type $dbType" )
+		};
+		$likeCond = $lowerCol . $db->buildLike( $db->anyString(), mb_strtolower( $value ), $db->anyString() );
+		return new RawSQLExpression( $likeCond );
 	}
 }
