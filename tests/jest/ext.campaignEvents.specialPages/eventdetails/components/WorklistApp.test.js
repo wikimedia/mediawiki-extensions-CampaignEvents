@@ -23,28 +23,30 @@ const article = ( title, overrides = {} ) => Object.assign( {
 	classes: ''
 }, overrides );
 
-const page = ( titles ) => ( { pages: titles.map( ( t ) => article( t ) ) } );
-
-const ARTICLES_PER_PAGE = 24;
+const page = ( titles, offsets = {} ) => ( {
+	pages: titles.map( ( t ) => article( t ) ),
+	paginationOffsets: offsets
+} );
 
 /**
- * Titles for a worklist of a given size, numbered so a page of them can be identified.
+ * Makes a list of titles of the given size, numbered so a page of them can be identified.
  *
  * @param {number} count
  * @return {string[]}
  */
-const articleTitles = ( count ) => Array.from(
+const makeTitles = ( count ) => Array.from(
 	{ length: count },
 	( ignored, index ) => 'Article ' + ( index + 1 )
 );
 
-/**
- * A response holding a worklist of a given size.
- *
- * @param {number} count
- * @return {Object}
- */
-const worklistOf = ( count ) => page( articleTitles( count ) );
+const ARTICLES_PER_PAGE = 24;
+
+const makeResponse = () => page(
+	makeTitles( ARTICLES_PER_PAGE ),
+	{ next: '123', last: null }
+);
+
+const makeResponseWithOffsets = ( offsets ) => page( makeTitles( ARTICLES_PER_PAGE ), offsets );
 
 const PAGINATION = '.ext-campaignevents-worklist-pagination';
 const firstButton = ( wrapper ) => wrapper.get( PAGINATION + '__first' );
@@ -82,6 +84,7 @@ const SEARCH = '.ext-campaignevents-worklist-search';
  */
 const search = async ( wrapper, term ) => {
 	await wrapper.get( SEARCH + ' input' ).setValue( term );
+	jest.advanceTimersByTime( 500 );
 	await settle();
 };
 
@@ -125,8 +128,8 @@ describe( 'WorklistApp', () => {
 			.toContain( 'worklist-empty-state' );
 	} );
 
-	it( 'shows no pagination for a worklist that fits on one page', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE ) );
+	it( 'shows no pagination if the entire worklist fits on one page', async () => {
+		worklistPages.fetchPages.mockResolvedValue( makeResponseWithOffsets( {} ) );
 		const wrapper = mountApp();
 		await settle();
 
@@ -134,29 +137,8 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.find( '.ext-campaignevents-worklist-pagination' ).exists() ).toBe( false );
 	} );
 
-	it( 'pages through the articles it already holds, without asking again', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
-		const wrapper = mountApp();
-		await settle();
-		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
-		worklistPages.fetchPages.mockClear();
-
-		await nextButton( wrapper ).trigger( 'click' );
-		await settle();
-
-		const shown = wrapper.findAll( CARD ).map( ( c ) => c.text() );
-		expect( shown ).toHaveLength( 3 );
-		expect( shown[ 0 ] ).toContain( 'Article ' + ( ARTICLES_PER_PAGE + 1 ) );
-		// The whole worklist is already in hand, so a page change costs no request.
-		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
-
-		await prevButton( wrapper ).trigger( 'click' );
-		await settle();
-		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
-	} );
-
 	it( 'offers fixed pagination buttons', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
+		worklistPages.fetchPages.mockResolvedValue( makeResponse() );
 		const wrapper = mountApp();
 		await settle();
 
@@ -167,7 +149,10 @@ describe( 'WorklistApp', () => {
 	} );
 
 	it( 'can go to the next page', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
+		const nextPageOffset = '1|2';
+		worklistPages.fetchPages.mockResolvedValue(
+			makeResponseWithOffsets( { next: nextPageOffset } )
+		);
 		const wrapper = mountApp();
 		await settle();
 		worklistPages.fetchPages.mockClear();
@@ -175,19 +160,19 @@ describe( 'WorklistApp', () => {
 		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 
+		worklistPages.fetchPages.mockResolvedValue( makeResponseWithOffsets( { prev: '0|1' } ) );
 		await nextButton( wrapper ).trigger( 'click' );
 		await settle();
 
-		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
-		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( worklistPages.fetchPages )
+			.toHaveBeenCalledWith( ARTICLES_PER_PAGE, nextPageOffset, false, null );
 
-		expect( wrapper.findAll( CARD )[ 0 ].text() )
-			.toContain( 'Article ' + ( ARTICLES_PER_PAGE + 1 ) );
-		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
+		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 	} );
 
 	it( 'names the icon-only paging buttons for assistive technology', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		worklistPages.fetchPages.mockResolvedValue( makeResponse() );
 		const wrapper = mountApp();
 		await settle();
 
@@ -203,7 +188,7 @@ describe( 'WorklistApp', () => {
 	} );
 
 	it( 'names the pagination landmark', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+		worklistPages.fetchPages.mockResolvedValue( makeResponse() );
 		const wrapper = mountApp();
 		await settle();
 
@@ -212,8 +197,10 @@ describe( 'WorklistApp', () => {
 			.toContain( 'worklist-pagination-label' );
 	} );
 
-	it( 'stops the reader paging off either end', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
+	it( 'stops the reader from going before the first page', async () => {
+		worklistPages.fetchPages.mockResolvedValue(
+			makeResponseWithOffsets( { next: 'set', cur: 'set', last: null } )
+		);
 		const wrapper = mountApp();
 		await settle();
 
@@ -221,33 +208,19 @@ describe( 'WorklistApp', () => {
 		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 		expect( lastButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
+	} );
 
-		await nextButton( wrapper ).trigger( 'click' );
+	it( 'stops the reader from going after the last page', async () => {
+		worklistPages.fetchPages.mockResolvedValue(
+			makeResponseWithOffsets( { prev: 'set', cur: 'set', first: null } )
+		);
+		const wrapper = mountApp();
 		await settle();
 
 		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 		expect( prevButton( wrapper ).attributes( 'disabled' ) ).toBeUndefined();
 		expect( nextButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
 		expect( lastButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
-	} );
-
-	it( 'drops back a page when removing an article empties the one shown', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 1 ) );
-		const wrapper = mountApp();
-		await settle();
-
-		await nextButton( wrapper ).trigger( 'click' );
-		await settle();
-		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
-
-		// The one article on the last page is removed, so that page no longer exists.
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE ) );
-		await wrapper.get( '.ext-campaignevents-worklist-card__remove' ).trigger( 'click' );
-		wrapper.vm.confirmRemove();
-		await settle();
-
-		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
-		expect( wrapper.find( '.ext-campaignevents-worklist-pagination' ).exists() ).toBe( false );
 	} );
 
 	it( 'reports a failed load instead of showing an empty worklist', async () => {
@@ -305,50 +278,35 @@ describe( 'WorklistApp', () => {
 			.toBe( false );
 	} );
 
-	it( 'filters as the reader types, without asking the server', async () => {
-		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Beavers', 'Chickens' ] ) );
+	it( 'sends an updated request with search term and returns to the first page', async () => {
+		worklistPages.fetchPages.mockResolvedValue( makeResponse() );
 		const wrapper = mountApp();
 		await settle();
-		worklistPages.fetchPages.mockClear();
 
-		await search( wrapper, 'bea' );
+		const titleFilter = 'my search';
+		await search( wrapper, titleFilter );
 
-		expect( wrapper.findAll( CARD ).map( ( c ) => c.text() ) ).toEqual( [
-			expect.stringContaining( 'Bears' ),
-			expect.stringContaining( 'Beavers' )
-		] );
-		// Paging client-side means the whole worklist is in hand, so filtering costs no request.
-		expect( worklistPages.fetchPages ).not.toHaveBeenCalled();
+		expect( worklistPages.fetchPages )
+			.toHaveBeenCalledWith( ARTICLES_PER_PAGE, null, false, titleFilter );
 	} );
 
-	it( 'matches any part of a title, whatever the case', async () => {
-		worklistPages.fetchPages.mockResolvedValue( page( [ 'Great bustard', 'Chickens' ] ) );
+	it( 'requests pages without search filter when the search field is cleared', async () => {
+		worklistPages.fetchPages.mockResolvedValue( makeResponse() );
 		const wrapper = mountApp();
 		await settle();
 
-		await search( wrapper, 'BUST' );
-
-		expect( wrapper.findAll( CARD ).map( ( c ) => c.text() ) )
-			.toEqual( [ expect.stringContaining( 'Great bustard' ) ] );
-	} );
-
-	it( 'restores the whole worklist when the search field is cleared', async () => {
-		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Chickens' ] ) );
-		const wrapper = mountApp();
-		await settle();
-
-		await search( wrapper, 'bea' );
-		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
-
+		await search( wrapper, 'non-empty value' );
 		await search( wrapper, '' );
 
-		expect( wrapper.findAll( CARD ) ).toHaveLength( 2 );
+		expect( worklistPages.fetchPages )
+			.toHaveBeenCalledWith( ARTICLES_PER_PAGE, null, false, null );
 	} );
 
 	it( 'says that nothing matched rather than that the worklist is empty', async () => {
 		const wrapper = mountApp();
 		await settle();
 
+		worklistPages.fetchPages.mockResolvedValue( page( [], {} ) );
 		await search( wrapper, 'nothing matches this' );
 
 		expect( wrapper.get( '.ext-campaignevents-worklist-empty-state' ).text() )
@@ -366,8 +324,8 @@ describe( 'WorklistApp', () => {
 			} ) )
 			.mockResolvedValue( page( [ 'Beavers' ] ) );
 
-		wrapper.vm.reload();
-		wrapper.vm.reload();
+		wrapper.vm.firstPage();
+		wrapper.vm.firstPage();
 		await settle();
 
 		resolveStale( page( [ 'Bears' ] ) );
@@ -382,7 +340,7 @@ describe( 'WorklistApp', () => {
 		await settle();
 
 		worklistPages.fetchPages.mockReturnValue( new Promise( () => {} ) );
-		wrapper.vm.reload();
+		wrapper.vm.lastPage();
 		await settle();
 
 		// Replacing the list with placeholders on a refresh would make it flicker.
@@ -391,21 +349,6 @@ describe( 'WorklistApp', () => {
 			.toBe( 'true' );
 	} );
 
-	it( 'returns to the first page when a search is entered', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE + 3 ) );
-		const wrapper = mountApp();
-		await settle();
-
-		await nextButton( wrapper ).trigger( 'click' );
-		await settle();
-		expect( wrapper.findAll( CARD ) ).toHaveLength( 3 );
-
-		await search( wrapper, 'article' );
-
-		// Back on the first page of the filtered results, not the second page of the old ones.
-		expect( wrapper.findAll( CARD ) ).toHaveLength( ARTICLES_PER_PAGE );
-		expect( firstButton( wrapper ).attributes( 'disabled' ) ).toBeDefined();
-	} );
 	it( 'shows the description of each article once it arrives', async () => {
 		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
 			[ LOCAL_WIKI + '|Bears', { views: null, image: null,
@@ -425,7 +368,8 @@ describe( 'WorklistApp', () => {
 		worklistPages.fetchPages.mockResolvedValue( {
 			pages: [ article( 'Foreign article', {
 				wiki: 'otherwiki', isLocal: false, classes: 'external'
-			} ) ]
+			} ) ],
+			paginationOffsets: {}
 		} );
 		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
 			[ 'otherwiki|Foreign article', { views: null, image: null,
@@ -464,19 +408,6 @@ describe( 'WorklistApp', () => {
 		// The image arrives on the same request, so it reaches the card at the same moment.
 		expect( wrapper.getComponent( CdxCard ).props( 'thumbnail' ).url )
 			.toBe( 'https://example.org/bears.jpg' );
-	} );
-
-	it( 'only asks about the articles on screen', async () => {
-		worklistPages.fetchPages.mockResolvedValue( worklistOf( ARTICLES_PER_PAGE * 3 ) );
-
-		mountApp();
-		await settle();
-
-		// A worklist can hold thousands; the reader is looking at a page of them.
-		expect( worklistPageData.fetchPageData ).toHaveBeenCalled();
-		worklistPageData.fetchPageData.mock.calls.forEach( ( [ asked ] ) => {
-			expect( asked ).toHaveLength( ARTICLES_PER_PAGE );
-		} );
 	} );
 
 	it( 'still shows the cards when the view counts cannot be fetched', async () => {

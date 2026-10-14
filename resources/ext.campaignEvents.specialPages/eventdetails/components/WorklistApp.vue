@@ -3,7 +3,7 @@
 		<div class="ext-campaignevents-worklist-toolbar">
 			<add-worklist-article-dialog
 				v-if="canAddArticles"
-				@added="reload"
+				@added="firstPage"
 			></add-worklist-article-dialog>
 			<a
 				v-if="historyUrl"
@@ -55,7 +55,7 @@
 			:aria-busy="isLoading"
 		>
 			<worklist-article-card
-				v-for="article in visibleArticles"
+				v-for="article in visiblePages"
 				:key="article.wiki + '|' + article.title"
 				:article="article"
 				:can-remove="canRemoveArticles"
@@ -88,7 +88,7 @@
 			<cdx-button
 				class="ext-campaignevents-worklist-pagination__prev"
 				weight="quiet"
-				:disabled="isLoading || !hasPreviousPage"
+				:disabled="isLoading || previousPageOffset === null"
 				:aria-label="$i18n( 'campaignevents-event-details-worklist-previous-page' ).text()"
 				:title="$i18n( 'campaignevents-event-details-worklist-previous-page' ).text()"
 				@click="previousPage"
@@ -98,7 +98,7 @@
 			<cdx-button
 				class="ext-campaignevents-worklist-pagination__next"
 				weight="quiet"
-				:disabled="isLoading || !hasNextPage"
+				:disabled="isLoading || nextPageOffset === null"
 				:aria-label="$i18n( 'campaignevents-event-details-worklist-next-page' ).text()"
 				:title="$i18n( 'campaignevents-event-details-worklist-next-page' ).text()"
 				@click="nextPage"
@@ -160,6 +160,9 @@ const HISTORY_BUTTON_CLASSES = [
 	'cdx-button--icon-only'
 ];
 
+// How long to wait (in ms) before sending a new request when the user changes the search input.
+const SEARCH_DEBOUNCE_TIME = 500;
+
 /**
  * The card presentation of an event's worklist, which replaces the placeholder cards the server
  * renders. This is what a reader with JavaScript gets; the server-rendered table is the fallback
@@ -178,17 +181,22 @@ module.exports = exports = defineComponent( {
 		CdxSearchInput
 	},
 	setup() {
-		// Every article matching the current search. The server decides which those are; splitting
-		// them into pages is this component's job, so that paging costs no request.
-		const articles = ref( [] );
+		const visiblePages = ref( [] );
 		// Per-article data held against `wiki|title`. A ref rather than a plain object so that
 		// filling one in after its card has rendered redraws that card.
 		const pageData = ref( new Map() );
-		const currentPage = ref( 1 );
+		const firstLoadDone = ref( false );
 		const isLoading = ref( true );
 		const errorMessage = ref( '' );
 
 		const searchTerm = ref( '' );
+
+		const isPaginatingBackwards = ref( false );
+		const hasFirstPage = ref( false );
+		const previousPageOffset = ref( null );
+		const curPageOffset = ref( null );
+		const nextPageOffset = ref( null );
+		const hasLastPage = ref( false );
 
 		// Quality held against `wiki|title`. A ref rather than a plain object so that filling one
 		// in after its card has rendered redraws that card.
@@ -210,34 +218,15 @@ module.exports = exports = defineComponent( {
 		// The placeholders stand in for a list that is not on screen yet. Once there are cards to
 		// show, a refresh leaves them in place rather than replacing the list with placeholders on
 		// every keystroke; the list is marked busy instead.
-		const showSkeleton = computed( () => isLoading.value && !articles.value.length );
-		// Filtering happens here rather than on the server: paging client-side means the whole
-		// worklist is already in hand, so a request per keystroke would fetch what we have.
-		const matchingArticles = computed( () => {
-			const needle = searchTerm.value.trim().toLowerCase();
-			if ( !needle ) {
-				return articles.value;
-			}
-			return articles.value.filter(
-				( article ) => article.title.toLowerCase().includes( needle )
-			);
-		} );
-		const isEmpty = computed( () => !matchingArticles.value.length );
-		const totalPages = computed(
-			() => Math.max( 1, Math.ceil( matchingArticles.value.length / ARTICLES_PER_PAGE ) )
-		);
-		const visibleArticles = computed( () => {
-			const start = ( currentPage.value - 1 ) * ARTICLES_PER_PAGE;
-			return matchingArticles.value.slice( start, start + ARTICLES_PER_PAGE );
-		} );
+		const showSkeleton = computed( () => isLoading.value && !firstLoadDone.value );
+
+		const isEmpty = computed( () => !visiblePages.value.length );
 		// One page of results needs no controls to leave it.
 		const showPagination = computed(
-			() => !errorMessage.value && !showSkeleton.value && totalPages.value > 1
+			() => !errorMessage.value && !showSkeleton.value &&
+				( previousPageOffset.value !== null || nextPageOffset.value !== null )
 		);
-		const hasFirstPage = computed( () => currentPage.value > 1 );
-		const hasPreviousPage = computed( () => currentPage.value > 1 );
-		const hasNextPage = computed( () => currentPage.value < totalPages.value );
-		const hasLastPage = computed( () => currentPage.value < totalPages.value );
+
 		// An empty list means something different once the reader has filtered it.
 		const emptyStateMessage = computed( () => mw.msg(
 			searchTerm.value.trim() ?
@@ -246,21 +235,32 @@ module.exports = exports = defineComponent( {
 		) );
 
 		/**
-		 * Read the whole worklist, keeping the reader on the page they are on where that page
-		 * still exists. Searching and paging both work on what this returns.
+		 * @param {string|null} offset
+		 * @param {boolean} backwards
+		 * @return {jQuery.Promise}
 		 */
-		function load() {
+		function loadResultPage( offset, backwards ) {
 			const requestId = ++latestRequestId;
 			isLoading.value = true;
 			errorMessage.value = '';
-			worklistPages.fetchPages( 10000, null, false, null ).then( ( response ) => {
+
+			const needle = searchTerm.value.trim().toLowerCase() || null;
+			return worklistPages.fetchPages(
+				ARTICLES_PER_PAGE, offset, backwards, needle
+			).then( ( response ) => {
 				if ( requestId !== latestRequestId ) {
 					return;
 				}
-				articles.value = response.pages;
-				// Removing an article can empty the last page; fall back to the one before it
-				// rather than showing a page that is no longer there.
-				currentPage.value = Math.min( currentPage.value, totalPages.value );
+
+				visiblePages.value = response.pages;
+				hasFirstPage.value = 'first' in response.paginationOffsets;
+				previousPageOffset.value = response.paginationOffsets.prev || null;
+				curPageOffset.value = offset;
+				nextPageOffset.value = response.paginationOffsets.next || null;
+				hasLastPage.value = 'last' in response.paginationOffsets;
+				isPaginatingBackwards.value = backwards;
+
+				firstLoadDone.value = true;
 				isLoading.value = false;
 			}, ( err, errObj ) => {
 				if ( requestId !== latestRequestId ) {
@@ -274,16 +274,7 @@ module.exports = exports = defineComponent( {
 			} );
 		}
 
-		/** Read the worklist again from the first page, after the set of articles has changed. */
-		function reload() {
-			currentPage.value = 1;
-			load();
-		}
-
-		// A new term reshuffles the list, so the reader starts at its first page again.
-		watch( searchTerm, () => {
-			currentPage.value = 1;
-		} );
+		watch( searchTerm, mw.util.debounce( firstPage, SEARCH_DEBOUNCE_TIME ) );
 
 		/**
 		 * Fill in the quality of the articles now on screen.
@@ -294,7 +285,7 @@ module.exports = exports = defineComponent( {
 		 * one for the whole worklist.
 		 */
 		function loadQuality() {
-			const showing = visibleArticles.value;
+			const showing = visiblePages.value;
 			if ( !showing.length ) {
 				return;
 			}
@@ -307,7 +298,7 @@ module.exports = exports = defineComponent( {
 			} );
 		}
 
-		watch( visibleArticles, loadQuality );
+		watch( visiblePages, loadQuality );
 
 		/**
 		 * @param {Object} article
@@ -328,19 +319,19 @@ module.exports = exports = defineComponent( {
 		}
 
 		function firstPage() {
-			currentPage.value = 1;
+			loadResultPage( null, false );
 		}
 
 		function previousPage() {
-			currentPage.value = Math.max( currentPage.value - 1, 1 );
+			loadResultPage( previousPageOffset.value, true );
 		}
 
 		function nextPage() {
-			currentPage.value = Math.min( currentPage.value + 1, totalPages.value );
+			loadResultPage( nextPageOffset.value, false );
 		}
 
 		function lastPage() {
-			currentPage.value = totalPages.value;
+			loadResultPage( null, true );
 		}
 
 		/**
@@ -352,7 +343,7 @@ module.exports = exports = defineComponent( {
 		 * reason to ask for what it still lacks.
 		 */
 		function loadPageData() {
-			const showing = visibleArticles.value;
+			const showing = visiblePages.value;
 			if ( !showing.length ) {
 				return;
 			}
@@ -365,7 +356,7 @@ module.exports = exports = defineComponent( {
 			} );
 		}
 
-		watch( visibleArticles, loadPageData );
+		watch( visiblePages, loadPageData );
 
 		/**
 		 * @param {Object} article
@@ -411,9 +402,17 @@ module.exports = exports = defineComponent( {
 				isRemoving.value = false;
 				isRemoveDialogOpen.value = false;
 				articleToRemove.value = null;
-				// Re-read rather than splicing the article out, so that the page count and the
-				// articles that move up to fill the gap are the server's answer, not a guess.
-				load();
+				// Reload the current page, to update contents and pagination status.
+				loadResultPage( curPageOffset.value, isPaginatingBackwards.value )
+					.then( () => {
+						if ( curPageOffset.value && !visiblePages.value.length ) {
+							// This could happen if removal empties the last (respectively first)
+							// page when paginating forwards (resp. backwards), as well as in case
+							// of offset mismatch between the pager implementations. So, reload the
+							// new last (resp. first) page without offset.
+							loadResultPage( null, !isPaginatingBackwards.value );
+						}
+					} );
 			}, ( err, errObj ) => {
 				mw.notify(
 					mw.msg(
@@ -433,10 +432,10 @@ module.exports = exports = defineComponent( {
 			isRemoving.value = false;
 		}
 
-		onMounted( reload );
+		onMounted( firstPage );
 
 		return {
-			visibleArticles,
+			visiblePages,
 			viewsFor,
 			imageFor,
 			descriptionFor,
@@ -450,8 +449,8 @@ module.exports = exports = defineComponent( {
 			showPagination,
 			emptyStateMessage,
 			hasFirstPage,
-			hasPreviousPage,
-			hasNextPage,
+			previousPageOffset,
+			nextPageOffset,
 			hasLastPage,
 			isRemoveDialogOpen,
 			isRemoving,
@@ -475,8 +474,7 @@ module.exports = exports = defineComponent( {
 			lastPage,
 			onRemoveRequested,
 			confirmRemove,
-			cancelRemove,
-			reload
+			cancelRemove
 		};
 	}
 } );
