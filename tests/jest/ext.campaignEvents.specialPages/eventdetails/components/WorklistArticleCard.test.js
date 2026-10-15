@@ -211,7 +211,7 @@ describe( 'WorklistArticleCard', () => {
 			.toBe( 'The other wiki' );
 	} );
 
-	it( 'shows when the article was added, once that has been fetched', () => {
+	it( 'shows the exact time when the article was added, if available', () => {
 		const wrapper = mountCard( {
 			added: '14:32, 3 September 2026',
 			addedAt: '2026-09-03T14:32:00Z'
@@ -222,10 +222,10 @@ describe( 'WorklistArticleCard', () => {
 		expect( time.text() ).toContain( '14:32, 3 September 2026' );
 	} );
 
-	it( 'shows no date until one has been fetched', () => {
-		expect(
-			mountCard().find( '.ext-campaignevents-worklist-card__added' ).exists()
-		).toBe( false );
+	it( 'shows a placeholder message when an item was just added', () => {
+		const wrapper = mountCard();
+		const time = wrapper.get( 'span.ext-campaignevents-worklist-card__added' );
+		expect( time.text() ).toBe( 'campaignevents-event-details-worklist-card-added-recent' );
 	} );
 
 } );

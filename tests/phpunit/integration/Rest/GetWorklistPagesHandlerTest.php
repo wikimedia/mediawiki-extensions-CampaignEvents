@@ -143,20 +143,17 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 		$missingPage = $this->getNonexistingTestPage( 'Worklist article to be created' )->getTitle();
 		$localWiki = WikiMap::getCurrentWikiId();
 
-		$curTime = 1791473863;
-		MWTimestamp::setFakeTime( $curTime );
-		$prevTime = $curTime - 10;
-
 		$formatTime = static fn ( $ts ) => "Formatted " . MWTimestamp::convert( TS::MW, $ts );
 		$lang = $this->createMock( Language::class );
 		$lang->method( 'userTimeAndDate' )->willReturnCallback( $formatTime );
 		$this->setUserLang( $lang );
 
+		$addedTime = 1791473863;
 		$respData = $this->executeWithPages( [
 			[
 				'wiki' => $localWiki,
 				'prefixedtext' => $existingPage->getPrefixedText(),
-				'timestamp' => $prevTime,
+				'timestamp' => $addedTime,
 			],
 			[
 				'wiki' => $localWiki,
@@ -171,8 +168,8 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 					'wiki' => $localWiki,
 					'is_local' => true,
 					'title' => $existingPage->getPrefixedText(),
-					'timestamp' => MWTimestamp::convert( TS::ISO_8601, $prevTime ),
-					'timestamp_formatted' => $formatTime( $prevTime ),
+					'timestamp' => MWTimestamp::convert( TS::ISO_8601, $addedTime ),
+					'timestamp_formatted' => $formatTime( $addedTime ),
 					'url' => $existingPage->getLinkURL( [], false, PROTO_RELATIVE ),
 					'classes' => '',
 				],
@@ -180,8 +177,8 @@ class GetWorklistPagesHandlerTest extends MediaWikiIntegrationTestCase {
 					'wiki' => $localWiki,
 					'is_local' => true,
 					'title' => $missingPage->getPrefixedText(),
-					'timestamp' => MWTimestamp::convert( TS::ISO_8601, $curTime ),
-					'timestamp_formatted' => $formatTime( $curTime ),
+					'timestamp' => null,
+					'timestamp_formatted' => null,
 					// A page still to be created is linked as a red link, exactly as the
 					// server-rendered worklist table does.
 					'url' => $missingPage->getLinkURL(

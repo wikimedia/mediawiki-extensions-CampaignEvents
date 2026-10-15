@@ -62,10 +62,7 @@
 				its slots once. The wiki is only worth naming for an article from elsewhere: two
 				articles with the same title on different wikis would otherwise look identical.
 				Relative to the wiki that answered the request, not the reader's. -->
-			<template
-				v-if="!article.isLocal || added || viewsText || signals.length"
-				#supporting-text
-			>
+			<template #supporting-text>
 				<span
 					v-if="!article.isLocal"
 					class="ext-campaignevents-worklist-card__wiki"
@@ -78,6 +75,12 @@
 					'campaignevents-event-details-worklist-card-added',
 					added
 				).text() }}</time>
+				<span
+					v-else
+					class="ext-campaignevents-worklist-card__added"
+				>
+					{{ $i18n( 'campaignevents-event-details-worklist-card-added-recent' ).text() }}
+				</span>
 
 				<!-- How often the article is read. Hidden entirely when the wiki cannot say: the
 					card has to look complete without it. The figure is shown bare, as the design

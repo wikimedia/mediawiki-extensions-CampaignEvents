@@ -102,8 +102,7 @@ class GetWorklistPagesHandler extends SimpleHandler {
 		foreach ( $pages as $page ) {
 			$wiki = $page['wiki'];
 			$prefixedText = $page['prefixedtext'];
-			// FIXME: decide on proper placeholders when timestamp isn't available
-			$timestamp = $page['timestamp'] ?? MWTimestamp::now();
+			$ts = $page['timestamp'];
 			$respVal[] = [
 				'wiki' => $wiki,
 				// Relative to the wiki answering this request, as the link attributes are. The
@@ -111,8 +110,8 @@ class GetWorklistPagesHandler extends SimpleHandler {
 				// come from the shared tables and do not depend on who answers.
 				'is_local' => $wiki === $currentWiki,
 				'title' => $prefixedText,
-				'timestamp' => MWTimestamp::convert( TS::ISO_8601, $timestamp ),
-				'timestamp_formatted' => $language->userTimeAndDate( $timestamp, $user )
+				'timestamp' => $ts !== null ? MWTimestamp::convert( TS::ISO_8601, $ts ) : null,
+				'timestamp_formatted' => $ts !== null ? $language->userTimeAndDate( $ts, $user ) : null,
 			] + $this->linkAttributes(
 				$linkRenderer,
 				$wiki === $currentWiki,
