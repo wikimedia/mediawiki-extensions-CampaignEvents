@@ -196,8 +196,6 @@
 	"campaignevents-unregister-participants-permission-denied": "Δεν επιτρέπεται να αφαιρέσετε συμμετέχοντες",
 	"campaignevents-event-details-tab-participants": "Συμμετέχοντες",
 	"campaignevents-event-details-tab-event-details": "Λεπτομέρειες εκδήλωσης",
-	"campaignevents-event-details-worklist-add-dialog-article-label": "Όνομα άρθρου",
-	"campaignevents-event-details-worklist-add-dialog-search-placeholder": "Αναζητήστε ένα άρθρο",
 	"campaignevents-event-details-worklist-add-dialog-placeholder": "Γη\nΣελήνη\nΔίας",
 	"campaignevents-event-details-worklist-add-dialog-submit": "Προσθήκη",
 	"campaignevents-event-details-worklist-loading": "Φορτώνονται σελίδες…",
