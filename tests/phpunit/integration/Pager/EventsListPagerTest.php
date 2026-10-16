@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CampaignEvents\Tests\Integration\Pager;
 
+use Generator;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CampaignEvents\CampaignEventsServices;
 use MediaWiki\Extension\CampaignEvents\Event\EventRegistration;
@@ -106,5 +107,31 @@ class EventsListPagerTest extends MediaWikiIntegrationTestCase {
 			true
 		);
 		$this->assertSame( 1, $pager->getNumRows() );
+	}
+
+	/**
+	 * @dataProvider provideSearchByName
+	 */
+	public function testSearchByName( string $search, bool $expectsFound ) {
+		$pager = CampaignEventsServices::getEventsPagerFactory()->newListPager(
+			new RequestContext(),
+			$search,
+			[],
+			null,
+			null,
+			null,
+			null,
+			[],
+			[],
+			true
+		);
+		$this->assertSame( $expectsFound ? 1 : 0, $pager->getNumRows() );
+	}
+
+	public static function provideSearchByName(): Generator {
+		yield 'Exact name' => [ self::$EVENT_NAME, true ];
+		yield 'Substring' => [ 'event dQw4', true ];
+		yield 'Different case' => [ 'TEST EVENT DQW4W9WGXCQ', true ];
+		yield 'No match' => [ 'Not the event name', false ];
 	}
 }

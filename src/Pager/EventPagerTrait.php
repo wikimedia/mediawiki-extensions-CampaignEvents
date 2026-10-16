@@ -6,13 +6,12 @@ namespace MediaWiki\Extension\CampaignEvents\Pager;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPageProxy;
+use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\WikiMap\WikiMap;
 use stdClass;
-use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
-use Wikimedia\Rdbms\LikeValue;
 
 /**
  * @property string $search;
@@ -61,10 +60,7 @@ trait EventPagerTrait {
 			'event_deleted_at' => null,
 		];
 		if ( $this->search !== '' ) {
-			// TODO Make this case-insensitive. Not easy right now because the name is a binary string and the DBAL does
-			// not provide a method for converting it to a non-binary value on which LOWER can be applied.
-			$conds[] = $this->mDb->expr( 'event_name', IExpression::LIKE,
-				new LikeValue( $this->mDb->anyString(), $this->search, $this->mDb->anyString() ) );
+			$conds[] = Utils::buildCaseInsensitiveSubstringSearchDBCondition( $this->mDb, 'event_name', $this->search );
 		}
 
 		return [
