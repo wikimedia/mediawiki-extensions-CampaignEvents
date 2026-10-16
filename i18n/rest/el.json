@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jimkats"
+		]
+	},
+	"campaignevents-rest-event-not-found": "Δεν υπάρχει εκδήλωση με αυτό το ID.",
+	"campaignevents-rest-enable-registration-permission-denied": "Δεν επιτρέπεται να ενεργοποιήσετε τις εγγραφές στην εκδήλωση.",
+	"campaignevents-rest-delete-already-deleted": "Αυτή η εγγραφή της εκδήλωσης έχει ήδη διαγραφεί.",
+	"campaignevents-rest-user-not-found": "Δεν υπάρχει χρήστης με αυτό το κεντρικό ID.",
+	"campaignevents-rest-get-registration-deleted": "Αυτή η εγγραφή της εκδήλωσης έχει διαγραφεί.",
+	"campaignevents-rest-get-registration-info-notparticipant": "Δεν συμμετέχετε σε αυτήν την εκδήλωση.",
+	"campaignevents-rest-register-invalid-answer": "Μη έγκυρη απάντηση στην ερώτηση $1",
+	"campaignevents-rest-contribution-not-found": "Δεν υπάρχει συνεισφορά με αυτό το ID.",
+	"campaignevents-rest-delete-contribution-permission-denied": "Δεν σας επιτρέπεται να διαγράψετε αυτήν τη συνεισφορά."
+}
