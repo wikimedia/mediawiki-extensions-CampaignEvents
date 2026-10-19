@@ -19,11 +19,28 @@
 			},
 			"options": {
 				"type": "object",
-				"description": "Available answer options, mapping display labels to values. Present for select-type questions."
+				"description": "Available answer options, mapping display labels to values. Present for select-type questions.",
+				"additionalProperties": {
+					"type": "integer"
+				}
 			},
 			"other-options": {
 				"type": "object",
-				"description": "Conditional follow-up options shown depending on selected answer"
+				"description": "Conditional follow-up options shown depending on selected answer, mapping option value to question options.",
+				"additionalProperties": {
+					"type": "object",
+					"required": [ "type", "label" ],
+					"properties": {
+						"type": {
+							"type": "string",
+							"description": "Type of the question (e.g. 'text')."
+						},
+						"label": {
+							"type": "string",
+							"description": "Localized label of the question."
+						}
+					}
+				}
 			}
 		}
 	}

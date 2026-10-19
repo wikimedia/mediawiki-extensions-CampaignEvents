@@ -115,12 +115,14 @@ class PatchWorklistPagesHandler extends SimpleHandler {
 				ParamValidator::PARAM_TYPE => 'array',
 				ParamValidator::PARAM_REQUIRED => false,
 				ParamValidator::PARAM_DEFAULT => [],
+				static::PARAM_EXAMPLE => [ 'awiki' => [ 'Some page' ] ],
 			],
 			'remove' => [
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'array',
 				ParamValidator::PARAM_REQUIRED => false,
 				ParamValidator::PARAM_DEFAULT => [],
+				static::PARAM_EXAMPLE => [ 'awiki' => [ 'Some page' ] ],
 			],
 		] + $this->getTokenParamDefinition();
 	}

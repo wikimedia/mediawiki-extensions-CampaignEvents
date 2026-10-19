@@ -157,6 +157,7 @@ class RegisterForEventHandler extends SimpleHandler {
 				static::PARAM_SOURCE => 'body',
 				ParamValidator::PARAM_TYPE => 'array',
 				static::PARAM_DESCRIPTION => new MessageValue( 'campaignevents-rest-param-desc-answers' ),
+				static::PARAM_EXAMPLE => [ 'question_name' => [ 'value' => 1, 'other' => 'Free text' ] ],
 			],
 		] + $this->getTokenParamDefinition();
 	}
