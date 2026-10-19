@@ -16,5 +16,6 @@
 	"campaignevents-rest-contribution-not-found": "Et gëtt keng Kontributioun mat dëser ID.",
 	"campaignevents-rest-delete-contribution-permission-denied": "Dir sidd net berechtegt, fir dës Kontributioun ze läschen.",
 	"campaignevents-rest-param-desc-event-page": "Titel vun der Säit fir dëst Evenement op der lokaler Wiki.",
-	"campaignevents-rest-param-desc-revid": "Versiouns-ID op der Zil-Wiki."
+	"campaignevents-rest-param-desc-revid": "Versiouns-ID op der Zil-Wiki.",
+	"campaignevents-rest-update-registration-desc": "Aktualiséiert eng besteeënd Umeldung fir en Evenement. Den authentifizéierte Benotzer muss en Organisateur vum Evenement sinn oder déi entspriechend Rechter hunn."
 }

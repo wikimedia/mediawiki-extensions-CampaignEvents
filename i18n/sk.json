@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Daimona Eaytoy",
+			"KormiSK",
 			"Luky001",
 			"Wizzard"
 		]
@@ -304,6 +305,13 @@
 	"campaignevents-event-details-tab-email": "Poslať správu",
 	"campaignevents-event-details-tab-event-details": "Podrobnosti podujatia",
 	"campaignevents-event-details-tab-stats": "Štatistiky odpovedí",
+	"campaignevents-event-details-worklist-add-dialog-search-label": "Hľadať $1",
+	"campaignevents-event-details-worklist-add-dialog-search-input-placeholder": "Hľadať $1",
+	"campaignevents-event-details-worklist-add-dialog-or": "alebo",
+	"campaignevents-event-details-worklist-add-dialog-list-label": "Zoznam stránok",
+	"campaignevents-event-details-worklist-add-dialog-list-description": "Jeden názov na riadok",
+	"campaignevents-event-details-worklist-first-page": "Prvý",
+	"campaignevents-event-details-worklist-last-page": "Posledný",
 	"campaignevents-event-details-tab-contributions": "Prispievanie",
 	"campaignevents-event-details-search-participants-placeholder": "Hľadať účastníkov",
 	"campaignevents-event-details-organizers-view-more": "Zobraziť viac",

@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"KormiSK"
+		]
+	},
+	"campaignevents-rest-param-desc-worklist-title": "Názov stránky pracovného zoznamu. Musí to byť lokálna stránka.",
+	"campaignevents-rest-update-registration-desc": "Aktualizuje existujúcu registráciu na udalosť. Overený používateľ musí byť organizátorom udalosti alebo mať príslušné práva."
+}
