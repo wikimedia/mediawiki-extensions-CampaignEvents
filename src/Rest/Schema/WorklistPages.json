@@ -4,7 +4,7 @@
 	"required": [
 		"wikis",
 		"pages",
-		"paginationOffsets"
+		"pagination_offsets"
 	],
 	"properties": {
 		"wikis": {
@@ -71,7 +71,7 @@
 				}
 			}
 		},
-		"paginationOffsets": {
+		"pagination_offsets": {
 			"description": "Pagination offsets to use to get other pages of the result set. These are set iff it would make sense to go from the currently-requested result page to the page in question.",
 			"type": "object",
 			"properties": {
