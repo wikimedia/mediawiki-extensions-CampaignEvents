@@ -4,7 +4,8 @@
 			"Brettchenweber",
 			"Inkowik",
 			"Johannnes89",
-			"IWL04"
+			"IWL04",
+			"PerfektesChaos"
 		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
@@ -16,7 +17,7 @@
 	"action-campaignevents-organize-events": "Veranstaltungen zu organisieren",
 	"right-campaignevents-organize-events": "Veranstaltungen organisieren",
 	"action-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
-	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
+	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer senden",
 	"specialpages-group-campaignevents": "Ereignisse",
 	"campaignevents-error-invalid-id": "Die Veranstaltungs-ID muss eine positive ganze Zahl sein.",
 	"campaignevents-error-empty-title": "Gib einen Titel für die Veranstaltungsseite ein.",
@@ -133,7 +134,7 @@
 	"allevents": "Alle Veranstaltungen",
 	"campaignevents-myevents-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um die Liste deiner Veranstaltungen einsehen zu können.",
 	"campaignevents-myevents-filter-legend": "Ereignisse filtern",
-	"campaignevents-myevents-label-search": "Suchen",
+	"campaignevents-myevents-label-search": "Suche (Groß-/Kleinschreibung beachten)",
 	"campaignevents-myevents-label-status": "Status",
 	"campaignevents-myevents-field-status-any": "Alle",
 	"campaignevents-myevents-field-status-open": "Offene Veranstaltungen",
@@ -142,7 +143,7 @@
 	"campaignevents-myevents-filter-btn-label": "Ereignisse filtern",
 	"campaignevents-allevents-filter-legend": "Veranstaltungen filtern",
 	"campaignevents-allevents-label-submit": "Filter anwenden",
-	"campaignevents-allevents-label-search": "Suchbegriff",
+	"campaignevents-allevents-label-search": "Suchbegriff (Groß-/Kleinschreibung beachten)",
 	"campaignevents-allevents-label-meeting-type": "Veranstaltungstyp",
 	"campaignevents-allevents-label-events-per-page": "Veranstaltungen pro Seite",
 	"campaignevents-allevents-label-start-date": "Von",
