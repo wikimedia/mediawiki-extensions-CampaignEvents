@@ -16,6 +16,7 @@ class CampaignEventsExtensionJsonTest extends ExtensionJsonTestBase {
 		'EchoHooksHandler' => 'EchoHooksHandler',
 		'CentralAuthContributionUserChangesHandler' => 'CentralAuth',
 		'UserMergeContributionUserChangesHandler' => 'UserMerge',
+		'ContentTranslationPublishHandler' => 'ContentTranslation',
 	];
 
 	/** @inheritDoc */

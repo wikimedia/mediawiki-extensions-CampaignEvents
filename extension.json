@@ -185,6 +185,18 @@
 				"NamespaceInfo"
 			]
 		},
+		"ContentTranslationPublishHandler": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ContentTranslationPublishHandler",
+			"services": [
+				"CampaignEventsCentralUserLookup",
+				"CampaignEventsEventLookup",
+				"CampaignEventsWorklistEventsStore",
+				"CampaignEventsEventContributionValidator",
+				"NamespaceInfo",
+				"CampaignEventsWikiLookup",
+				"MainConfig"
+			]
+		},
 		"CentralAuthContributionUserChangesHandler": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\CentralAuthContributionUserChangesHandler",
 			"services": [
@@ -222,6 +234,7 @@
 		"BeforeCreateEchoEvent": "EchoHooksHandler",
 		"GetPreferences": "GetPreferencesHandler",
 		"BeforePageDisplay": "PostEditHandler",
+		"ContentTranslationAfterPublish": "ContentTranslationPublishHandler",
 		"DeleteAccount": "UserMergeContributionUserChangesHandler",
 		"UserMergeAccountFields": "UserMergeContributionUserChangesHandler",
 		"CentralAuthAccountDeleted": "CentralAuthContributionUserChangesHandler",
