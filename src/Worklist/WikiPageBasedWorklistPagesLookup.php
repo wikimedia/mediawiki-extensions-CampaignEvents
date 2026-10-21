@@ -10,6 +10,7 @@ use MediaWiki\Extension\CampaignEvents\Utils;
 use MediaWiki\Page\PageIdentity;
 use stdClass;
 use Wikimedia\Assert\Assert;
+use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 use Wikimedia\Timestamp\TimestampFormat;
 
@@ -74,7 +75,8 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		$sortFields = self::INTERNAL_SORT_FIELDS[$sort];
 
 		$offset = $offset !== '' ? $offset : null;
-		$offsetMap = $offset ? self::splitOffsetString( $sortFields, $offset ) : null;
+		$dbr = $this->databaseHelper->getReplicaConnection();
+		$offsetMap = $offset ? self::splitUserProvidedOffsetString( $dbr, $sortFields, $offset ) : null;
 
 		// Increase the limit so we can tell if there's going to be a next page in the result set.
 		$effectiveLimit = $limit + 1;
@@ -142,7 +144,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * @param bool $direction
 	 * @param bool $isBackwards
 	 * @param bool $includeOffset
-	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}>
+	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}>
 	 */
 	private function getResultsFromContent(
 		?int $worklistID,
@@ -229,14 +231,14 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * sorting by ancillary data if the content isn't hydrated.
 	 *
 	 * @phpcs:ignore Generic.Files.LineLength
-	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp?:int,placeholders?:bool}> $flatContent
+	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp?:string,placeholders?:bool}> $flatContent
 	 * @param non-empty-list<string> $sortFields
 	 * @param positive-int $limit
 	 * @param ?array<string,string> $offsetValueMap
 	 * @param bool $direction
 	 * @param bool $includeOffset
 	 * @param bool $isPreliminaryPass
-	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp?:int,placeholders?:bool}>
+	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp?:string,placeholders?:bool}>
 	 */
 	private function getResultPageFromContentIncludingTies(
 		array $flatContent,
@@ -314,7 +316,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 			if (
 				!$isPreliminaryPass ||
 				$offsetValueMap === null ||
-				self::splitOffsetString( $sortFields, $offsetValue ) !== $offsetValueMap
+				self::splitKnownValidOffsetString( $sortFields, $offsetValue ) !== $offsetValueMap
 			) {
 				$remainingCount -= count( $items );
 			}
@@ -331,22 +333,23 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 *
 	 * @param int|null $worklistID
 	 * @param array<string,array{id:int,wiki:string,prefixedtext:string}> $rawResult
-	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}>
+	 * @return array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}>
 	 */
 	private function hydrateResultWithDBData( ?int $worklistID, array $rawResult ): array {
+		$dbr = $this->databaseHelper->getReplicaConnection();
+
 		if ( $worklistID === null ) {
 			// This should typically not be null, as the deferred update that creates the worklist entity can be
 			// expected to run immediately. Still, it might in principle be possible for it not to run, or to error out,
 			// or the read here might be from a lagged replica. So, in that case, return placeholders only.
 			/**
 			 * @param array{id:int,wiki:string,prefixedtext:string} $item
-			 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}
+			 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}
 			 */
-			$placeholderFiller = static fn ( array $item ): array => self::hydrateResultItem( $item, null );
+			$placeholderFiller = static fn ( array $item ): array => self::hydrateResultItem( $dbr, $item, null );
 			return array_map( $placeholderFiller, $rawResult );
 		}
 		$queryInfo = $this->worklistPagesSecondaryStore->getQueryInfo( $worklistID );
-		$dbr = $this->databaseHelper->getReplicaConnection();
 		$dbConcat = $dbr->buildConcat( [ 'cewp_wiki', $dbr->addQuotes( '|' ), 'cewp_page_prefixedtext' ] );
 		$concatAlias = 'page_wiki_prefixedtext';
 		$makePageKey = static fn ( string $wiki, string $prefixedText ): string => $wiki . '|' . $prefixedText;
@@ -368,7 +371,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 			}
 
 			foreach ( $pageBatch as $pageKey => $pageItem ) {
-				$result[$pageKey] = self::hydrateResultItem( $pageItem, $rowsByPageKey[$pageKey] ?? null );
+				$result[$pageKey] = self::hydrateResultItem( $dbr, $pageItem, $rowsByPageKey[$pageKey] ?? null );
 			}
 		}
 
@@ -377,8 +380,8 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 
 	/**
 	 * @phpcs:disable Generic.Files.LineLength
-	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}> $result
-	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}|null $extraItem
+	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}> $result
+	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}|null $extraItem
 	 * @param int|null $worklistID
 	 * @param array<string,string[]> $rawContent
 	 * @param non-empty-list<string> $sortFields
@@ -446,7 +449,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 
 		// Note we avoid exposing placeholders in offsets. Is this always the best approach?
 		/**
-		 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool} $item
+		 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool} $item
 		 */
 		$makeOffset = static fn ( array $item ): string => self::buildOffsetString( $sortFields, $item, true );
 
@@ -472,7 +475,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * Builds an offset string that can be fed back to this class to paginate through results.
 	 *
 	 * @param string[] $sortFields
-	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool} $offsetItem
+	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool} $offsetItem
 	 * @param bool $dropPlaceholders
 	 */
 	private static function buildOffsetString( array $sortFields, array $offsetItem, bool $dropPlaceholders ): string {
@@ -488,14 +491,19 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	}
 
 	/**
-	 * Given a list of sort fields and an offset for those fields which may potentially be invalid (e.g. user-supplied),
+	 * Given a list of sort fields and a user-supplied offset for those fields (which may therefore be invalid),
 	 * split the offset into a map of values for each sort field.
 	 *
+	 * @param IReadableDatabase $dbr
 	 * @param string[] $sortFields
 	 * @param string $offset
-	 * @return array<string,string|int>|null Null when the offset is invalid.
+	 * @return array<string,string>|null Null when the offset is invalid.
 	 */
-	private static function splitOffsetString( array $sortFields, string $offset ): ?array {
+	private static function splitUserProvidedOffsetString(
+		IReadableDatabase $dbr,
+		array $sortFields,
+		string $offset
+	): ?array {
 		$offsetParts = explode( '|', $offset );
 		if ( count( $sortFields ) !== count( $offsetParts ) ) {
 			return null;
@@ -505,7 +513,7 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		foreach ( $sortFields as $i => $field ) {
 			// Empty values are allowed for placeholder only. Otherwise the offset is treated as invalid.
 			if ( $offsetParts[$i] === '' ) {
-				$placeholders = self::getPlaceholderValues();
+				$placeholders = self::getPlaceholderValues( $dbr );
 				if ( !array_key_exists( $field, $placeholders ) ) {
 					return null;
 				}
@@ -523,14 +531,16 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 *
 	 * @param string[] $sortFields
 	 * @param string $offset
-	 * @return array<string,string|int>
+	 * @return array<string,string>
 	 */
 	private static function splitKnownValidOffsetString( array $sortFields, string $offset ): array {
-		$tolerantRes = self::splitOffsetString( $sortFields, $offset );
-		if ( $tolerantRes === null ) {
-			throw new LogicException( "Invalid offset $offset for fields " . implode( ',', $sortFields ) );
+		$offsetParts = explode( '|', $offset );
+
+		$offsetValues = [];
+		foreach ( $sortFields as $i => $field ) {
+			$offsetValues[$field] = $offsetParts[$i];
 		}
-		return $tolerantRes;
+		return $offsetValues;
 	}
 
 	/**
@@ -565,14 +575,14 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * in pagination. The values chosen depend on the wanted semantics for each field when sorting by that field.
 	 * These are for internal use by this class and are stripped away before returning a result set outside.
 	 *
-	 * @return array<string,string|int>
+	 * @return array<string,string>
 	 */
-	private static function getPlaceholderValues(): array {
+	private static function getPlaceholderValues( IReadableDatabase $dbr ): array {
 		static $placeholders;
 		if ( !$placeholders ) {
 			$placeholders = [
 				// Rows without a timestamp are recently-inserted, so use the current time as placeholder
-				'timestamp' => (int)ConvertibleTimestamp::now( TimestampFormat::UNIX ),
+				'timestamp' => self::convertTimestampForComparisons( $dbr, ConvertibleTimestamp::now() ),
 			];
 		}
 		return $placeholders;
@@ -582,19 +592,20 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	 * Creates an item for the return value, merging information from the wikipage and the database.
 	 * It also adds a flag to indicate whether placeholders were used and should be stripped later.
 	 *
+	 * @param IReadableDatabase $dbr
 	 * @param array{id:int,wiki:string,prefixedtext:string} $item
 	 * @param stdClass|null $dbRow From ce_worklist_pages, if present
-	 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}
+	 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}
 	 */
-	private static function hydrateResultItem( array $item, ?stdClass $dbRow ): array {
+	private static function hydrateResultItem( IReadableDatabase $dbr, array $item, ?stdClass $dbRow ): array {
 		if ( $dbRow ) {
 			$ancillaryData = [
-				'timestamp' => (int)ConvertibleTimestamp::convert( TimestampFormat::UNIX, $dbRow->cewp_timestamp ),
+				'timestamp' => self::convertTimestampForComparisons( $dbr, $dbRow->cewp_timestamp ),
 				'placeholders' => false,
 			];
 		} else {
 			$ancillaryData = [
-				...self::getPlaceholderValues(),
+				...self::getPlaceholderValues( $dbr ),
 				'placeholders' => true,
 			];
 		}
@@ -602,21 +613,33 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 		return array_merge( $item, $ancillaryData );
 	}
 
+	private static function convertTimestampForComparisons( IReadableDatabase $dbr, string $timestamp ): string {
+		if ( defined( 'MW_PHPUNIT_TEST' ) ) {
+			// Use UNIX in tests so that writing expected values is easier and doesn't depend on the DBMS.
+			return ConvertibleTimestamp::convert( TimestampFormat::UNIX, $timestamp );
+		}
+		// Use database timestamp format to offer more interoperability with the database-based lookup.
+		return $dbr->timestamp( $timestamp );
+	}
+
 	/**
 	 * Cleans a result page from internal data so it can be returned outside this class.
 	 *
 	 * @phpcs:ignore Generic.Files.LineLength
-	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool}> $rawResult
+	 * @param array<string,array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool}> $rawResult
 	 * @return list<array{wiki:string,prefixedtext:string,timestamp:int|null}>
 	 */
 	private static function cleanResult( array $rawResult ): array {
 		$result = [];
 		foreach ( $rawResult as $item ) {
 			$itemsWithoutPlaceholders = self::dropPlaceholders( $item );
+			$outTimestamp = $itemsWithoutPlaceholders['timestamp'] !== null
+				? (int)ConvertibleTimestamp::convert( TimestampFormat::UNIX, $itemsWithoutPlaceholders['timestamp'] )
+				: null;
 			$result[] = [
 				'wiki' => $itemsWithoutPlaceholders['wiki'],
 				'prefixedtext' => $itemsWithoutPlaceholders['prefixedtext'],
-				'timestamp' => $itemsWithoutPlaceholders['timestamp'],
+				'timestamp' => $outTimestamp,
 			];
 		}
 		return $result;
@@ -625,8 +648,8 @@ class WikiPageBasedWorklistPagesLookup implements IWorklistPagesLookup {
 	/**
 	 * Drops placeholder values from an item, without further modifications.
 	 *
-	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:int,placeholders:bool} $item
-	 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:int|null,placeholders:bool}
+	 * @param array{id:int,wiki:string,prefixedtext:string,timestamp:string,placeholders:bool} $item
+	 * @return array{id:int,wiki:string,prefixedtext:string,timestamp:string|null,placeholders:bool}
 	 */
 	private static function dropPlaceholders( array $item ): array {
 		if ( $item['placeholders'] ) {
