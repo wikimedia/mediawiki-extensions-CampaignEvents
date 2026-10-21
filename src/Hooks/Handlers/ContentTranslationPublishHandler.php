@@ -17,14 +17,16 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\NamespaceInfo;
+use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\WikiMap\WikiMap;
 
 /**
- * Auto-associates translations published with ContentTranslation with an event, when the source article is in the
- * worklist of exactly one event that the translator can associate edits with (T435388). This mirrors the
- * auto-association in PostEditHandler, except that the worklist is matched against the source page rather than
- * the edited page, since the source is what organizers add to the worklist.
+ * Auto-associates translations published with ContentTranslation with an event, when the source or the target
+ * article is in the worklist of exactly one event that the translator can associate edits with (T435388). This
+ * mirrors the auto-association in PostEditHandler, which does not run after a translation is published. Besides the
+ * edited (target) page, the worklist is also matched against the source page, since organizers may list either the
+ * articles to translate or the articles to create (which may not exist yet).
  */
 class ContentTranslationPublishHandler implements ContentTranslationAfterPublishHook {
 	private const MAX_EVENTS = 50;
@@ -35,6 +37,7 @@ class ContentTranslationPublishHandler implements ContentTranslationAfterPublish
 		private readonly WorklistEventsStore $worklistEventsStore,
 		private readonly EventContributionValidator $eventContributionValidator,
 		private readonly NamespaceInfo $namespaceInfo,
+		private readonly TitleFormatter $titleFormatter,
 		private readonly WikiLookup $wikiLookup,
 		private readonly Config $mainConfig,
 	) {
@@ -64,11 +67,6 @@ class ContentTranslationPublishHandler implements ContentTranslationAfterPublish
 			return;
 		}
 
-		$sourceWikiID = $this->getSourceWikiID( $sourceLanguage );
-		if ( $sourceWikiID === null ) {
-			return;
-		}
-
 		// Note, this only returns events where the current (target) wiki is a target wiki.
 		$events = $this->eventLookup->getEventsForContributionAssociationByParticipant(
 			$centralUser,
@@ -81,14 +79,27 @@ class ContentTranslationPublishHandler implements ContentTranslationAfterPublish
 		$eventIDs = array_map( static fn ( ExistingEventRegistration $e ): int => $e->getID(), $events );
 		$matchingEventIDs = $this->worklistEventsStore->filterEventsByPageInWorklist(
 			$eventIDs,
-			$sourceWikiID,
-			// Worklist pages are stored as prefixed text. We can't parse titles from another wiki, but at least
-			// handle titles in DB key form.
-			strtr( $sourceTitle, '_', ' ' )
+			WikiMap::getCurrentWikiId(),
+			$this->titleFormatter->getPrefixedText( $targetPage )
 		);
+		// If the source wiki is unknown, the source page can't be in any worklist, but the target page still can.
+		$sourceWikiID = $this->getSourceWikiID( $sourceLanguage );
+		if ( $sourceWikiID !== null ) {
+			$matchingEventIDs = array_values( array_unique( array_merge(
+				$matchingEventIDs,
+				$this->worklistEventsStore->filterEventsByPageInWorklist(
+					$eventIDs,
+					$sourceWikiID,
+					// Worklist pages are stored as prefixed text. We can't parse titles from another wiki, but at
+					// least handle titles in DB key form.
+					strtr( $sourceTitle, '_', ' ' )
+				)
+			) ) );
+		}
 
-		// Like PostEditHandler, only auto-associate when there's a single candidate event, since an edit can only
-		// be associated with one event. In any other case, the edit can still be associated manually.
+		// Like PostEditHandler, only auto-associate when there's a single candidate event (counting both the source
+		// and the target page), since an edit can only be associated with one event. In any other case, the edit can
+		// still be associated manually.
 		if ( count( $matchingEventIDs ) === 1 ) {
 			// Validation is skipped for the same reasons as in PostEditHandler.
 			$this->eventContributionValidator->scheduleAssociationJob(

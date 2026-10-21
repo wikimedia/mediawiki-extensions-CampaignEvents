@@ -193,6 +193,7 @@
 				"CampaignEventsWorklistEventsStore",
 				"CampaignEventsEventContributionValidator",
 				"NamespaceInfo",
+				"TitleFormatter",
 				"CampaignEventsWikiLookup",
 				"MainConfig"
 			]

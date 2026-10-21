@@ -28,6 +28,7 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 	private const CENTRAL_USER_ID = 1;
 	private const REVISION_ID = 555;
 	private const SOURCE_TITLE = 'Some_article';
+	private const TARGET_TITLE = 'Translated_article';
 
 	private WikiLookup $wikiLookup;
 
@@ -67,6 +68,7 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 			$worklistEventsStore ?? $this->createNoOpMock( WorklistEventsStore::class ),
 			$eventContributionValidator ?? $this->createNoOpMock( EventContributionValidator::class ),
 			$this->getServiceContainer()->getNamespaceInfo(),
+			$this->getServiceContainer()->getTitleFormatter(),
 			$this->wikiLookup,
 			$this->getServiceContainer()->getMainConfig(),
 		);
@@ -105,7 +107,7 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 	): void {
 		$handler->onContentTranslationAfterPublish(
 			new UserIdentityValue( 42, 'Translator' ),
-			new PageIdentityValue( 10, $namespace, 'Translated_article', PageIdentityValue::LOCAL ),
+			new PageIdentityValue( 10, $namespace, self::TARGET_TITLE, PageIdentityValue::LOCAL ),
 			self::REVISION_ID,
 			$sourceLanguage,
 			self::SOURCE_TITLE,
@@ -125,43 +127,76 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 		$this->runHook( $this->getHandler( centralUserLookup: $this->makeCentralUserLookup( false ) ) );
 	}
 
-	public function testSkip_unknownSourceWiki(): void {
-		// The no-op event lookup ensures that we bail out before looking for events.
-		$this->runHook( $this->getHandler(), sourceLanguage: 'xx' );
-	}
-
 	public function testSkip_noEvents(): void {
 		$this->runHook( $this->getHandler( eventLookup: $this->makeEventLookup( [] ) ) );
 	}
 
-	public function testAutoAssociatesWithSingleMatchingEvent(): void {
-		$curWikiID = WikiMap::getCurrentWikiId();
+	/**
+	 * Returns a worklist store where each page is in the worklist of the given events. Pages are identified by
+	 * wiki ID and prefixed text.
+	 *
+	 * @param array<string,array<string,int[]>> $eventsByWikiAndPage
+	 */
+	private function makeWorklistEventsStore( array $eventsByWikiAndPage ): WorklistEventsStore {
+		$store = $this->createMock( WorklistEventsStore::class );
+		$store->method( 'filterEventsByPageInWorklist' )->willReturnCallback(
+			static fn ( array $eventIDs, string $wikiID, string $prefixedText ): array => array_values(
+				array_intersect( $eventIDs, $eventsByWikiAndPage[$wikiID][$prefixedText] ?? [] )
+			)
+		);
+		return $store;
+	}
 
-		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
-		$worklistEventsStore->expects( $this->once() )
-			->method( 'filterEventsByPageInWorklist' )
-			// Must be matched against the source page, as prefixed text.
-			->with( [ 1, 2 ], 'enwiki', 'Some article' )
-			->willReturn( [ 2 ] );
+	/**
+	 * @dataProvider provideSingleMatch
+	 */
+	public function testAutoAssociatesWithSingleMatchingEvent(
+		array $sourcePageEvents,
+		array $targetPageEvents,
+		string $sourceLanguage,
+		int $expectedEventID
+	): void {
+		$curWikiID = WikiMap::getCurrentWikiId();
+		// Worklist pages are matched as prefixed text.
+		$worklistEventsStore = $this->makeWorklistEventsStore( [
+			'enwiki' => [ 'Some article' => $sourcePageEvents ],
+			$curWikiID => [ 'Translated article' => $targetPageEvents ],
+		] );
 
 		$validator = $this->createMock( EventContributionValidator::class );
 		$validator->expects( $this->once() )
 			->method( 'scheduleAssociationJob' )
-			->with( self::REVISION_ID, $curWikiID, 2, self::CENTRAL_USER_ID );
+			->with( self::REVISION_ID, $curWikiID, $expectedEventID, self::CENTRAL_USER_ID );
 
-		$this->runHook( $this->getHandler(
-			eventLookup: $this->makeEventLookup( [ 1, 2 ] ),
-			worklistEventsStore: $worklistEventsStore,
-			eventContributionValidator: $validator,
-		) );
+		$this->runHook(
+			$this->getHandler(
+				eventLookup: $this->makeEventLookup( [ 1, 2, 3 ] ),
+				worklistEventsStore: $worklistEventsStore,
+				eventContributionValidator: $validator,
+			),
+			sourceLanguage: $sourceLanguage
+		);
+	}
+
+	public static function provideSingleMatch(): Generator {
+		yield 'Source page in worklist' => [ [ 2 ], [], 'en', 2 ];
+		yield 'Target page in worklist' => [ [], [ 2 ], 'en', 2 ];
+		yield 'Source and target page in the same worklist' => [ [ 2 ], [ 2 ], 'en', 2 ];
+		yield 'Only events the translator can associate edits with' => [ [ 2, 4 ], [], 'en', 2 ];
+		yield 'Unknown source wiki, target page in worklist' => [ [ 1 ], [ 2 ], 'xx', 2 ];
 	}
 
 	/**
 	 * @dataProvider provideNoSingleMatch
 	 */
-	public function testDoesNotAssociateWithoutSingleMatch( array $matchingEventIDs ): void {
-		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
-		$worklistEventsStore->method( 'filterEventsByPageInWorklist' )->willReturn( $matchingEventIDs );
+	public function testDoesNotAssociateWithoutSingleMatch(
+		array $sourcePageEvents,
+		array $targetPageEvents
+	): void {
+		$worklistEventsStore = $this->makeWorklistEventsStore( [
+			'enwiki' => [ 'Some article' => $sourcePageEvents ],
+			WikiMap::getCurrentWikiId() => [ 'Translated article' => $targetPageEvents ],
+		] );
 
 		$validator = $this->createMock( EventContributionValidator::class );
 		$validator->expects( $this->never() )->method( 'scheduleAssociationJob' );
@@ -174,23 +209,28 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 	}
 
 	public static function provideNoSingleMatch(): Generator {
-		yield 'No matching events' => [ [] ];
-		yield 'Multiple matching events' => [ [ 1, 2 ] ];
+		yield 'No matching events' => [ [], [] ];
+		yield 'Source page in multiple worklists' => [ [ 1, 2 ], [] ];
+		yield 'Target page in multiple worklists' => [ [], [ 1, 2 ] ];
+		yield 'Source and target page in different worklists' => [ [ 1 ], [ 2 ] ];
 	}
 
 	/**
-	 * Asserts that the handler looks up the source page on the given wiki, or not at all if null.
+	 * Returns the IDs of the wikis where the handler looks up the source page.
+	 *
+	 * @return string[]
 	 */
-	private function assertSourceWikiLookedUp( string $sourceLanguage, ?string $expectedWikiID ): void {
+	private function getSourceWikiIDs( string $sourceLanguage ): array {
+		$sourceWikiIDs = [];
 		$worklistEventsStore = $this->createMock( WorklistEventsStore::class );
-		if ( $expectedWikiID !== null ) {
-			$worklistEventsStore->expects( $this->once() )
-				->method( 'filterEventsByPageInWorklist' )
-				->with( [ 1 ], $expectedWikiID, 'Some article' )
-				->willReturn( [] );
-		} else {
-			$worklistEventsStore->expects( $this->never() )->method( 'filterEventsByPageInWorklist' );
-		}
+		$worklistEventsStore->method( 'filterEventsByPageInWorklist' )->willReturnCallback(
+			static function ( array $eventIDs, string $wikiID, string $prefixedText ) use ( &$sourceWikiIDs ): array {
+				if ( $prefixedText === 'Some article' ) {
+					$sourceWikiIDs[] = $wikiID;
+				}
+				return [];
+			}
+		);
 
 		$this->runHook(
 			$this->getHandler(
@@ -199,6 +239,7 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 			),
 			sourceLanguage: $sourceLanguage
 		);
+		return $sourceWikiIDs;
 	}
 
 	/**
@@ -216,7 +257,10 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 			[ 'en' => 'w', 'fr' => 'w2' ],
 			'http://localhost:8080/$1/api.php'
 		);
-		$this->assertSourceWikiLookedUp( $sourceLanguage, $expectedWikiID );
+		$this->assertSame(
+			$expectedWikiID !== null ? [ $expectedWikiID ] : [],
+			$this->getSourceWikiIDs( $sourceLanguage )
+		);
 	}
 
 	public static function provideSourceWikiWithSharedHost(): Generator {
@@ -234,6 +278,6 @@ class ContentTranslationPublishHandlerTest extends MediaWikiIntegrationTestCase 
 			[],
 			'//$1.example.org/w/api.php'
 		);
-		$this->assertSourceWikiLookedUp( 'en', 'enwiki' );
+		$this->assertSame( [ 'enwiki' ], $this->getSourceWikiIDs( 'en' ) );
 	}
 }
