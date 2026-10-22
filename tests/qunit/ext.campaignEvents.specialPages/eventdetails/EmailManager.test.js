@@ -136,9 +136,12 @@ QUnit.module(
 			expectedText += ')';
 			assert.strictEqual( emailManager.$recipientsListElement.text(), expectedText, 'Recipients message' );
 		};
-		const assertWarning = ( assert, msg ) => {
-			if ( msg !== null ) {
-				assert.strictEqual( emailManager.resultMessage.getLabel(), `(${ msg })`, 'Warning message' );
+		const MISSING_ADDRESS_WARNING = '<p>(campaignevents-email-participants-missing-address-certain)</p>' +
+			'<p>(campaignevents-email-participants-missing-address-talk-page)</p>';
+		const UNCERTAIN_ADDRESS_WARNING = '(campaignevents-email-participants-missing-address-uncertain)';
+		const assertWarning = ( assert, expectedHtml ) => {
+			if ( expectedHtml !== null ) {
+				assert.strictEqual( emailManager.resultMessage.$label.html(), expectedHtml, 'Warning message' );
 			} else {
 				assert.strictEqual( emailManager.resultMessage.getLabel(), null, 'No warning expected' );
 			}
@@ -156,7 +159,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '1 valid, 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -166,7 +169,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '2 valid, 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -176,7 +179,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '3 valid, 1 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -186,7 +189,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'All selected are valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -212,7 +215,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '1 valid, 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -222,7 +225,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '2 valid, 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -232,7 +235,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '3 valid, 1 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -242,7 +245,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'All selected are valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -268,7 +271,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '1 valid, 3 invalid (visible)', async ( assert ) => {
 					setupParticipantsManager(
@@ -278,7 +281,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '2 valid, 2 invalid (visible)', async ( assert ) => {
 					setupParticipantsManager(
@@ -288,7 +291,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '3 valid, 1 invalid (visible)', async ( assert ) => {
 					setupParticipantsManager(
@@ -298,7 +301,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'All visible selected are valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -308,7 +311,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address-uncertain' );
+					assertWarning( assert, UNCERTAIN_ADDRESS_WARNING );
 				} );
 			}
 		);
@@ -324,7 +327,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '1 valid, 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -334,7 +337,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '2 valid, 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -344,7 +347,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( '3 valid, 1 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -354,7 +357,7 @@ QUnit.module(
 						false
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-all' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'All selected are valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -382,7 +385,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-1' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -392,7 +395,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -402,7 +405,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address-uncertain' );
+					assertWarning( assert, UNCERTAIN_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 1 valid', async ( assert ) => {
@@ -413,7 +416,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-4' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -423,7 +426,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -433,7 +436,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 1 invalid, 1 valid', async ( assert ) => {
@@ -444,7 +447,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 1 invalid, 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -454,7 +457,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 1 invalid, 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -464,7 +467,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 2 invalid, 1 valid', async ( assert ) => {
@@ -475,7 +478,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid, 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -485,7 +488,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid, 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -495,7 +498,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 5 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 3 invalid, 1 valid', async ( assert ) => {
@@ -506,7 +509,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address-uncertain' );
+					assertWarning( assert, UNCERTAIN_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 3 invalid, 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -516,7 +519,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 5 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address-uncertain' );
+					assertWarning( assert, UNCERTAIN_ADDRESS_WARNING );
 				} );
 			}
 		);
@@ -532,7 +535,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-1' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -542,7 +545,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 3 invalid', async ( assert ) => {
 					setupParticipantsManager(
@@ -563,7 +566,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except', 'User-4' );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -573,7 +576,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -583,7 +586,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 1 invalid, 1 valid', async ( assert ) => {
@@ -594,7 +597,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 2 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 1 invalid, 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -604,7 +607,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 1 invalid, 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -614,7 +617,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 2 invalid, 1 valid', async ( assert ) => {
@@ -625,7 +628,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 3 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid, 2 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -635,7 +638,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 4 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 				QUnit.test( 'Deselect 2 invalid, 3 valid', async ( assert ) => {
 					setupParticipantsManager(
@@ -645,7 +648,7 @@ QUnit.module(
 						true
 					);
 					assertRecipientsMsg( assert, 'campaignevents-email-participants-except-count', 5 );
-					assertWarning( assert, 'campaignevents-email-participants-missing-address' );
+					assertWarning( assert, MISSING_ADDRESS_WARNING );
 				} );
 
 				QUnit.test( 'Deselect 3 invalid, 1 valid', async ( assert ) => {

@@ -201,7 +201,8 @@
 	) {
 		if ( this.hasInvalidRecipients( userData, selectedIDs ) ) {
 			this.setWarning(
-				mw.message( 'campaignevents-email-participants-missing-address' ).text()
+				$( '<p>' ).text( mw.message( 'campaignevents-email-participants-missing-address-certain' ).text() )
+					.add( $( '<p>' ).text( mw.message( 'campaignevents-email-participants-missing-address-talk-page' ).text() ) )
 			);
 		} else if ( ( selectedIDs === null || this.isSelectionInverted ) && !fullListLoaded ) {
 			this.setWarning(
