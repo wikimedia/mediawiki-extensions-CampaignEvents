@@ -5,10 +5,12 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CampaignEvents\FrontendModules;
 
 use MediaWiki\Language\Language;
+use MediaWiki\Language\MessageLocalizer;
 use OOUI\ButtonWidget;
 use OOUI\CheckboxInputWidget;
 use OOUI\FieldLayout;
 use OOUI\FieldsetLayout;
+use OOUI\HtmlSnippet;
 use OOUI\MessageWidget;
 use OOUI\MultilineTextInputWidget;
 use OOUI\PanelLayout;
@@ -33,7 +35,9 @@ class EmailParticipantsModule {
 	 * probably not worth doing.
 	 */
 	public function createContent(
-		Language $language
+		Language $language,
+		bool $userIsEmailConfirmed,
+		MessageLocalizer $messageLocalizer
 	): Tag {
 		$msgFormatter = $this->messageFormatterFactory->getTextFormatter( $language->getCode() );
 		$items = [];
@@ -43,7 +47,7 @@ class EmailParticipantsModule {
 				MessageValue::new( 'campaignevents-email-participants-label' )
 			)
 		);
-		$items[] = $this->getEmailForm( $msgFormatter );
+		$items[] = $this->getEmailForm( $msgFormatter, $userIsEmailConfirmed, $messageLocalizer );
 
 		$layout = new PanelLayout( [
 			'content' => $items,
@@ -57,7 +61,11 @@ class EmailParticipantsModule {
 			->appendContent( $layout );
 	}
 
-	private function getEmailForm( ITextFormatter $msgFormatter ): FieldsetLayout {
+	private function getEmailForm(
+		ITextFormatter $msgFormatter,
+		bool $userIsEmailConfirmed,
+		MessageLocalizer $messageLocalizer
+	): FieldsetLayout {
 		$fields = [];
 
 		$fields[] = new FieldLayout(
@@ -68,6 +76,21 @@ class EmailParticipantsModule {
 				),
 			] )
 		);
+
+		if ( !$userIsEmailConfirmed ) {
+			$fields[] = new FieldLayout(
+				new MessageWidget( [
+					'type' => 'warning',
+					'inline' => true,
+					'label' => new HtmlSnippet(
+						$messageLocalizer->msg( 'campaignevents-event-details-no-organizer-email' )->parse()
+					),
+				] ),
+				[
+					'classes' => [ 'ext-campaignevents-details-email-organizer-no-email' ]
+				]
+			);
+		}
 
 		$recipientsList = ( new Tag( 'div' ) )
 			->addClasses( [ 'ext-campaignevents-eventdetails-email-recipient-list' ] );

@@ -85,6 +85,7 @@ class EventDetailsParticipantsModule {
 		bool $isOrganizer,
 		bool $canEmailParticipants,
 		bool $isLocalWiki,
+		bool $userIsEmailConfirmed,
 		OutputPage $out
 	): Tag {
 		$eventID = $event->getID();
@@ -159,8 +160,7 @@ class EventDetailsParticipantsModule {
 			'wgCampaignEventsEventDetailsParticipantsTotal' => $totalParticipants,
 			'wgCampaignEventsLastParticipantID' => $lastParticipantID,
 			'wgCampaignEventsCurUserCentralID' => $centralUser?->getCentralID(),
-			'wgCampaignEventsViewerHasEmail' =>
-				$this->userFactory->newFromUserIdentity( $viewingUser )->isEmailConfirmed(),
+			'wgCampaignEventsViewerHasEmail' => $userIsEmailConfirmed,
 			'wgCampaignEventsNonPIIQuestionIDs' => $nonPIIQuestionIDs,
 		] );
 

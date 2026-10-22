@@ -131,6 +131,7 @@ class SpecialEventDetails extends SpecialPage {
 				$this->event
 			);
 		}
+		$userIsEmailConfirmed = $this->getUser()->isEmailConfirmed();
 		$out->addJsConfigVars( [
 			'wgCampaignEventsEventID' => $eventID,
 			'wgCampaignEventsShowEmailTab' => $userCanEmailParticipants,
@@ -211,6 +212,7 @@ class SpecialEventDetails extends SpecialPage {
 				$isOrganizer,
 				$userCanEmailParticipants,
 				$isLocalWiki,
+				$userIsEmailConfirmed,
 				$out
 			)
 		);
@@ -248,7 +250,7 @@ class SpecialEventDetails extends SpecialPage {
 			$tabs[] = $this->createTab(
 				self::EMAIL_PANEL,
 				$msgFormatter->format( MessageValue::new( 'campaignevents-event-details-tab-email' ) ),
-				$emailModule->createContent( $language )
+				$emailModule->createContent( $language, $userIsEmailConfirmed, $this )
 			);
 		}
 

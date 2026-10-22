@@ -73,11 +73,7 @@
 	EmailManager.prototype.installEventListeners = function () {
 		const self = this;
 		if ( !participantsManager.viewerHasEmail ) {
-			this.setWarning(
-				new OO.ui.HtmlSnippet(
-					mw.message( 'campaignevents-event-details-no-organizer-email' ).parse()
-				)
-			);
+			// The warning about the missing email address is shown by the server
 			this.subject.setDisabled( true );
 			this.message.setDisabled( true );
 			this.CCMe.setDisabled( true );
