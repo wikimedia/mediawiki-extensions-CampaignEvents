@@ -138,7 +138,8 @@ QUnit.module(
 		};
 		const MISSING_ADDRESS_WARNING = '<p>(campaignevents-email-participants-missing-address-certain)</p>' +
 			'<p>(campaignevents-email-participants-missing-address-talk-page)</p>';
-		const UNCERTAIN_ADDRESS_WARNING = '(campaignevents-email-participants-missing-address-uncertain)';
+		const UNCERTAIN_ADDRESS_WARNING = '<p>(campaignevents-email-participants-missing-address-uncertain)</p>' +
+			'<p>(campaignevents-email-participants-missing-address-talk-page)</p>';
 		const assertWarning = ( assert, expectedHtml ) => {
 			if ( expectedHtml !== null ) {
 				assert.strictEqual( emailManager.resultMessage.$label.html(), expectedHtml, 'Warning message' );

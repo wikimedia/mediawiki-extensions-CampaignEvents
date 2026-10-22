@@ -200,17 +200,23 @@
 		fullListLoaded
 	) {
 		if ( this.hasInvalidRecipients( userData, selectedIDs ) ) {
-			this.setWarning(
-				$( '<p>' ).text( mw.message( 'campaignevents-email-participants-missing-address-certain' ).text() )
-					.add( $( '<p>' ).text( mw.message( 'campaignevents-email-participants-missing-address-talk-page' ).text() ) )
-			);
+			this.setMissingAddressWarning( 'campaignevents-email-participants-missing-address-certain' );
 		} else if ( ( selectedIDs === null || this.isSelectionInverted ) && !fullListLoaded ) {
-			this.setWarning(
-				mw.message(
-					'campaignevents-email-participants-missing-address-uncertain'
-				).text()
-			);
+			this.setMissingAddressWarning( 'campaignevents-email-participants-missing-address-uncertain' );
 		}
+	};
+
+	/**
+	 * @param {string} msgKey Key of the message saying that some recipients (may) have no email
+	 */
+	EmailManager.prototype.setMissingAddressWarning = function ( msgKey ) {
+		// The messages that can be used here are:
+		// * campaignevents-email-participants-missing-address-certain
+		// * campaignevents-email-participants-missing-address-uncertain
+		this.setWarning(
+			$( '<p>' ).text( mw.message( msgKey ).text() )
+				.add( $( '<p>' ).text( mw.message( 'campaignevents-email-participants-missing-address-talk-page' ).text() ) )
+		);
 	};
 
 	EmailManager.prototype.addValidation = function () {
