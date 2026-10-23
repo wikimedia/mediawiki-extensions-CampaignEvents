@@ -345,6 +345,7 @@
 	"campaignevents-event-details-worklist-load-error": "İş siyahısı yüklənə bilmədi. $1",
 	"campaignevents-event-details-worklist-card-views-label": "Oxunma sayı",
 	"campaignevents-event-details-worklist-card-added": "$1 tarixində əlavə edildi",
+	"campaignevents-event-details-worklist-card-added-recent": "Qısa müddət əvvəl əlavə edilib",
 	"campaignevents-event-details-worklist-card-impact-high": "Yüksək təsir imkanı",
 	"campaignevents-event-details-worklist-card-impact-medium": "Orta təsir imkanı",
 	"campaignevents-event-details-worklist-card-impact-low": "Aşağı təsir imkanı",
