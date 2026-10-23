@@ -15,7 +15,7 @@
 	"canceleventregistration": "Отказ от Ваша регистрация за събитие",
 	"myevents": "Ваши събития",
 	"allevents": "Всички събития",
-	"campaignevents-myevents-label-search": "Търсене",
+	"campaignevents-myevents-label-search": "Търсене (чувствително към регистъра)",
 	"campaignevents-allevents-tab-events-heading": "Събития",
 	"campaignevents-eventslist-delete-dialog-cancel": "Отказ",
 	"deleteeventregistration": "Изтриване на регистрация за събитие",
