@@ -17,10 +17,10 @@ use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 
 /**
- * @property CampaignsCentralUserLookup $centralUserLookup
- * @property UserLinker $userLinker
- * @property ExistingEventRegistration $event
- * @property PermissionChecker $permissionChecker
+ * @property-read CampaignsCentralUserLookup $centralUserLookup
+ * @property-read UserLinker $userLinker
+ * @property-read ExistingEventRegistration $event
+ * @property-read PermissionChecker $permissionChecker
  * @method IReadableDatabase getDatabase()
  * @method IContextSource getContext()
  * @method Language getLanguage()

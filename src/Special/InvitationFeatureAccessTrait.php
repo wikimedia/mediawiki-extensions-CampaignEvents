@@ -14,7 +14,7 @@ use MediaWiki\Permissions\Authority;
 // @phan-file-suppress UnusedPluginSuppression,UnusedSuppression,UnusedPluginFileSuppression
 
 /**
- * @property PermissionChecker $permissionChecker
+ * @property-read PermissionChecker $permissionChecker
  * @method Config getConfig()
  * @phan-suppress-next-line PhanPluginUnknownArrayMethodParamType
  * @method Message msg(mixed $key, mixed ...$params)

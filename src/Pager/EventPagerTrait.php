@@ -14,11 +14,10 @@ use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 
 /**
- * @property string $search;
- * @property string $status;
+ * @property-read string $search;
  * @property IReadableDatabase $mDb;
- * @property LinkBatchFactory $linkBatchFactory;
- * @property CampaignsPageFactory $campaignsPageFactory;
+ * @property-read LinkBatchFactory $linkBatchFactory;
+ * @property-read CampaignsPageFactory $campaignsPageFactory;
  * @method Config getConfig()
  */
 trait EventPagerTrait {
