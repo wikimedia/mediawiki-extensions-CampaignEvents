@@ -12,7 +12,6 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserLinker;
 use MediaWiki\Extension\CampaignEvents\Permissions\PermissionChecker;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Page\LinkBatchFactory;
 use MediaWiki\Pager\CodexTablePager;
 use MediaWiki\RecentChanges\ChangesList;
 use UnexpectedValueException;
@@ -51,7 +50,6 @@ class EventContributionsEditorsPager extends CodexTablePager {
 
 	public function __construct(
 		CampaignsDatabaseHelper $databaseHelper,
-		private readonly LinkBatchFactory $linkBatchFactory,
 		protected UserLinker $userLinker,
 		private readonly PermissionChecker $permissionChecker,
 		protected CampaignsCentralUserLookup $centralUserLookup,

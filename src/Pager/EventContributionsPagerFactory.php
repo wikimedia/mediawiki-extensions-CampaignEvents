@@ -61,7 +61,6 @@ class EventContributionsPagerFactory {
 	): EventContributionsEditorsPager {
 		return new EventContributionsEditorsPager(
 			$this->databaseHelper,
-			$this->linkBatchFactory,
 			$this->userLinker,
 			$this->permissionChecker,
 			$this->centralUserLookup,
