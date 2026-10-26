@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Samoasambia"
+			"Samoasambia",
+			"Wikipeedikko"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Tällä tunnisteella ei ole tapahtumaa.",
@@ -20,5 +21,10 @@
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Poista tapahtumailmoittautumisesi sivustolla $1, jossa tapahtuma on luotu.",
 	"campaignevents-rest-email-participants-nonlocal-error-message": "Lähetä sähköpostia osallistujille sivustolla $1, jossa tapahtuma on luotu.",
 	"campaignevents-rest-contribution-not-found": "Tällä tunnisteella ei ole muokkausta.",
-	"campaignevents-rest-delete-contribution-permission-denied": "Sinulla ei ole oikeutta poistaa tätä muokkausta."
+	"campaignevents-rest-delete-contribution-permission-denied": "Sinulla ei ole oikeutta poistaa tätä muokkausta.",
+	"campaignevents-rest-update-registration-desc": "Päivittää olemassa olevan rekisteröitymisen tapahtumaan. Todennetun käyttäjän on oltava tapahtuman järjestäjä tai hänellä on oltava asianmukaiset käyttöoikeudet.",
+	"campaignevents-rest-delete-registration-desc": "Poistaa olemassa olevan rekisteröitymisen tapahtumaan pysyvästi. Todennetulla käyttäjällä on oltava tapahtuman poistamisoikeudet. Toimintoa ei voi perua.",
+	"campaignevents-rest-get-worklist-param-desc-limit": "Noudettavien sivujen enimmäismäärä.",
+	"campaignevents-rest-get-worklist-param-desc-backwards": "Näytetäänkö tulokset käänteisessä järjestyksessä (esimerkiksi viimeisen tulossivun näyttämiseksi).",
+	"campaignevents-rest-get-worklist-param-desc-title-filter": "Jos merkkijono annetaan, nouda vain sivut, joiden nimissä se esiintyy."
 }

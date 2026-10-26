@@ -346,6 +346,7 @@
 	"campaignevents-event-details-worklist-load-error": "Arbejdslisten kunne ikke indlæses. $1",
 	"campaignevents-event-details-worklist-card-views-label": "Visninger",
 	"campaignevents-event-details-worklist-card-added": "Tilføjet $1",
+	"campaignevents-event-details-worklist-card-added-recent": "Tilføjet for kort tid siden",
 	"campaignevents-event-details-worklist-card-impact-high": "Mulighed med stor effekt",
 	"campaignevents-event-details-worklist-card-impact-medium": "Mulighed for mellemstor effekt",
 	"campaignevents-event-details-worklist-card-impact-low": "Mulighed med lav effekt",

@@ -17,11 +17,15 @@
 	"campaignevents-eventpage-enableheader-button-label": "Увамкнуць рэгістрацыю",
 	"campaignevents-eventpage-enable-registration-dialog-confirm": "Увамкнуць рэгістрацыю",
 	"campaignevents-event-details-edit-button": "Рэдагаваць",
+	"campaignevents-event-details-remove-participant-remove-btn": "Прыбраць",
 	"campaignevents-event-details-remove-participant-cancel-btn": "Скасаваць",
+	"campaignevents-worklist-table-remove-button-label": "Прыбраць",
 	"campaignevents-event-details-participants-deselect": "Зьняць выбар",
 	"campaignevents-register-question-gender-option-not-say": "Не жадаю адказваць",
 	"campaignevents-register-question-confidence-contributing-not-say": "Не жадаю адказваць",
+	"campaignevents-worklist-remove-confirm-action": "Прыбраць",
 	"campaignevents-allevents-label-upcoming-events-title": "Будучыя падзеі",
 	"campaignevents-event-details-contributions-delete-success": "Зьмена была выдалена з падзеі.",
-	"campaignevents-event-details-contributions-delete-title": "Выдаліць гэтую зьмену з $1"
+	"campaignevents-event-details-contributions-delete-title": "Выдаліць гэтую зьмену з $1",
+	"campaignevents-event-details-contributions-delete-confirm": "Прыбраць"
 }
