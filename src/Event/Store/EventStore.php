@@ -108,9 +108,7 @@ class EventStore implements IEventStore, IEventLookup {
 		$cachedEventEncoded = $this->wanCache->getWithSetCallback(
 			$this->makePageEventCacheKey( $page ),
 			self::PAGE_EVENT_CACHE_TTL,
-			function ( ExistingEventRegistration|false|null $oldValue )
-				use ( $page, $readFlags ): ?string
-			{
+			function () use ( $page, $readFlags ): ?string {
 				try {
 					$event = $this->loadEventFromDB( $page, $readFlags );
 					return $this->jsonCodec->toJsonString( $event );

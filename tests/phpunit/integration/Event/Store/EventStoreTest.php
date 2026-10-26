@@ -26,6 +26,8 @@ use MediaWiki\WikiMap\WikiMap;
 use MediaWikiIntegrationTestCase;
 use Throwable;
 use Wikimedia\JsonCodec\JsonCodec;
+use Wikimedia\ObjectCache\HashBagOStuff;
+use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\LBFactory;
 use Wikimedia\TestingAccessWrapper;
@@ -230,6 +232,35 @@ class EventStoreTest extends MediaWikiIntegrationTestCase {
 			"dbkey={$page->getDBkey()}, wiki={$page->getWikiId()})" );
 
 		CampaignEventsServices::getEventLookup()->getEventByPage( $page );
+	}
+
+	/**
+	 * @covers ::getEventByPage
+	 * @covers ::loadEventFromDB
+	 */
+	public function testGetEventByPage__earlyRefresh(): void {
+		// Before a value expires, the cache can make the value again. Then it gives the cached value to the
+		// callback (T442283). This cache does this each time that it finds a value.
+		$cache = new class( [ 'cache' => new HashBagOStuff() ] ) extends WANObjectCache {
+			/** @inheritDoc */
+			protected function isLotteryRefreshDue( $res, $lowTTL, $ageNew, $hotTTR, $now ) {
+				return true;
+			}
+		};
+		$this->setService( 'WANObjectCache', $cache );
+		// Store the event at a time in the past, so that the purge tombstones expire before the next step.
+		$mockTime = wfTimestamp() - 60;
+		$cache->setMockTime( $mockTime );
+		$event = $this->getTestEvent();
+		$this->storeEvent( $event );
+
+		$mockTime += 30;
+		$eventLookup = CampaignEventsServices::getEventLookup();
+		$eventLookup->getEventByPage( $event->getPage() );
+		// Move the time forward. The cache does not refresh a value that is very new.
+		$mockTime += 1;
+		$refreshedEvent = $eventLookup->getEventByPage( $event->getPage() );
+		$this->assertEventsEqual( $event, $refreshedEvent );
 	}
 
 	/**
