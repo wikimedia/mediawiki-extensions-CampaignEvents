@@ -362,6 +362,7 @@
 	"campaignevents-event-details-worklist-load-error": "تعذر تحميل قائمة المهام. $1",
 	"campaignevents-event-details-worklist-card-views-label": "المشاهدات",
 	"campaignevents-event-details-worklist-card-added": "تمت إضافة $1",
+	"campaignevents-event-details-worklist-card-added-recent": "تمت إضافته منذ فترة قصيرة",
 	"campaignevents-event-details-worklist-card-impact-high": "فرصة ذات تأثير كبير",
 	"campaignevents-event-details-worklist-card-impact-medium": "فرصة ذات تأثير متوسط",
 	"campaignevents-event-details-worklist-card-impact-low": "فرصة ذات تأثير منخفض",

@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mansur"
+			"Mansur",
+			"Ильгиз"
 		]
 	},
+	"group-event-organizer-member": "{{GENDER:$1|чараларны координатлаучы}}",
 	"campaignevents-event-details-header-questions-help-label": "Мәгълүматларны саклау хәбәре",
 	"campaignevents-event-details-header-questions-help": "Таблицада чагылдырылган аерым катнашучыларның җаваплары агрегирлаштырылачак, ә аннары җибәрелгәч 90 көннән соң яки чара ахырында (алданрак нәрсә булачагына карап) бетереләчәк. Агрегирлаштырылган җавапларчара тәмамланганнан соң күренәчәк \"{{int:campaignevents-event-details-tab-stats}}\" өстәмә битендә булачак, ул чара тәмамланганнан соң күренәчәк.",
 	"campaignevents-event-dates-cannot-be-changed": "Сез чараның датасын киләчәк датага үзгәртә алмыйсыз, чөнки чара тәмамланды. Бу чикләү катнашучыларның мәгълүматларын саклый.",
