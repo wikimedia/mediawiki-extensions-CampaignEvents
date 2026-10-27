@@ -132,16 +132,14 @@ trait EventPagerTrait {
 
 	private function getEventPageFromRow( stdClass $eventRow ): MWPageProxy {
 		$eventID = $eventRow->event_id;
-		$eventPageCache = $this->eventPageCache;
-		$campaignsPageFactory = $this->campaignsPageFactory;
-		if ( !isset( $eventPageCache[$eventID] ) ) {
-			$eventPageCache[$eventID] = $campaignsPageFactory->newPageFromDB(
+		if ( !isset( $this->eventPageCache[$eventID] ) ) {
+			$this->eventPageCache[$eventID] = $this->campaignsPageFactory->newPageFromDB(
 				(int)$eventRow->event_page_namespace,
 				$eventRow->event_page_title,
 				$eventRow->event_page_prefixedtext,
 				$eventRow->event_page_wiki
 			);
 		}
-		return $eventPageCache[$eventID];
+		return $this->eventPageCache[$eventID];
 	}
 }
