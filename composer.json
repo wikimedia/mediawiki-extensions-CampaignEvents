@@ -6,6 +6,9 @@
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
 		"php-parallel-lint/php-parallel-lint": "1.4.0"
 	},
+	"require": {
+		"spatie/icalendar-generator": "3.3.0"
+	},
 	"scripts": {
 		"fix": [
 			"minus-x fix .",

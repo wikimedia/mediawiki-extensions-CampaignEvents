@@ -13,6 +13,7 @@
 			"cldr": "*"
 		}
 	},
+	"load_composer_autoloader": true,
 	"attributes": {
 		"VisualEditor": {
 			"AvailableNamespaces": {
