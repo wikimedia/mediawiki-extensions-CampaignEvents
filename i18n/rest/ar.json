@@ -78,5 +78,11 @@
 	"campaignevents-rest-response-organizers-updated": "قام المنظمون بتحديث المعلومات.",
 	"campaignevents-rest-response-email-accepted": "تم قبول مهمة إرسال البريد الإلكتروني. يعكس عدد الرسائل المرسلة عدد الرسائل التي تم إرسالها.",
 	"campaignevents-rest-response-contribution-accepted": "تم قبول وظيفة في جمعية خيرية.",
-	"campaignevents-rest-response-contribution-deleted": "تم حذف سجل مساهمة الحدث."
+	"campaignevents-rest-response-contribution-deleted": "تم حذف سجل مساهمة الحدث.",
+	"campaignevents-rest-response-400": "يحتوي الطلب على معلمات غير صالحة.",
+	"campaignevents-rest-response-403": "لا يملك المستخدم إذنًا لتنفيذ هذا الإجراء.",
+	"campaignevents-rest-response-404-user-not-found": "المستخدم المحدد غير موجود.",
+	"campaignevents-rest-response-404-not-participant": "التسجيل الخاص بالحدث غير موجود، أو أن المستخدم الحالي غير مسجل فيه.",
+	"campaignevents-rest-response-404-contribution-not-found": "سجل المساهمة المحدد غير موجود.",
+	"campaignevents-rest-response-worklist-updated": "تم تحديث صفحات قائمة المهام."
 }
