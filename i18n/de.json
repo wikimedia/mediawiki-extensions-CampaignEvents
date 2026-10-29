@@ -4,7 +4,8 @@
 			"Brettchenweber",
 			"Inkowik",
 			"Johannnes89",
-			"IWL04"
+			"IWL04",
+			"PerfektesChaos"
 		]
 	},
 	"campaignevents-desc": "Stellt Funktionen für Organisatoren und Teilnehmer von Veranstaltungen bereit.",
@@ -19,7 +20,7 @@
 	"action-campaignevents-organize-events": "Veranstaltungen zu organisieren",
 	"right-campaignevents-organize-events": "Veranstaltungen organisieren",
 	"action-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
-	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer",
+	"right-campaignevents-email-participants": "E-Mail an Veranstaltungsteilnehmer senden",
 	"action-campaignevents-view-private-participants": "Teilnehmer privater Veranstaltungen anzuzeigen",
 	"right-campaignevents-view-private-participants": "Teilnehmer privater Veranstaltungen anzeigen",
 	"action-campaignevents-generate-invitation-lists": "Einladungslisten zu erstellen",
@@ -166,7 +167,7 @@
 	"allevents": "Alle Veranstaltungen",
 	"campaignevents-myevents-need-central-account": "Du benötigst ein zentrales Benutzerkonto, um die Liste deiner Veranstaltungen einsehen zu können.",
 	"campaignevents-myevents-filter-legend": "Ereignisse filtern",
-	"campaignevents-myevents-label-search": "Suchen",
+	"campaignevents-myevents-label-search": "Suche",
 	"campaignevents-myevents-label-status": "Status",
 	"campaignevents-myevents-field-status-any": "Alle",
 	"campaignevents-myevents-field-status-open": "Offene Veranstaltungen",
