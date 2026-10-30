@@ -552,7 +552,7 @@
 	"communityconfiguration-campaignevents-description": "Tùy chọn cấu hình cho phần mở rộng CampaignEvents",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Không gian tên sự kiện hợp lệ",
 	"campaignevents-email-participants-missing-address-uncertain": "Một số người tham gia được chọn có thể không có địa chỉ email trong tài khoản của họ và sẽ không nhận được email của bạn.",
-	"campaignevents-eventtype-editing-event": "Sửa đổi sự kiện",
+	"campaignevents-eventtype-editing-event": "Sự kiện sửa đổi",
 	"campaignevents-eventtype-media-upload-event": "Tải lên phương tiện sự kiện",
 	"campaignevents-eventtype-backlog-drive": "Động lực tồn đọng",
 	"campaignevents-eventtype-contest": "Cuộc thi",
