@@ -860,7 +860,8 @@
 				"CampaignEventsRegisterParticipantCommand",
 				"CampaignEventsParticipantsStore",
 				"CampaignEventsPolicyMessagesLookup",
-				"CampaignEventsEventQuestionsRegistry"
+				"CampaignEventsEventQuestionsRegistry",
+				"CampaignEventsPageURLResolver"
 			]
 		},
 		"CancelEventRegistration": {

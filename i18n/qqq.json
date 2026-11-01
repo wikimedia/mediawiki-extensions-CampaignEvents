@@ -164,6 +164,7 @@
 	"campaignevents-register-error-event-not-found": "Error message shown on [[Special:RegisterForEvent]] and [[Special:CancelEventRegistration]] when the event ID provided does not correspond to an existing event.",
 	"campaignevents-register-success": "Message shown on [[Special:RegisterForEvent]] when the registration went through successfully",
 	"campaignevents-register-success-edit": "Message shown on [[Special:RegisterForEvent]] when the edit to the registration went through successfully",
+	"campaignevents-register-back-to-event-page": "Text of a link shown at the top of [[Special:RegisterForEvent]] that points back to the page of the event.",
 	"campaignevents-register-confirmation-top": "Form label used on [[Special:RegisterForEvent]]",
 	"campaignevents-register-edit-legend": "Form label used on [[Special:RegisterForEvent]] when the user is already registered and they can only edit their registration data.",
 	"campaignevents-register-confirmation-btn": "Label of the submit button on [[Special:RegisterForEvent]]. By clicking, the user will register for the event. {{msg-mw|campaignevents-register-edit-btn}} is used instead when the user is already a participant updating their information.",

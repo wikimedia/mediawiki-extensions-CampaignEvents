@@ -157,6 +157,7 @@
 	"campaignevents-register-error-event-not-found": "There is no event with this ID.",
 	"campaignevents-register-success": "You are now registered for this event.",
 	"campaignevents-register-success-edit": "Your registration information was updated.",
+	"campaignevents-register-back-to-event-page": "Back to event page",
 	"campaignevents-register-confirmation-top": "Confirm registration",
 	"campaignevents-register-edit-legend": "Edit registration",
 	"campaignevents-register-confirmation-btn": "Register",

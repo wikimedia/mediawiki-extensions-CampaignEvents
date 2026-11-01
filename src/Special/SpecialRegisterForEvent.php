@@ -7,6 +7,7 @@ namespace MediaWiki\Extension\CampaignEvents\Special;
 use MediaWiki\Extension\CampaignEvents\Event\Store\IEventLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CentralUser;
+use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
 use MediaWiki\Extension\CampaignEvents\MWEntity\UserNotGlobalException;
 use MediaWiki\Extension\CampaignEvents\Participants\Participant;
 use MediaWiki\Extension\CampaignEvents\Participants\ParticipantsStore;
@@ -20,6 +21,7 @@ use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Utils\MWTimestamp;
+use OOUI\ButtonWidget;
 use OOUI\IconWidget;
 use StatusValue;
 use Wikimedia\Timestamp\TimestampFormat as TS;
@@ -48,6 +50,8 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 	/** @var list<int>|null IDs of participant questions to show in the form */
 	private ?array $participantQuestionsToShow;
 	private ?CentralUser $centralUser;
+	/** @var string|null HTML of the "Back to event page" link, if the form is shown */
+	private ?string $backLinkHtml = null;
 
 	public function __construct(
 		IEventLookup $eventLookup,
@@ -56,6 +60,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		private readonly ParticipantsStore $participantsStore,
 		private readonly PolicyMessagesLookup $policyMessagesLookup,
 		private readonly EventQuestionsRegistry $eventQuestionsRegistry,
+		private readonly PageURLResolver $pageURLResolver,
 	) {
 		parent::__construct( self::PAGE_NAME, $eventLookup, $centralUserLookup );
 		$this->getOutput()->enableOOUI();
@@ -63,6 +68,7 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 			'ext.campaignEvents.specialPages.styles',
 			'oojs-ui.styles.icons-location',
 			'oojs-ui.styles.icons-moderation',
+			'oojs-ui.styles.icons-movement',
 		] );
 	}
 
@@ -87,7 +93,27 @@ class SpecialRegisterForEvent extends ChangeRegistrationSpecialPageBase {
 		$this->getOutput()->setPageTitleMsg(
 			$this->msg( 'campaignevents-event-register-for-event-title', $this->event->getName() )
 		);
+		$backLink = new ButtonWidget( [
+			'framed' => false,
+			'flags' => [ 'progressive' ],
+			'label' => $this->msg( 'campaignevents-register-back-to-event-page' )->text(),
+			'href' => $this->pageURLResolver->getUrl( $this->event->getPage() ),
+			'icon' => 'arrowPrevious',
+			'classes' => [ 'ext-campaignevents-registerforevent-back-btn' ]
+		] );
+		// Added in ::execute(), so that it's shown above the success message too
+		$this->backLinkHtml = $backLink->toString();
 		return parent::getForm();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function execute( $par ): void {
+		parent::execute( $par );
+		if ( $this->backLinkHtml !== null ) {
+			$this->getOutput()->prependHTML( $this->backLinkHtml );
+		}
 	}
 
 	/**
