@@ -285,7 +285,6 @@
 	"campaignevents-email-participants-label": "E-posta yaz",
 	"campaignevents-email-success-notification": "İleti gönderildi!",
 	"campaignevents-email-select-participant-notification": "Lütfen geçerli e-posta alıcıları seçin",
-	"campaignevents-email-participants-missing-address": "Seçilen katılımcılardan bazılarının hesaplarında bir e-posta adresi yok ve e-postanızı alamayacaklar. Kullanıcı adlarına tıklayarak ve kullanıcı mesaj sayfalarına giderek onlara bir ileti gönderebilirsiniz.",
 	"campaignevents-email-participants-all": "Tüm katılımcılar",
 	"campaignevents-email-participants-except": "$1 dışında hepsi",
 	"campaignevents-email-participants-except-count": "$1 dışında hepsi",

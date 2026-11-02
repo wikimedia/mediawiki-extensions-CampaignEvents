@@ -167,7 +167,6 @@
 	"campaignevents-event-details-participants-deselect": "Deselectează",
 	"campaignevents-email-participants-label": "Scrie un email",
 	"campaignevents-email-success-notification": "Mesaj trimis!",
-	"campaignevents-email-participants-missing-address": "Unii dintre participanții selectați nu au o adresă de e-mail în contul lor și nu vor primi e-mailul dvs. Le puteți trimite un mesaj făcând clic pe numele lor de utilizator și accesând pagina de discuții pentru utilizatori.",
 	"campaignevents-email-participants-all": "Toți participanții",
 	"campaignevents-email-participants-except": "Toate, cu excepția $1",
 	"campaignevents-email-participants-yes": "Da",

@@ -380,7 +380,6 @@
 	"campaignevents-email-participants-label": "ఇమెయిల్ రాయండి",
 	"campaignevents-email-success-notification": "సందేశాన్ని పంపించాం",
 	"campaignevents-email-select-participant-notification": "దయచేసి సరైన ఇమెయిల్ స్వీకర్తలను ఎంచుకోండి",
-	"campaignevents-email-participants-missing-address": "ఎంచుకున్న పాల్గొనేవారిలో కొందరి ఖాతాల్లో ఈమెయిలు చిరునామా లేదు. అంచేత, వారికి మీ ఈమెయిలు అందదు. మీరు వారి వాడుకరిపేర్లపై నొక్కి, వారి వాడుకరి చర్చ పేజీకి వెళ్ళి, వారికి సందేశం పంపవచ్చు.",
 	"campaignevents-email-participants-all": "పాల్గొనేవారందరూ",
 	"campaignevents-email-participants-except": "$1 తప్ప మిగతావన్నీ",
 	"campaignevents-email-participants-except-count": "$1 మినహా అన్నీ",

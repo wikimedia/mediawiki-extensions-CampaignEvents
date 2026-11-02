@@ -343,7 +343,6 @@
 	"campaignevents-email-participants-label": "Escribi un email",
 	"campaignevents-email-success-notification": "Ya envia ya el mensaje!",
 	"campaignevents-email-select-participant-notification": "Por favor escoge maga valido recipientey email",
-	"campaignevents-email-participants-missing-address": "Tiene na maga escogido participante no hay email address na de ila account y no puede recibi el de tuyo email. Puede tu envia kanila un mensaje, man clic lang tu con el de ila maga username y anda na de ila pagina de discusion.",
 	"campaignevents-email-participants-all": "Todo maga participante",
 	"campaignevents-email-participants-except": "Todo, pero excepcion si $1",
 	"campaignevents-email-participants-except-count": "Todo, pero excepcion si $1",

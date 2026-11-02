@@ -352,7 +352,6 @@
 	"campaignevents-email-participants-label": "Хаам йазбе",
 	"campaignevents-email-success-notification": "Хаам дӀахьажийна!",
 	"campaignevents-email-select-participant-notification": "Дехар до, нийса электронан пошта дӀакхачорхой къастабе",
-	"campaignevents-email-participants-missing-address": "Цхьаболчу хаьржинчу декъашхойн шайн аккаунт тӀехь электронан поштан адрес дац, хьан пошта схьаоьцур йац. Цаьрга хаам бан йиш йу хьан, церан декъашхойн цӀерашна тӀе а таӀийна, церан декъашхочун дийцарийн агӀонехь.",
 	"campaignevents-email-participants-all": "Массо а декъашхо",
 	"campaignevents-email-participants-except": "Йерриге, $1 йиссалц",
 	"campaignevents-email-participants-except-count": "Йерриге, $1 йиссалц",

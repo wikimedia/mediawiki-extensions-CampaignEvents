@@ -364,7 +364,6 @@
 	"campaignevents-email-participants-label": "Napísať e-mail",
 	"campaignevents-email-success-notification": "Správa odoslaná!",
 	"campaignevents-email-select-participant-notification": "Vyberte platných príjemcov e-mailu",
-	"campaignevents-email-participants-missing-address": "Niektorí z vybraných účastníkov nemajú pre svoj účet zadanú e-mailovú adresu a nedostanú váš e-mail. Správu im môžete poslať kliknutím na ich používateľské mená a prejdením na ich diskusnú stránku.",
 	"campaignevents-email-participants-all": "Všetci účastníci",
 	"campaignevents-email-participants-except": "Všetci okrem $1",
 	"campaignevents-email-participants-except-count": "Všetci okrem $1",

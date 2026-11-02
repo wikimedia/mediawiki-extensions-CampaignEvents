@@ -298,7 +298,6 @@
 	"campaignevents-email-participants-label": "撰寫電郵",
 	"campaignevents-email-success-notification": "寄咗封電郵！",
 	"campaignevents-email-select-participant-notification": "請揀選有效嘅電郵收件人",
-	"campaignevents-email-participants-missing-address": "部分所選參加者嘅帳戶無電郵地址，佢哋唔會收到你嘅電郵。你可以點擊佢哋嘅用戶名，去佢哋嘅用戶討論頁發訊息畀佢哋。",
 	"campaignevents-email-participants-all": "所有參與者",
 	"campaignevents-email-participants-except": "除 $1 外全部",
 	"campaignevents-email-participants-except-count": "除 $1 外全部",

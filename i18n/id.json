@@ -403,7 +403,6 @@
 	"campaignevents-email-participants-label": "Tulis surel",
 	"campaignevents-email-success-notification": "Pesan terkirim!",
 	"campaignevents-email-select-participant-notification": "Silakan pilih penerima surel yang benar",
-	"campaignevents-email-participants-missing-address": "Beberapa peserta terpilih tidak memiliki alamat surel di akun mereka dan tidak akan menerima surel Anda. Anda juga dapat mengirimkan pesan kepada mereka dengan mengklik nama pengguna dan membuka halaman diskusi pengguna mereka.",
 	"campaignevents-email-participants-all": "Semua peserta",
 	"campaignevents-email-participants-except": "Semua, kecuali $1",
 	"campaignevents-email-participants-except-count": "Semua, kecuali $1",

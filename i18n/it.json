@@ -349,7 +349,6 @@
 	"campaignevents-email-participants-label": "Scrivi email",
 	"campaignevents-email-success-notification": "Messaggio inviato!",
 	"campaignevents-email-select-participant-notification": "Seleziona una lista di destinatari validi",
-	"campaignevents-email-participants-missing-address": "Alcuni dei partecipanti selezionati non hanno un indirizzo email collegato alla propria utenza e non riceveranno l'email. Puoi inviare loro un messaggio cliccando sul loro nome utente e andando nella loro pagina di discussione.",
 	"campaignevents-email-participants-all": "Tutti i partecipanti",
 	"campaignevents-email-participants-except": "Tutti tranne $1",
 	"campaignevents-email-participants-except-count": "Tutti tranne $1",

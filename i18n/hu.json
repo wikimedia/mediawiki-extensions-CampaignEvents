@@ -392,7 +392,6 @@
 	"campaignevents-email-participants-label": "E-mail írása",
 	"campaignevents-email-success-notification": "Üzenet elküldve",
 	"campaignevents-email-select-participant-notification": "Válassz érvényes e-mail-címzetteket.",
-	"campaignevents-email-participants-missing-address": "A kiválasztott résztvevők közül néhánynak nincs e-mail-címe megadva a fiókjában, ezért nem kapják meg az e-mailedet. Üzenetet úgy küldhetsz nekik, hogy a felhasználónevükre kattintasz, majd megnyitod a vitalapjukat.",
 	"campaignevents-email-participants-all": "Minden résztvevő",
 	"campaignevents-email-participants-except": "Mind, kivéve $1",
 	"campaignevents-email-participants-except-count": "Mind, kivéve $1",

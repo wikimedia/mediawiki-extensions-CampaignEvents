@@ -429,7 +429,6 @@
 	"campaignevents-email-participants-label": "Soạn thư",
 	"campaignevents-email-success-notification": "Đã gửi tin nhắn!",
 	"campaignevents-email-select-participant-notification": "Vui lòng chọn người nhận thư điện tử hợp lệ",
-	"campaignevents-email-participants-missing-address": "Một số người tham gia được chọn không có địa chỉ thư điện tử trong tài khoản của họ và sẽ không nhận được thư điện tử của bạn. Bạn có thể gửi tin nhắn cho họ bằng cách nhấn vào tên người dùng của họ và truy cập trang thảo luận của người dùng đó.",
 	"campaignevents-email-participants-all": "Tất cả người tham gia",
 	"campaignevents-email-participants-except": "Tất cả ngoại trừ $1",
 	"campaignevents-email-participants-except-count": "Tất cả ngoại trừ $1",

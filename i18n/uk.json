@@ -396,7 +396,6 @@
 	"campaignevents-email-participants-label": "Написати електронного листа",
 	"campaignevents-email-success-notification": "Повідомлення надіслано!",
 	"campaignevents-email-select-participant-notification": "Будь ласка, виберіть дійсних одержувачів електронного листа",
-	"campaignevents-email-participants-missing-address": "Деякі з вибраних учасників не мають адреси електронної пошти у своєму обліковому записі та не отримають вашого листа. Ви можете залишити їм повідомлення, натиснувши на їхні імена користувачів та перейшовши на їхню сторінку обговорення.",
 	"campaignevents-email-participants-all": "Усі учасники",
 	"campaignevents-email-participants-except": "Усі, крім $1",
 	"campaignevents-email-participants-except-count": "Усі, крім $1",
