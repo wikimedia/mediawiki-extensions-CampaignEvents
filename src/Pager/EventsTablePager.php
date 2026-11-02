@@ -37,6 +37,7 @@ class EventsTablePager extends TablePager {
 		'event_name' => [ 'event_name', 'event_start_utc', 'event_id' ],
 		'num_participants' => [ 'num_participants', 'event_start_utc', 'event_id' ],
 	];
+	private const DEFAULT_DESCENDING_SORTS = [ 'event_start_utc' ];
 
 	/**
 	 * @param IContextSource $context
@@ -155,6 +156,13 @@ class EventsTablePager extends TablePager {
 	 */
 	public function getDefaultSort(): string {
 		return 'event_start_utc';
+	}
+
+	/** @inheritDoc */
+	protected function getDefaultDirections(): bool {
+		return in_array( $this->mSort, self::DEFAULT_DESCENDING_SORTS, true )
+			? self::DIR_DESCENDING
+			: self::DIR_ASCENDING;
 	}
 
 	/**
