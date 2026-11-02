@@ -80,7 +80,6 @@ QUnit.module(
 	} ),
 	() => {
 		const participantsManager = require( '../../../../resources/ext.campaignEvents.specialPages/eventdetails/ParticipantsManager.js' );
-		participantsManager.viewerHasEmail = true;
 		participantsManager.selectAllParticipantsCheckbox = new OO.ui.CheckboxInputWidget( {} );
 
 		const makeEnvironmentWithTotalParticipants = ( total ) => QUnit.newMwEnvironment( {

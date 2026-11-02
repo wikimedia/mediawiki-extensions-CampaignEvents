@@ -133,7 +133,8 @@ class EmailParticipantsModule {
 					MessageValue::new( 'campaignevents-event-details-email-subject-placeholder' )
 				),
 				'infusable' => true,
-				'classes' => [ 'ext-campaignevents-details-email-subject' ]
+				'classes' => [ 'ext-campaignevents-details-email-subject' ],
+				'disabled' => !$userIsEmailConfirmed,
 			] ),
 			[
 				'label' => $msgFormatter->format(
@@ -153,6 +154,7 @@ class EmailParticipantsModule {
 				'minLength' => 10,
 				'maxLength' => 2000,
 				'rows' => 17,
+				'disabled' => !$userIsEmailConfirmed,
 			] ),
 			[
 				'label' => $msgFormatter->format(
@@ -166,6 +168,7 @@ class EmailParticipantsModule {
 			new CheckboxInputWidget( [
 				'infusable' => true,
 				'classes' => [ 'ext-campaignevents-details-email-ccme' ],
+				'disabled' => !$userIsEmailConfirmed,
 			] ),
 			[
 				'align' => 'inline',

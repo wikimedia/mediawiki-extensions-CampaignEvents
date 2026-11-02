@@ -72,12 +72,6 @@
 
 	EmailManager.prototype.installEventListeners = function () {
 		const self = this;
-		if ( !participantsManager.viewerHasEmail ) {
-			// The warning about the missing email address is shown by the server
-			this.subject.setDisabled( true );
-			this.message.setDisabled( true );
-			this.CCMe.setDisabled( true );
-		}
 		participantsManager.on( 'change', this.onRecipientsUpdate.bind( this ) );
 
 		this.button.on( 'click', this.emailUsers.bind( this ) );
