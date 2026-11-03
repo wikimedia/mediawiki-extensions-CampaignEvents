@@ -70,6 +70,18 @@ class ArticleQualityLookup {
 	/** Stands in for the version when a response does not say, which is still a version. */
 	private const UNKNOWN_VERSION = '';
 
+	/**
+	 * @param HttpRequestFactory $httpRequestFactory
+	 * @param WANObjectCache $wanCache
+	 * @param SiteLookup $siteLookup
+	 * @param LoggerInterface $logger
+	 * @param TitleParser $titleParser
+	 * @param PageStoreFactory $pageStoreFactory
+	 * @param IConnectionProvider $connectionProvider
+	 * @param string|null $endpoint
+	 * @param string|null $hostHeader
+	 * @param list<string>|null $supportedWikis
+	 */
 	public function __construct(
 		private readonly HttpRequestFactory $httpRequestFactory,
 		private readonly WANObjectCache $wanCache,
@@ -80,6 +92,7 @@ class ArticleQualityLookup {
 		private readonly IConnectionProvider $connectionProvider,
 		private readonly ?string $endpoint,
 		private readonly ?string $hostHeader,
+		private readonly ?array $supportedWikis,
 	) {
 	}
 
@@ -107,6 +120,9 @@ class ArticleQualityLookup {
 			return [];
 		}
 
+		if ( $this->supportedWikis !== null && !in_array( $wiki, $this->supportedWikis, true ) ) {
+			return [];
+		}
 		$langCode = $this->getLanguageCode( $wiki );
 		if ( $langCode === null ) {
 			// Without a language the model cannot be called at all, so there is nothing to report.

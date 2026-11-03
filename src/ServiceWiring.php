@@ -590,6 +590,7 @@ return [
 				$services->getConnectionProvider(),
 				$config->get( 'CampaignEventsArticleQualityEndpoint' ),
 				$config->get( 'CampaignEventsArticleQualityHostHeader' ),
+				$config->get( 'CampaignEventsArticleQualitySupportedWikis' ),
 			);
 		},
 	WorklistArticleHelper::SERVICE_NAME =>

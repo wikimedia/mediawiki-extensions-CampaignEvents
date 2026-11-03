@@ -73,6 +73,10 @@
 			"description": "Host header to send with requests to $wgCampaignEventsArticleQualityEndpoint, or null to send none. Some inference services route on it and will not answer without it. The default endpoint does not need one.",
 			"value": null
 		},
+		"CampaignEventsArticleQualitySupportedWikis": {
+			"description": "List of IDs of the wiki (in the wiki farm) for which getting article quality is supported. Default of null means all wikis.",
+			"value": null
+		},
 		"CampaignEventsEnableWikimediaParticipantQuestions": {
 			"description": "Flag to enable Wikimedia-specific participant questions. This flag could be reconsidered in the future, in favour of other solutions (like a hook to add Wikimedia-specific questions).",
 			"value": true

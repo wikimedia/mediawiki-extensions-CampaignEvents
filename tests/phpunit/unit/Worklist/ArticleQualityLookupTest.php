@@ -69,6 +69,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	 * @param string|null $langCode Language of the wiki, or null for a wiki the lookup cannot find
 	 * @param string|null $endpoint Inference endpoint, or null for a wiki that configures none
 	 * @param string|null $hostHeader Host header to route on, or null to send none
+	 * @param array|null $supportedWikis
 	 * @param callable|null $whileRequesting Run while the model requests are in flight, to stand
 	 *   in for another request doing its own work at the same time
 	 * @return ArticleQualityLookup
@@ -80,6 +81,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 		?string $langCode = 'en',
 		?string $endpoint = self::ENDPOINT,
 		?string $hostHeader = null,
+		?array $supportedWikis = null,
 		?callable $whileRequesting = null
 	): ArticleQualityLookup {
 		$this->sentRequests = [];
@@ -157,6 +159,7 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			$this->createMock( IConnectionProvider::class ),
 			$endpoint,
 			$hostHeader,
+			$supportedWikis,
 		);
 	}
 
@@ -212,6 +215,23 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 	public static function provideNoHostHeader(): Generator {
 		yield 'Unset' => [ null ];
 		yield 'Blanked' => [ '' ];
+	}
+
+	/** @dataProvider provideSupportedWikis */
+	public function testGetQualityForArticles__supportedWikis( array $supportedWikis, bool $expectsResults ): void {
+		$lookup = $this->newLookup(
+			[ 'Beavers' => 17 ],
+			[ 'Beavers' => self::modelResponse( 0.9, 'GA', [] ) ],
+			supportedWikis: $supportedWikis,
+		);
+		$expectedCount = $expectsResults ? 1 : 0;
+		$this->assertCount( $expectedCount, $lookup->getQualityForArticles( self::WIKI, [ 'Beavers' ] ) );
+	}
+
+	public static function provideSupportedWikis(): Generator {
+		yield 'Empty list' => [ [], false ];
+		yield 'Different wiki' => [ [ self::WIKI . '-other' ], false ];
+		yield 'Current wiki' => [ [ self::WIKI ], true ];
 	}
 
 	/** A cache whose clock, like ConvertibleTimestamp's, is $this->now. */
