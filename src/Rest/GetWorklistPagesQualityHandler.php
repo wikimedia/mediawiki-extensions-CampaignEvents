@@ -64,24 +64,7 @@ class GetWorklistPagesQualityHandler extends SimpleHandler {
 		$requested = $params['titles'];
 
 		$inWorklist = $this->filterToWorklist( $worklistPage, $wiki, $requested );
-		$quality = $inWorklist
-			? $this->articleQualityLookup->getQualityForArticles( $wiki, $inWorklist )
-			: [];
-
-		$respVal = [];
-		foreach ( $inWorklist as $prefixedText ) {
-			// Articles the model could not score are left out rather than sent as nulls: the card
-			// shows no chip for them, and the client tells the two cases apart by absence.
-			if ( isset( $quality[$prefixedText] ) ) {
-				$respVal[] = [
-					'wiki' => $wiki,
-					'title' => $prefixedText,
-					'score' => $quality[$prefixedText]['score'],
-					'label' => $quality[$prefixedText]['label'],
-					'elements' => $quality[$prefixedText]['elements'],
-				];
-			}
-		}
+		$respVal = $this->articleQualityLookup->getQualityListForArticles( $wiki, $inWorklist );
 
 		return $this->getResponseFactory()->createJson( [ 'articles' => $respVal ] );
 	}

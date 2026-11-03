@@ -142,6 +142,40 @@ class ArticleQualityLookup {
 	}
 
 	/**
+	 * Quality of the given articles, in the form that the REST endpoints return it.
+	 *
+	 * This method does not check that the articles are in a list. Each endpoint does that check
+	 * before it calls this method, because each kind of list has a different check.
+	 *
+	 * @param string $wiki Wiki ID the articles belong to. Callers must check that it's a valid wiki.
+	 * @param list<string> $prefixedTexts At most self::MAX_ARTICLES of them
+	 * @return list<array{wiki: string, title: string, score: float, label: string, elements: array<string,float|bool>}>
+	 *   In the order of $prefixedTexts
+	 */
+	public function getQualityListForArticles( string $wiki, array $prefixedTexts ): array {
+		if ( !$prefixedTexts ) {
+			return [];
+		}
+		$quality = $this->getQualityForArticles( $wiki, $prefixedTexts );
+
+		$result = [];
+		foreach ( $prefixedTexts as $prefixedText ) {
+			// Articles the model could not score are left out rather than sent as nulls: the card
+			// shows no chip for them, and the client tells the two cases apart by absence.
+			if ( isset( $quality[$prefixedText] ) ) {
+				$result[] = [
+					'wiki' => $wiki,
+					'title' => $prefixedText,
+					'score' => $quality[$prefixedText]['score'],
+					'label' => $quality[$prefixedText]['label'],
+					'elements' => $quality[$prefixedText]['elements'],
+				];
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * Scores for revisions already known, taken from the cache where possible and requested in
 	 * parallel where not.
 	 *

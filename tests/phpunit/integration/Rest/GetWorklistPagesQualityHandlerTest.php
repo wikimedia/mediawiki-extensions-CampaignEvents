@@ -79,7 +79,11 @@ class GetWorklistPagesQualityHandlerTest extends MediaWikiIntegrationTestCase {
 		$worklistLookupFactory = $this->createMock( WorklistPagesLookupFactory::class );
 		$worklistLookupFactory->method( 'getLookupForWorklist' )->willReturn( $worklistPagesLookup );
 
-		$qualityLookup = $this->createMock( ArticleQualityLookup::class );
+		// Only the model call is replaced, so the response comes from the real code.
+		$qualityLookup = $this->getMockBuilder( ArticleQualityLookup::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'getQualityForArticles' ] )
+			->getMock();
 		$qualityLookup->method( 'getQualityForArticles' )->willReturnCallback(
 			static function ( string $wiki, array $titles ) use ( $quality ): array {
 				return array_intersect_key( $quality, array_fill_keys( $titles, true ) );

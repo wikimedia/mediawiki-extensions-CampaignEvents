@@ -663,4 +663,73 @@ class ArticleQualityLookupTest extends MediaWikiUnitTestCase {
 			$lookup->getQualityForArticles( self::WIKI, $titles )
 		);
 	}
+
+	/**
+	 * A lookup with the model call replaced, to test getQualityListForArticles on its own.
+	 *
+	 * @param array $quality What getQualityForArticles gives, keyed by prefixed text
+	 */
+	private function newListLookup( array $quality ): ArticleQualityLookup {
+		$lookup = $this->getMockBuilder( ArticleQualityLookup::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'getQualityForArticles' ] )
+			->getMock();
+		$lookup->method( 'getQualityForArticles' )->willReturnCallback(
+			static fn ( string $wiki, array $titles ): array =>
+				array_intersect_key( $quality, array_fill_keys( $titles, true ) )
+		);
+		return $lookup;
+	}
+
+	public function testGetQualityListForArticles__returnsScoreLabelAndElements(): void {
+		$lookup = $this->newListLookup( [
+			'Beavers' => [ 'score' => 0.42, 'label' => 'C', 'elements' => [ 'refs' => 0.3 ] ],
+		] );
+
+		$this->assertSame(
+			[ [
+				'wiki' => self::WIKI,
+				'title' => 'Beavers',
+				'score' => 0.42,
+				'label' => 'C',
+				'elements' => [ 'refs' => 0.3 ],
+			] ],
+			$lookup->getQualityListForArticles( self::WIKI, [ 'Beavers' ] )
+		);
+	}
+
+	public function testGetQualityListForArticles__keepsTheOrderAskedFor(): void {
+		// The model gives the scores in a different order from the titles.
+		$lookup = $this->newListLookup( [
+			'Otters' => [ 'score' => 0.5, 'label' => 'B', 'elements' => [] ],
+			'Beavers' => [ 'score' => 0.4, 'label' => 'C', 'elements' => [] ],
+		] );
+
+		$this->assertSame(
+			[ 'Beavers', 'Otters' ],
+			array_column( $lookup->getQualityListForArticles( self::WIKI, [ 'Beavers', 'Otters' ] ), 'title' )
+		);
+	}
+
+	public function testGetQualityListForArticles__leavesOutArticlesTheModelCannotScore(): void {
+		$lookup = $this->newListLookup( [
+			'Beavers' => [ 'score' => 0.4, 'label' => 'C', 'elements' => [] ],
+		] );
+
+		$this->assertSame(
+			[ 'Beavers' ],
+			array_column( $lookup->getQualityListForArticles( self::WIKI, [ 'Beavers', 'Otters' ] ), 'title' )
+		);
+	}
+
+	public function testGetQualityListForArticles__noTitles(): void {
+		// No titles must not cost a call to the model.
+		$lookup = $this->getMockBuilder( ArticleQualityLookup::class )
+			->disableOriginalConstructor()
+			->onlyMethods( [ 'getQualityForArticles' ] )
+			->getMock();
+		$lookup->expects( $this->never() )->method( 'getQualityForArticles' );
+
+		$this->assertSame( [], $lookup->getQualityListForArticles( self::WIKI, [] ) );
+	}
 }
