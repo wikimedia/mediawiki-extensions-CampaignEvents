@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"SaldırganSincap",
-			"شاه زمان پټان"
+			"شاه زمان پټان",
+			"باران"
 		]
 	},
 	"campaignevents-desc": "د ټاکنيزې‌سيالۍ په مهاروونکو او گډونوالو لپاره ځانگړنې چمتو کوي.",
@@ -95,7 +96,7 @@
 	"campaignevents-edit-field-wiki-type-specific": "هو، ځانگړې ويکي گانې",
 	"campaignevents-edit-field-wikis-label": "موخې وړ ويکي‌گانې",
 	"campaignevents-edit-field-wikis-placeholder": "ځانگړې ويکي‌گانې ورگډول",
-	"campaignevents-edit-field-wikis-help": "که ستاسو پېښه په ځانگړو ويکي‌گانو کې تسره کېږي، مهرباني وکړئ دلته يې لړليک کړئ. دا له خلکو سره مرسته کوي چې پرېکړه وکړي چې په کومو پېښو کې گډون وکړي. او دا د تحليلونو سره هم مرسته کوي.",
+	"campaignevents-edit-field-wikis-help": "که ستاسو پېښه په ځانگړو ويکي‌گانو کې ترسره کېږي، مهرباني وکړئ دلته يې لړليک کړئ. دا له خلکو سره مرسته کوي چې پرېکړه وکړي چې په کومو پېښو کې گډون وکړي. او دا د تحليلونو سره هم مرسته کوي.",
 	"campaignevents-edit-field-wikis-empty-specific": "لږترلږه يو ويکي دننه کړئ",
 	"campaignevents-edit-field-tracking-tools": "پروگرامونو او پېښو ليددړې وېبتړ",
 	"campaignevents-edit-field-tracking-tools-help": "د ټولگړو نوم‌ليکل‌شويو گډونوالو کارن‌نومونه به په خپلکاري ډول ليددړې ته ولېږل شي. دا وسيله تاسو سره د گډونوالو د ونډې څارلو او ستاسو د ټاکنيزې‌سيالۍ پېښې اغېزې اندازه کولو کې مرسته کوي. [https://meta.wikimedia.org/wiki/Special:MyLanguage/Programs_%26_Events_Dashboard نور زده کړئ].",
@@ -137,7 +138,7 @@
 	"campaignevents-edit-form-submit": "نوم‌ليکنه سمول",
 	"campaignevents-edit-form-notice": "د نوم‌ليکنې پرمهال به يوازې د گډونوالو کارن‌نومونه راټول شي. [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Registration نور زده کړئ].",
 	"campaignevents-edit-invalid-id": "د پېښې يو باوري پېژند چمتو کړئ.",
-	"campaignevents-edit-no-event-id": "دا مخ د پېښې باوري پېژند نه لري. د پېښې باوري پېژند دننه کړئ يا ټولې پېښې په  [[Special:AllEvents|همکارۍ لړليک]] کې وگورئ.",
+	"campaignevents-edit-no-event-id": "دا مخ د پېښې باوري پېژند نه لري. د پېښې باوري پېژند دننه کړئ يا ټولې پېښې د [[Special:AllEvents|پېښو لړليک]] کې وگورئ.",
 	"campaignevents-edit-event-notfound": "په دې پېژند دلته هېڅ پېښه نشته.",
 	"campaignevents-edit-page-nonlocal": "مهرباني وکړئ په '''[$1 خپل د پېښې نوم‌ليکنه په $2 کې سمه کړئ]'''، هغه ويکي چې دا پېښه پکې رامنځته شوې ده.",
 	"campaignevents-edit-error-deleted": "د دې پېښې نوم‌ليکنه ړنگه شوې.",
@@ -332,6 +333,11 @@
 	"campaignevents-event-details-worklist-add-button-label": "کارلړ ته ورگډول",
 	"campaignevents-event-details-worklist-add-dialog-title": "کارلړ ته ورگډول",
 	"campaignevents-event-details-worklist-add-dialog-wiki-label": "ويکي",
+	"campaignevents-event-details-worklist-add-dialog-search-label": "$1 پلټل",
+	"campaignevents-event-details-worklist-add-dialog-search-input-placeholder": "$1 پلټل",
+	"campaignevents-event-details-worklist-add-dialog-or": "يا",
+	"campaignevents-event-details-worklist-add-dialog-list-label": "مخونه لړليکول",
+	"campaignevents-event-details-worklist-add-dialog-list-description": "هره کرښه کې يو سرليک",
 	"campaignevents-event-details-worklist-add-dialog-wiki-placeholder": "د يو ويکي پلټنه",
 	"campaignevents-event-details-worklist-add-dialog-placeholder": "ځمکه\nسپوږمۍ\nمشتري",
 	"campaignevents-event-details-worklist-add-dialog-submit": "ورگډول",
@@ -568,6 +574,7 @@
 	"campaignevents-worklist-remove-confirm-body": "دا مخ به له کارلړه لرې شي.",
 	"campaignevents-worklist-remove-confirm-action": "لرې‌کول",
 	"campaignevents-worklist-remove-confirm-cancel": "ناگارل",
+	"campaignevents-worklist-private-participant-warning": "که تاسو د ټولواله پېښو کارلړ کې ونډه واخلئ؛ نو ستاسو کارن‌نوم به په ټولواله ډول ښکاره شي.",
 	"campaignevents-worklist-remove-success": "مخ له کارلړه لرې شو.",
 	"campaignevents-worklist-remove-error": "مخ له کارلړه نشي لرې کېدای. $1",
 	"invitationlist": "بلنې لړليک",
@@ -613,7 +620,7 @@
 	"communityconfiguration-campaignevents-title": "ټاکنيزې‌سيالۍ پېښې",
 	"communityconfiguration-campaignevents-description": "د ټاکنيزوپېښو پراختيا لپاره د ترتيبولو خوښنې",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "باوري پېښې نوم‌تشيالونه",
-	"campaignevents-email-participants-missing-address-uncertain": "ځينې شوي گډونوال ښايي په خپل گڼون کې برېښليک پته ونه لري؛ نو ستاسو برېښليک به ترلاسه نه کړي.",
+	"campaignevents-email-participants-missing-address-uncertain": "ځينې غوره‌شوي گډونوال ښايي په خپل گڼون کې برېښليک پته ونه لري؛ نو ستاسو برېښليک به ترلاسه نه کړي.",
 	"campaignevents-eventtype-editing-event": "سمون پېښه",
 	"campaignevents-eventtype-media-upload-event": "رسنۍ راپورته‌کوونکې پېښه",
 	"campaignevents-eventtype-backlog-drive": "دندلړ چلوونکی",

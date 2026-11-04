@@ -625,7 +625,7 @@
 	"communityconfiguration-campaignevents-title": "{{optional}}\nTitle of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
 	"communityconfiguration-campaignevents-description": "Description of the Community Configuration provider. Shown at Special:CommunityConfiguration.",
 	"communityconfiguration-campaignevents-campaigneventseventnamespaces-label": "Label for the community configuration namespace field. Shown at Special:CommunityConfiguration/CampaignEvents.",
-	"campaignevents-email-participants-missing-address-uncertain": "Warning text displayed when potentially invalid recipients are selected",
+	"campaignevents-email-participants-missing-address-uncertain": "Warning text displayed when potentially invalid recipients are selected. Followed by {{msg-mw|campaignevents-email-participants-missing-address-talk-page}} in a separate paragraph.",
 	"campaignevents-eventtype-editing-event": "Event type label for editing events, which focus on editing wiki content.",
 	"campaignevents-eventtype-media-upload-event": "Event type label for media upload events, where participants contribute media such as images or videos.",
 	"campaignevents-eventtype-backlog-drive": "Event type label for backlog drive events, intended to reduce maintenance or content backlogs. A [[:w:en:Wikipedia:Backlog|backlog]] is a list of tasks of a certain kind that should be completed.",
