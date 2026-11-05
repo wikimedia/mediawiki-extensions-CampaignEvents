@@ -362,6 +362,26 @@
 		"remoteExtPath": "CampaignEvents/resources"
 	},
 	"ResourceModules": {
+		"ext.campaignEvents.cardElements": {
+			"localBasePath": "resources/ext.campaignEvents.cardElements",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.cardElements",
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxInfoChip"
+			],
+			"packageFiles": [
+				"index.js",
+				"ImpactChip.vue"
+			],
+			"messages": [
+				"campaignevents-event-details-worklist-card-impact-high",
+				"campaignevents-event-details-worklist-card-impact-medium",
+				"campaignevents-event-details-worklist-card-impact-low"
+			],
+			"dependencies": [
+				"vue"
+			]
+		},
 		"ext.campaignEvents.specialPages": {
 			"localBasePath": "resources",
 			"remoteExtPath": "CampaignEvents/resources",
@@ -377,8 +397,7 @@
 				"CdxTextInput",
 				"CdxTextArea",
 				"CdxMessage",
-				"CdxIcon",
-				"CdxInfoChip"
+				"CdxIcon"
 			],
 			"packageFiles": [
 				"ext.campaignEvents.specialPages/dispatcher.js",
@@ -446,7 +465,8 @@
 				"mediawiki.jqueryMsg",
 				"mediawiki.widgets.datetime",
 				"mediawiki.widgets.UsersMultiselectWidget",
-				"jquery.makeCollapsible"
+				"jquery.makeCollapsible",
+				"ext.campaignEvents.cardElements"
 			],
 			"messages": [
 				"campaignevents-edit-organizers-not-allowed",
@@ -542,9 +562,6 @@
 				"campaignevents-event-details-worklist-card-views-millions",
 				"campaignevents-event-details-worklist-card-added",
 				"campaignevents-event-details-worklist-card-added-recent",
-				"campaignevents-event-details-worklist-card-impact-high",
-				"campaignevents-event-details-worklist-card-impact-medium",
-				"campaignevents-event-details-worklist-card-impact-low",
 				"campaignevents-event-details-worklist-card-signal-refs",
 				"campaignevents-event-details-worklist-card-signal-wikilinks",
 				"campaignevents-event-details-worklist-card-signal-headings",

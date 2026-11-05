@@ -92,18 +92,10 @@ describe( 'WorklistArticleCard', () => {
 		expect( mountCard().find( CHIP ).exists() ).toBe( false );
 	} );
 
-	it.each( [ [ 'high' ], [ 'medium' ], [ 'low' ] ] )( 'names the %s band', ( band ) => {
-		expect( mountCard( { impactBand: band } ).get( CHIP ).text() )
-			.toBe( '(campaignevents-event-details-worklist-card-impact-' + band + ')' );
-	} );
-
-	it( 'draws every band the same way', () => {
-		// The words carry the difference. Colour or weight would rank one reader's article above
-		// another's on a page listing work still to do.
-		const classesFor = ( band ) => mountCard( { impactBand: band } )
-			.get( CHIP ).classes().sort();
-		expect( classesFor( 'high' ) ).toEqual( classesFor( 'low' ) );
-		expect( classesFor( 'medium' ) ).toEqual( classesFor( 'low' ) );
+	it( 'shows the chip of its band', () => {
+		// ImpactChip.test.js tests each band. This test checks that the card gives the band.
+		expect( mountCard( { impactBand: 'high' } ).get( CHIP ).text() )
+			.toBe( '(campaignevents-event-details-worklist-card-impact-high)' );
 	} );
 
 	it( 'puts the chip above the title', () => {

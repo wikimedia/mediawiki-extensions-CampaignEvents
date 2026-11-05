@@ -34,6 +34,8 @@ module.exports = {
 	moduleNameMapper: {
 		'codex.js': '@wikimedia/codex',
 		'icons.json': '@wikimedia/codex-icons',
+		'^ext\\.campaignEvents\\.cardElements$':
+			'<rootDir>/resources/ext.campaignEvents.cardElements/index.js',
 		'^ext\\.campaignEvents\\.worklistEventDiscoveryTracking$':
 			'<rootDir>/tests/jest/mocks/ext.campaignEvents.worklistEventDiscoveryTracking.js'
 	},
