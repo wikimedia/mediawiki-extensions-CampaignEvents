@@ -1,6 +1,6 @@
 /**
  * CampaignEvents features on Special:Saved: an impact chip above the title of each card,
- * and a view count below its description.
+ * and the view count and the weakest signal below its description.
  *
  * ReadingListsHandler adds this module to the special page. All the code of the features is in
  * CampaignEvents. The ReadingLists extension has no code for them.
@@ -14,7 +14,7 @@
  * the browser cannot get the wiki ID of another host.
  */
 const { createMwApp, Fragment, h, ref, shallowRef, Teleport } = require( 'vue' );
-const { ImpactChip, ViewCount, useQuality, usePageData } =
+const { ArticleSignals, ImpactChip, ViewCount, useQuality, usePageData } =
 	require( 'ext.campaignEvents.cardElements' );
 
 /** The content of the page, from core. The module only loads on Special:Saved. */
@@ -106,7 +106,8 @@ function placeBeside( host, reference, after ) {
 }
 
 /**
- * Keeps an impact chip and a view count in each card that is a page of this wiki.
+ * Keeps an impact chip, a view count and the weakest signal in each card that is a page of
+ * this wiki.
  *
  * There is one Vue app. It is mounted on an element that is never added to the page, and it
  * teleports each element of a card into an element that this module adds to the card. When a
@@ -124,10 +125,11 @@ function init( root ) {
 	 * - name: the key of its teleport
 	 * - hostClass: the class of the element that this module adds to the card for it
 	 * - place: puts the host in the card text. Called with the title, the description or null,
-	 *   and the host.
+	 *   the host, and the hosts of all the elements of the card, keyed on name. The elements are
+	 *   placed in the order of this list, so an element can go beside an element before it.
 	 * - render: gives the vnode of the element for an article. The render functions read the
-	 *   composables, so each element shows when its data arrives. ImpactChip and ViewCount show
-	 *   nothing when there is no data.
+	 *   composables, so each element shows when its data arrives. ImpactChip, ViewCount and
+	 *   ArticleSignals show nothing when there is no data.
 	 */
 	const elements = [
 		{
@@ -152,6 +154,17 @@ function init( root ) {
 					count: views ? views.count : null
 				} );
 			}
+		},
+		{
+			name: 'signals',
+			hostClass: 'ext-campaignevents-readinglists-signals',
+			// Below the view count, as on the worklist card. The signals come from the same
+			// quality request as the impact chip, so this element sends no new request.
+			place: ( title, description, host, hosts ) => placeBeside( host, hosts.views, true ),
+			render: ( article ) => h( ArticleSignals, {
+				class: 'ext-campaignevents-readinglists-signals__text',
+				signals: qualityFor( article ).signals
+			} )
 		}
 	];
 
@@ -223,9 +236,9 @@ function init( root ) {
 		// ReadingLists can render the text of the card again, or add a part of the card after
 		// an element, for example the description. Put the elements in their places again.
 		const description = link.querySelector( CARD_DESCRIPTION );
-		elements.forEach(
-			( element ) => element.place( title, description, entry.hosts[ element.name ] )
-		);
+		elements.forEach( ( element ) => element.place(
+			title, description, entry.hosts[ element.name ], entry.hosts
+		) );
 		return entry;
 	}
 
