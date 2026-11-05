@@ -6,5 +6,6 @@
  * other endpoints later.
  */
 module.exports = {
-	ImpactChip: require( './ImpactChip.vue' )
+	ImpactChip: require( './ImpactChip.vue' ),
+	ViewCount: require( './ViewCount.vue' )
 };

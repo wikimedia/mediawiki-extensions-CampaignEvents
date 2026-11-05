@@ -81,16 +81,11 @@
 				</span>
 
 				<!-- How often the article is read. Hidden entirely when the wiki cannot say: the
-					card has to look complete without it. The figure is shown bare, as the design
-					has it, so the icon rather than the text says what the number counts. -->
-				<span v-if="viewsText" class="ext-campaignevents-worklist-card__views">
-					<cdx-icon
-						class="ext-campaignevents-worklist-card__views-icon"
-						:icon="cdxIconChartLine"
-						:icon-label="viewsLabel"
-						size="small"
-					></cdx-icon>{{ viewsText }}
-				</span>
+					card has to look complete without it. -->
+				<view-count
+					class="ext-campaignevents-worklist-card__views"
+					:count="views ? views.count : null"
+				></view-count>
 
 				<!-- What the article most needs, from the per-element scores behind its quality
 					rating. The first is shown in full and the rest summarised, so that a card with
@@ -116,43 +111,13 @@
 <script>
 const { computed, defineComponent } = require( 'vue' );
 const { CdxButton, CdxCard, CdxIcon } = require( '../../../codex.js' );
-const { ImpactChip } = require( 'ext.campaignEvents.cardElements' );
-const { cdxIconChartLine, cdxIconLightbulbOutline, cdxIconTrash } =
-	require( '../../../icons.json' );
-
-/** Counts of a thousand or more are shortened; the suffix is a message, not a letter in code. */
-const THOUSAND = 1000;
-const MILLION = 1000000;
-
-/**
- * The view count as the reader sees it: shortened past a thousand, in their own digits.
- *
- * @param {number} count
- * @return {string}
- */
-function shorten( count ) {
-	if ( count < THOUSAND ) {
-		return mw.language.convertNumber( count );
-	}
-	// The unit is chosen from the rounded figure rather than the raw count, so a count that
-	// rounds up into the next unit is shown in that unit: 999,600 reads as 1M, not 1000k.
-	const thousands = Math.round( count / THOUSAND );
-	if ( thousands < THOUSAND ) {
-		return mw.msg(
-			'campaignevents-event-details-worklist-card-views-thousands',
-			mw.language.convertNumber( thousands )
-		);
-	}
-	return mw.msg(
-		'campaignevents-event-details-worklist-card-views-millions',
-		mw.language.convertNumber( Math.round( count / MILLION ) )
-	);
-}
+const { ImpactChip, ViewCount } = require( 'ext.campaignEvents.cardElements' );
+const { cdxIconLightbulbOutline, cdxIconTrash } = require( '../../../icons.json' );
 
 // @vue/component
 module.exports = exports = defineComponent( {
 	name: 'WorklistArticleCard',
-	components: { CdxButton, CdxCard, CdxIcon, ImpactChip },
+	components: { CdxButton, CdxCard, CdxIcon, ImpactChip, ViewCount },
 	props: {
 		article: {
 			type: Object,
@@ -193,8 +158,6 @@ module.exports = exports = defineComponent( {
 	},
 	emits: [ 'remove' ],
 	setup( props ) {
-		const viewsText = computed( () => props.views ? shorten( props.views.count ) : '' );
-
 		// Only the first signal is written out; the rest are counted. One message rather than
 		// two joined here, so that the wording between them, the word order and the plural form
 		// of the count are all the translator's to decide. A lone signal is shown on its own,
@@ -210,12 +173,6 @@ module.exports = exports = defineComponent( {
 		} );
 
 		return {
-			viewsText,
-			// The figure beside it is a bare number, so the icon is what names it. Labelled
-			// rather than hidden, or a screen reader would read "20k" with nothing saying what
-			// 20k counts.
-			viewsLabel: mw.msg( 'campaignevents-event-details-worklist-card-views-label' ),
-			cdxIconChartLine,
 			signalsText,
 			removeLabel: mw.msg( 'campaignevents-worklist-table-remove-button-label' ),
 			cdxIconLightbulbOutline,

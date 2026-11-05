@@ -56,32 +56,11 @@ describe( 'WorklistArticleCard', () => {
 		expect( mountCard().find( VIEWS ).exists() ).toBe( false );
 	} );
 
-	it.each( [
-		[ 40, '40' ],
-		[ 999, '999' ],
-		[ 1000, '(campaignevents-event-details-worklist-card-views-thousands, 1)' ],
-		[ 20437, '(campaignevents-event-details-worklist-card-views-thousands, 20)' ],
-		[ 120000, '(campaignevents-event-details-worklist-card-views-thousands, 120)' ],
-		[ 999499, '(campaignevents-event-details-worklist-card-views-thousands, 999)' ],
-		// Rounds up into the next unit, so it reads as 1M rather than 1000k.
-		[ 999500, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
-		[ 999999, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
-		[ 1000000, '(campaignevents-event-details-worklist-card-views-millions, 1)' ],
-		[ 2400000, '(campaignevents-event-details-worklist-card-views-millions, 2)' ]
-	] )( 'shortens %s past a thousand', ( count, shown ) => {
-		const card = mountCard( { views: { count: count } } );
-		expect( card.get( VIEWS ).text() ).toContain( shown );
-	} );
-
-	it( 'names the count with the icon, since the figure is shown bare', () => {
-		// A screen reader would otherwise read "10" with nothing saying what ten counts.
-		const icon = mountCard( { views: { count: 10 } } ).get( VIEWS ).get( 'svg' );
-		expect( icon.attributes( 'aria-hidden' ) ).toBeUndefined();
-	} );
-
-	it( 'puts the icon before the figure, as the design has it', () => {
-		const html = mountCard( { views: { count: 10 } } ).get( VIEWS ).html();
-		expect( html.indexOf( 'svg' ) ).toBeLessThan( html.indexOf( '10' ) );
+	it( 'shows the view count', () => {
+		// ViewCount.test.js tests how the count is shortened. This test checks that the card
+		// gives the count.
+		expect( mountCard( { views: { count: 20437 } } ).get( VIEWS ).text() )
+			.toContain( '(campaignevents-event-details-worklist-card-views-thousands, 20)' );
 	} );
 
 	const SIGNALS = '.ext-campaignevents-worklist-card__signals';
