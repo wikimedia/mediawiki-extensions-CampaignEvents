@@ -45,8 +45,8 @@
 	}
 
 	/**
-	 * Elements that become a signal, in the order they are offered to the reader, each with the
-	 * message describing what the article needs.
+	 * Elements that become a signal, each with the message describing what the article needs.
+	 * Signals with the same score keep this order.
 	 *
 	 * Two of the model's nine elements are deliberately absent. `sources` saturates almost at
 	 * once — a stub with five of them already scores 1 — so it would practically never fall below
@@ -73,6 +73,14 @@
 	const loaders = new Map();
 
 	/**
+	 * Score of a missing infobox, for the order of the signals only.
+	 *
+	 * The infobox element is a boolean, not a score. T443285 gives a missing infobox this
+	 * interim score. T440727 will decide a better order.
+	 */
+	const MISSING_INFOBOX_SCORE = 0.5;
+
+	/**
 	 * Whether an element counts as a weakness.
 	 *
 	 * `infobox` is a boolean rather than a score: false means the article has none. Comparing it
@@ -90,7 +98,17 @@
 	}
 
 	/**
-	 * The signals for one article, in the order they are offered.
+	 * The score of an element, for the order of the signals.
+	 *
+	 * @param {number|boolean} value A weak element, see isWeak()
+	 * @return {number}
+	 */
+	function orderScore( value ) {
+		return typeof value === 'boolean' ? MISSING_INFOBOX_SCORE : value;
+	}
+
+	/**
+	 * The signals for one article, the weakest element first.
 	 *
 	 * @param {Object} elements The endpoint's per-element scores
 	 * @return {string[]} Messages, empty when nothing is below the threshold
@@ -98,6 +116,10 @@
 	function signalsFor( elements ) {
 		return SIGNALS
 			.filter( ( signal ) => isWeak( elements[ signal.element ] ) )
+			// Array.prototype.sort is stable, so signals with the same score keep the order of
+			// SIGNALS.
+			.sort( ( a, b ) => orderScore( elements[ a.element ] ) -
+				orderScore( elements[ b.element ] ) )
 			.map( ( signal ) => mw.msg( signal.message ) );
 	}
 

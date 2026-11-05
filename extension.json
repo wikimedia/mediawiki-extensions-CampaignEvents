@@ -429,8 +429,7 @@
 				"campaignevents-card-signal-media",
 				"campaignevents-card-signal-infobox",
 				"campaignevents-card-signal-categories",
-				"campaignevents-card-signal-characters",
-				"campaignevents-card-signals"
+				"campaignevents-card-signal-characters"
 			],
 			"dependencies": [
 				"vue",

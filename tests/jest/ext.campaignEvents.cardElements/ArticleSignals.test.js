@@ -14,25 +14,14 @@ describe( 'ArticleSignals', () => {
 		expect( mount( ArticleSignals ).find( SIGNALS ).exists() ).toBe( false );
 	} );
 
-	it( 'shows a single signal alone, with no count', () => {
-		// There is nothing to count, so the message is not used, and translators do not see a
-		// branch for a count that cannot occur.
+	it( 'shows a single signal', () => {
 		expect( mountSignals( [ 'Needs images' ] ).get( SIGNALS ).text() ).toBe( 'Needs images' );
 	} );
 
-	it( 'names the first signal and counts the others, in one message', () => {
-		// The card has the same height for any number of weaknesses. One message, so that the
-		// count and the words between are for the translator to place.
+	it( 'shows only the most important signal, with no count of the others', () => {
+		// T443285: the reader cannot open a list of the others, so the card does not count them.
 		const signals = mountSignals( [ 'Needs more citations', 'Needs images', 'Needs an infobox' ] );
-		expect( signals.get( SIGNALS ).text() ).toBe(
-			'(campaignevents-card-signals, Needs more citations, 2)'
-		);
-	} );
-
-	it( 'shows the count in the digits of the reader', () => {
-		mw.language.convertNumber.mockClear();
-		mountSignals( [ 'Needs images', 'Needs an infobox' ] );
-		expect( mw.language.convertNumber ).toHaveBeenCalledWith( 1 );
+		expect( signals.get( SIGNALS ).text() ).toBe( 'Needs more citations' );
 	} );
 
 	it( 'shows the signals when they arrive', async () => {

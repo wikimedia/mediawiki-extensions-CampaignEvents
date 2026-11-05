@@ -23,8 +23,7 @@ const { CdxIcon } = require( './codex.js' );
 const { cdxIconLightbulbOutline } = require( './icons.json' );
 
 /**
- * What an article most needs, with a lightbulb icon. For example: "Needs more citations and
- * 2 more".
+ * What an article most needs, with a lightbulb icon. For example: "Needs more citations".
  *
  * The card gives the signals: the quality loader makes them from the per-element scores of
  * the article. The component shows nothing when there are no signals: while they load, when
@@ -43,20 +42,9 @@ module.exports = exports = defineComponent( {
 		}
 	},
 	setup( props ) {
-		// Only the first signal is written out. The others are counted, so that a card with six
-		// weaknesses is no taller than a card with one. One message, not two joined here, so
-		// that the wording between them, the word order and the plural form of the count are
-		// for the translator. A single signal is shown alone, so the message has no branch for
-		// a count that cannot occur.
-		const text = computed( () => {
-			const first = props.signals[ 0 ] || '';
-			const more = Math.max( props.signals.length - 1, 0 );
-			return more ? mw.msg(
-				'campaignevents-card-signals',
-				first,
-				mw.language.convertNumber( more )
-			) : first;
-		} );
+		// Only the most important signal, with no count of the others (T443285). The reader
+		// cannot open a list of the others, so a count would tell them nothing they can use.
+		const text = computed( () => props.signals[ 0 ] || '' );
 
 		return {
 			text,

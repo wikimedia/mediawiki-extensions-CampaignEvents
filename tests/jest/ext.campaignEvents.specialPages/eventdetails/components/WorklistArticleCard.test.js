@@ -92,9 +92,7 @@ describe( 'WorklistArticleCard', () => {
 		// ArticleSignals.test.js tests the text. This test checks that the card gives the
 		// signals.
 		const card = mountCard( { signals: [ 'Needs more citations', 'Needs images' ] } );
-		expect( card.get( SIGNALS ).text() ).toBe(
-			'(campaignevents-card-signals, Needs more citations, 1)'
-		);
+		expect( card.get( SIGNALS ).text() ).toBe( 'Needs more citations' );
 	} );
 
 	it( 'links the title to the article', () => {

@@ -112,14 +112,43 @@ describe( 'qualityLoader', () => {
 			.toEqual( [] );
 	} );
 
-	it( 'orders signals the same way for every article', async () => {
+	it( 'puts the weakest element first', async () => {
+		// T443285: the card shows only the first signal, so it must be the weakest element.
+		const get = mockRest();
+		get.mockResolvedValue( {
+			articles: [ entry( 'Beavers', { refs: 0.4, media: 0.05, characters: 0.2 } ) ]
+		} );
+
+		expect( ( await qualityLoader.fetchQuality( PATH, [ article( 'Beavers' ) ] ) ).get( 'awiki|Beavers' ).signals )
+			.toEqual( [
+				'(campaignevents-card-signal-media)',
+				'(campaignevents-card-signal-characters)',
+				'(campaignevents-card-signal-refs)'
+			] );
+	} );
+
+	it( 'gives a missing infobox the score 0.5 for the order', async () => {
+		// T443285: an interim score, until T440727 decides a better order. Every other weak
+		// element scores below 0.5, so a missing infobox comes after them.
+		const get = mockRest();
+		get.mockResolvedValue( {
+			articles: [ entry( 'Beavers', { infobox: false, categories: 0.49 } ) ]
+		} );
+
+		expect( ( await qualityLoader.fetchQuality( PATH, [ article( 'Beavers' ) ] ) ).get( 'awiki|Beavers' ).signals )
+			.toEqual( [
+				'(campaignevents-card-signal-categories)',
+				'(campaignevents-card-signal-infobox)'
+			] );
+	} );
+
+	it( 'keeps the same order for elements with the same score', async () => {
 		const get = mockRest();
 		get.mockResolvedValue( {
 			articles: [ entry( 'Beavers', { characters: 0.1, refs: 0.1, media: 0.1 } ) ]
 		} );
 
-		// The card names the first and counts the rest, so a stable order keeps the same signal
-		// on the card from one page view to the next.
+		// A stable order keeps the same signal on the card from one page view to the next.
 		expect( ( await qualityLoader.fetchQuality( PATH, [ article( 'Beavers' ) ] ) ).get( 'awiki|Beavers' ).signals )
 			.toEqual( [
 				'(campaignevents-card-signal-refs)',
