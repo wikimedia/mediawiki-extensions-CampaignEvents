@@ -38,6 +38,7 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\GlobalEditCountLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -189,6 +190,10 @@ class CampaignEventsServices {
 
 	public static function getUserLinker( ?ContainerInterface $services = null ): UserLinker {
 		return ( $services ?? MediaWikiServices::getInstance() )->get( UserLinker::SERVICE_NAME );
+	}
+
+	public static function getGlobalEditCountLookup( ?ContainerInterface $services = null ): GlobalEditCountLookup {
+		return ( $services ?? MediaWikiServices::getInstance() )->get( GlobalEditCountLookup::SERVICE_NAME );
 	}
 
 	public static function getFrontendModulesFactory( ?ContainerInterface $services = null ): FrontendModulesFactory {

@@ -41,6 +41,7 @@ use MediaWiki\Extension\CampaignEvents\Messaging\CampaignsUserMailer;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsCentralUserLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFactory;
 use MediaWiki\Extension\CampaignEvents\MWEntity\CampaignsPageFormatter;
+use MediaWiki\Extension\CampaignEvents\MWEntity\GlobalEditCountLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\MWPermissionsLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageAuthorLookup;
 use MediaWiki\Extension\CampaignEvents\MWEntity\PageURLResolver;
@@ -74,6 +75,7 @@ use MediaWiki\Extension\CampaignEvents\Worklist\WorklistEventsStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesLookupFactory;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistPagesSecondaryStore;
 use MediaWiki\Extension\CampaignEvents\Worklist\WorklistSecondaryStore;
+use MediaWiki\Extension\CentralAuth\CentralAuthServices;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -313,6 +315,16 @@ return [
 			$services->getMessageFormatterFactory(),
 			$services->getLinkBatchFactory(),
 			$services->getLinkRenderer()
+		);
+	},
+	GlobalEditCountLookup::SERVICE_NAME => static function ( MediaWikiServices $services ): GlobalEditCountLookup {
+		// CentralAuth is optional. Without it, the lookup gives the local edit count.
+		$centralAuthEditCounter = ExtensionRegistry::getInstance()->isLoaded( 'CentralAuth' )
+			? CentralAuthServices::getEditCounter( $services )
+			: null;
+		return new GlobalEditCountLookup(
+			$services->getUserEditTracker(),
+			$centralAuthEditCounter
 		);
 	},
 	FrontendModulesFactory::SERVICE_NAME => static function ( MediaWikiServices $services ): FrontendModulesFactory {

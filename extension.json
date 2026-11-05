@@ -230,6 +230,13 @@
 		},
 		"WorklistPage": {
 			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\WorklistPageHandler"
+		},
+		"ReadingLists": {
+			"class": "MediaWiki\\Extension\\CampaignEvents\\Hooks\\Handlers\\ReadingListsHandler",
+			"services": [
+				"MainConfig",
+				"CampaignEventsGlobalEditCountLookup"
+			]
 		}
 	},
 	"Hooks": {
@@ -247,7 +254,8 @@
 		"BlockIpComplete": "ContributionUserChangesHandler",
 		"UnblockUserComplete": "ContributionUserChangesHandler",
 		"RenameUserComplete": "ContributionUserChangesHandler",
-		"getUserPermissionsErrors": "WorklistPage"
+		"getUserPermissionsErrors": "WorklistPage",
+		"SpecialPageBeforeExecute": "ReadingLists"
 	},
 	"DomainEventIngresses": [
 		{
@@ -376,6 +384,13 @@
 		"remoteExtPath": "CampaignEvents/resources"
 	},
 	"ResourceModules": {
+		"ext.campaignEvents.readingLists": {
+			"localBasePath": "resources/ext.campaignEvents.readingLists",
+			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.readingLists",
+			"packageFiles": [
+				"index.js"
+			]
+		},
 		"ext.campaignEvents.cardElements": {
 			"localBasePath": "resources/ext.campaignEvents.cardElements",
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.cardElements",
