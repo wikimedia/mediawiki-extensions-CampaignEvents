@@ -389,6 +389,15 @@
 			"remoteExtPath": "CampaignEvents/resources/ext.campaignEvents.readingLists",
 			"packageFiles": [
 				"index.js"
+			],
+			"styles": [
+				"styles.less"
+			],
+			"dependencies": [
+				"vue",
+				"mediawiki.util",
+				"mediawiki.Title",
+				"ext.campaignEvents.cardElements"
 			]
 		},
 		"ext.campaignEvents.cardElements": {

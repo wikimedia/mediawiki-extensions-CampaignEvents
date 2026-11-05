@@ -1,0 +1,10 @@
+@import 'mediawiki.skin.variables.less';
+
+// The chip above the title of a card on Special:Saved. ImpactChip sets no layout, so
+// the place in the card is set here. The element that holds the chip is empty while there is
+// no band, and then it takes no space in the column of the card text.
+.ext-campaignevents-readinglists-impact__chip {
+	// Only as wide as its words.
+	width: fit-content;
+	margin-bottom: @spacing-25;
+}
