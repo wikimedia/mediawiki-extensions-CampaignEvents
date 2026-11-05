@@ -98,8 +98,10 @@
 	margin-top: @spacing-100;
 }
 
+// Each on a line of its own.
 .ext-campaignevents-worklist-card__wiki,
-.ext-campaignevents-worklist-card__added {
+.ext-campaignevents-worklist-card__added,
+.ext-campaignevents-worklist-card__views {
 	display: block;
 }
 
@@ -148,12 +150,6 @@
 	// A line of text rather than a row of boxes, so a long need wraps within the card instead
 	// of being squeezed by its neighbours.
 	color: @color-subtle;
-}
-
-// Both are inline, so they share a line with nothing but a collapsed newline between them.
-// Keyed on the view count being there, so a card without one is not indented by the gap.
-.ext-campaignevents-worklist-card__views + .ext-campaignevents-worklist-card__signals {
-	margin-inline-start: @spacing-25;
 }
 
 .ext-campaignevents-worklist-app .ext-campaignevents-worklist-card__signals-icon {
