@@ -412,6 +412,22 @@
 				}
 			}
 		},
+		"/pages/quality": {
+			"get": {
+				"summary": "Quality scores for pages on one wiki",
+				"x-i18n-description": "campaignevents-rest-get-pages-quality-desc",
+				"tags": [ "Worklists" ],
+				"handler": {
+					"class": "MediaWiki\\Extension\\CampaignEvents\\Rest\\GetPagesQualityHandler",
+					"services": [
+						"MainConfig",
+						"CampaignEventsArticleQualityLookup",
+						"CampaignEventsWikiLookup",
+						"UserFactory"
+					]
+				}
+			}
+		},
 		"/event_discovery/discoverable_events": {
 			"get": {
 				"summary": "List discoverable events for a page",

@@ -110,6 +110,7 @@
 	"campaignevents-rest-get-worklist-param-desc-offset": "Pagination offset to get a specific page of the result set, as returned by a previous request to this endpoint.",
 	"campaignevents-rest-get-worklist-param-desc-backwards": "Whether to list results backwards (for example, to get the last result page).",
 	"campaignevents-rest-get-worklist-param-desc-title-filter": "If provided, return only pages whose title includes this string.",
+	"campaignevents-rest-get-pages-quality-desc": "Returns the quality of the requested pages on one wiki, as scored by the Wikimedia Foundation's language-agnostic articlequality model. Pages the model cannot score are ignored, so the response may name fewer pages than were asked for.",
 	"campaignevents-rest-get-worklist-pages-quality-desc": "Returns the quality of the requested pages, contained in a worklist, as scored by the Wikimedia Foundation's language-agnostic articlequality model. Pages that are not in the worklist are ignored, as are pages the model cannot score, so the response may name fewer pages than were asked for.",
 	"campaignevents-rest-list-discoverable-events-desc": "Returns the open events whose worklist contains the given page and for which the authenticated user (a non-participant who has not opted out) should be shown the event discovery dialog, recording the once-per-user-and-event suppression as it does so."
 }

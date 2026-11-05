@@ -104,6 +104,10 @@
 		"CampaignEventsEnableWorklistCardView": {
 			"description": "Flag to enable the card presentation of an event's worklist, and the REST endpoint that feeds it, on a wiki.",
 			"value": false
+		},
+		"CampaignEventsEnableReadingListsCardElements": {
+			"description": "Flag to enable the REST endpoint that gives the quality of pages for the editing signals in the reading lists of a user, on a wiki. Experimental.",
+			"value": false
 		}
 	},
 	"ContentHandlers": {
@@ -354,6 +358,16 @@
 			"user-global": [
 				5,
 				86400
+			]
+		},
+		"campaignevents-pages-quality": {
+			"ip-all": [
+				600,
+				60
+			],
+			"user": [
+				600,
+				60
 			]
 		}
 	},
