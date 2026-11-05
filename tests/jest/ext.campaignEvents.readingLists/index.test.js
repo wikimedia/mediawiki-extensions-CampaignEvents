@@ -10,9 +10,13 @@ vue.createMwApp = vue.createApp;
 
 const mockQualityFor = jest.fn();
 const mockUseQuality = jest.fn( () => ( { qualityFor: mockQualityFor } ) );
+const mockPageDataFor = jest.fn();
+const mockUsePageData = jest.fn( () => ( { pageDataFor: mockPageDataFor } ) );
 jest.mock( 'ext.campaignEvents.cardElements', () => ( {
 	ImpactChip: jest.requireActual( 'ext.campaignEvents.cardElements' ).ImpactChip,
-	useQuality: ( ...args ) => mockUseQuality( ...args )
+	ViewCount: jest.requireActual( 'ext.campaignEvents.cardElements' ).ViewCount,
+	useQuality: ( ...args ) => mockUseQuality( ...args ),
+	usePageData: ( ...args ) => mockUsePageData( ...args )
 } ) );
 
 const { init } = require( '../../../resources/ext.campaignEvents.readingLists/index.js' );
@@ -20,9 +24,14 @@ const { init } = require( '../../../resources/ext.campaignEvents.readingLists/in
 const SETTLE_TIME = 100;
 const CHIP = '.ext-campaignevents-readinglists-impact__chip';
 const HOST = '.ext-campaignevents-readinglists-impact';
+const COUNT = '.ext-campaignevents-readinglists-views__count';
+const VIEWS_HOST = '.ext-campaignevents-readinglists-views';
 
 /** The impact band of each page, as the quality endpoint gives it. */
 const BANDS = { Beavers: 'high', Otters: 'low', Stoats: 'medium' };
+
+/** The view count of each page, as usePageData() gives it. */
+const VIEWS = { Beavers: 1234, Otters: 56 };
 
 /**
  * A small app with the same tree as ReadingLists: a list of items, each with a Codex card that
@@ -92,6 +101,9 @@ describe( 'ext.campaignEvents.readingLists', () => {
 		mockQualityFor.mockImplementation(
 			( article ) => ( { band: BANDS[ article.title ] || null } )
 		);
+		mockPageDataFor.mockImplementation( ( article ) => ( {
+			views: article.title in VIEWS ? { count: VIEWS[ article.title ] } : null
+		} ) );
 
 		root = document.createElement( 'div' );
 		root.id = 'mw-content-text';
@@ -118,6 +130,26 @@ describe( 'ext.campaignEvents.readingLists', () => {
 		expect( host.nextElementSibling.classList.contains( 'cdx-card__text__title' ) ).toBe( true );
 	} );
 
+	it( 'shows a view count below the title of a card without a description', async () => {
+		init( root );
+		mountReadingLists( appRoot, [ localItem( 1, 'Otters' ) ] );
+		await settle();
+
+		expect( root.querySelector( COUNT ).textContent ).toBe( '(campaignevents-card-views, 56, 56, 30)' );
+		const host = root.querySelector( VIEWS_HOST );
+		expect( host.previousElementSibling.classList.contains( 'cdx-card__text__title' ) ).toBe( true );
+	} );
+
+	it( 'shows no view count for a page without views', async () => {
+		init( root );
+		mountReadingLists( appRoot, [ localItem( 1, 'Stoats' ) ] );
+		await settle();
+
+		expect( root.querySelectorAll( COUNT ) ).toHaveLength( 0 );
+		// The chip of the same card is not affected.
+		expect( chipTitles( root ) ).toEqual( [ 'Stoats' ] );
+	} );
+
 	it( 'asks useQuality() for the pages of this wiki only', async () => {
 		init( root );
 		mountReadingLists( appRoot, [
@@ -128,12 +160,16 @@ describe( 'ext.campaignEvents.readingLists', () => {
 
 		const [ path, articles ] = mockUseQuality.mock.calls[ 0 ];
 		expect( path ).toBe( '/campaignevents/v0/pages/quality' );
-		expect( articles.value ).toEqual( [ { wiki: 'localwiki', title: 'Beavers' } ] );
+		expect( articles.value ).toEqual(
+			[ { wiki: 'localwiki', title: 'Beavers', isLocal: true, apiUrl: null } ]
+		);
+		// usePageData() gets the same pages.
+		expect( mockUsePageData.mock.calls[ 0 ][ 0 ] ).toBe( articles );
 		// The card of a page on another wiki gets nothing.
 		expect( chipTitles( root ) ).toEqual( [ 'Beavers' ] );
 	} );
 
-	it( 'keeps the chip above the title when the card is rendered with a description', async () => {
+	it( 'keeps the chip above the title and the view count below the description', async () => {
 		init( root );
 		const { items } = mountReadingLists( appRoot, [ localItem( 1, 'Beavers' ) ] );
 		await settle();
@@ -146,6 +182,12 @@ describe( 'ext.campaignEvents.readingLists', () => {
 		expect( root.querySelectorAll( HOST ) ).toHaveLength( 1 );
 		expect( root.querySelector( HOST ).nextElementSibling.classList.contains( 'cdx-card__text__title' ) )
 			.toBe( true );
+		// The view count moves below the description.
+		expect( root.querySelectorAll( COUNT ) ).toHaveLength( 1 );
+		expect( root.querySelector( VIEWS_HOST ).previousElementSibling.classList.contains( 'cdx-card__text__description' ) )
+			.toBe( true );
+		expect( root.querySelector( COUNT ).textContent )
+			.toBe( '(campaignevents-card-views, (campaignevents-card-views-thousands, 1), 1234, 30)' );
 	} );
 
 	it( 'follows the cards that are added and removed', async () => {
@@ -159,6 +201,9 @@ describe( 'ext.campaignEvents.readingLists', () => {
 
 		expect( chipTitles( root ) ).toEqual( [ 'Otters', 'Stoats' ] );
 		expect( root.querySelectorAll( HOST ) ).toHaveLength( 2 );
+		expect( root.querySelectorAll( VIEWS_HOST ) ).toHaveLength( 2 );
+		// Only Otters has views.
+		expect( root.querySelectorAll( COUNT ) ).toHaveLength( 1 );
 	} );
 
 	it( 'shows the chips of the new list after a route change', async () => {
@@ -183,6 +228,7 @@ describe( 'ext.campaignEvents.readingLists', () => {
 		await settle();
 
 		expect( root.querySelectorAll( HOST ) ).toHaveLength( 0 );
+		expect( root.querySelectorAll( VIEWS_HOST ) ).toHaveLength( 0 );
 	} );
 
 	it( 'shows no chip for a page without a band', async () => {
