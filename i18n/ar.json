@@ -439,6 +439,8 @@
 	"campaignevents-email-participants-label": "إنشاء بريد إلكتروني",
 	"campaignevents-email-success-notification": "أُرسلت الرسالة!",
 	"campaignevents-email-select-participant-notification": "يرجى اختيار مستلمي البريد الإلكتروني الصالحين",
+	"campaignevents-email-participants-missing-address-certain": "بعض المشاركين المختارين ليس لديهم عنوان بريد إلكتروني في حساباتهم ولن يتلقوا رسالتك الإلكترونية.",
+	"campaignevents-email-participants-missing-address-talk-page": "يمكنك إرسال رسالة إليهم بالنقر على أسماء المستخدمين الخاصة بهم والذهاب إلى صفحة نقاش المستخدم الخاصة بهم.",
 	"campaignevents-email-participants-all": "كل المشاركين",
 	"campaignevents-email-participants-except": "جميعها باستثناء $1",
 	"campaignevents-email-participants-except-count": "جميعها باستثناء $1",
