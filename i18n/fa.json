@@ -4,7 +4,8 @@
 			"Havadar-hvac",
 			"Jeeputer",
 			"Darafsh",
-			"Mohammad ebz"
+			"Mohammad ebz",
+			"LProfo"
 		]
 	},
 	"campaignevents-desc": "ویژگی‌هایی را در اختیار برگزارکنندگان و شرکت‌کنندگان کارزار قرار می‌دهد.",
@@ -260,7 +261,7 @@
 	"campaignevents-event-details-message-all": "ارسال پیام به تمام شرکت‌کنندگان",
 	"campaignevents-event-details-message-participants": "ارسال پیام به شرکت‌کنندگان",
 	"campaignevents-event-details-participants-checkboxes-selected": "$1 شرکت‌کننده از $2 شرکت‌کننده انتخاب {{PLURAL:$1|شده است|شده‌اند}}",
-	"campaignevents-event-details-no-organizer-email": "برای ارسال پیام به شرکت‌کنندگان، باید یک نشانی ایمیل برای حساب خود داشته باشید. [[Special:ChangeEmail|ایمیل خود را بیافزایید]].",
+	"campaignevents-event-details-no-organizer-email": "برای ارسال پیام به شرکت‌کنندگان، باید یک نشانی ایمیل برای حساب خود داشته باشید. [[Special:ChangeEmail|ایمیل خود را بیفزایید]].",
 	"campaignevents-event-details-remove-participant-confirmation-title": "حذف {{PLURAL:$1|شرکت‌کننده|شرکت‌کنندگان}}",
 	"campaignevents-event-details-remove-participant-confirmation-msg": "آیا از حذف {{PLURAL:$1|شرکت‌کنندهٔ|شرکت‌کنندگان}} انتخاب‌شده مطمئن هستید؟",
 	"campaignevents-event-details-remove-participant-remove-btn": "حذف",
