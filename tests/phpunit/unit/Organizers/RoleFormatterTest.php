@@ -56,10 +56,10 @@ class RoleFormatterTest extends MediaWikiUnitTestCase {
 		$frFormatter->method( 'format' )->willReturn( $frMsg );
 		$msgFormatterFactory = $this->createMock( IMessageFormatterFactory::class );
 		$msgFormatterFactory->expects( $this->atLeastOnce() )->method( 'getTextFormatter' )
-			->willReturnMap( [
-				[ 'en', $enFormatter ],
-				[ 'fr', $frFormatter ]
-			] );
+			->willReturnCallback( static fn ( string $lang ) => match ( $lang ) {
+				'en' => $enFormatter,
+				'fr' => $frFormatter,
+			} );
 		$formatter = new RoleFormatter( $msgFormatterFactory );
 
 		// Implicitly asserts that the messages are different, too.
