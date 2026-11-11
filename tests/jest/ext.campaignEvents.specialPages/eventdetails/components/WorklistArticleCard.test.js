@@ -95,7 +95,7 @@ describe( 'WorklistArticleCard', () => {
 	it( 'shows the chip of its band', () => {
 		// ImpactChip.test.js tests each band. This test checks that the card gives the band.
 		expect( mountCard( { impactBand: 'high' } ).get( CHIP ).text() )
-			.toBe( '(campaignevents-event-details-worklist-card-impact-high)' );
+			.toBe( '(campaignevents-card-impact-high)' );
 	} );
 
 	it( 'puts the chip above the title', () => {

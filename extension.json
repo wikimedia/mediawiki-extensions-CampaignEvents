@@ -374,9 +374,9 @@
 				"ImpactChip.vue"
 			],
 			"messages": [
-				"campaignevents-event-details-worklist-card-impact-high",
-				"campaignevents-event-details-worklist-card-impact-medium",
-				"campaignevents-event-details-worklist-card-impact-low"
+				"campaignevents-card-impact-high",
+				"campaignevents-card-impact-medium",
+				"campaignevents-card-impact-low"
 			],
 			"dependencies": [
 				"vue"

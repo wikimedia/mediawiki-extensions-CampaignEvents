@@ -10,7 +10,7 @@ const mountChip = ( band ) => mount( ImpactChip, { props: { band } } );
 describe( 'ImpactChip', () => {
 	it.each( [ [ 'high' ], [ 'medium' ], [ 'low' ] ] )( 'names the %s band', ( band ) => {
 		expect( mountChip( band ).get( CHIP ).text() )
-			.toBe( '(campaignevents-event-details-worklist-card-impact-' + band + ')' );
+			.toBe( '(campaignevents-card-impact-' + band + ')' );
 	} );
 
 	it( 'draws every band the same way', () => {
@@ -32,7 +32,7 @@ describe( 'ImpactChip', () => {
 		const wrapper = mountChip( null );
 		await wrapper.setProps( { band: 'medium' } );
 		expect( wrapper.get( CHIP ).text() )
-			.toBe( '(campaignevents-event-details-worklist-card-impact-medium)' );
+			.toBe( '(campaignevents-card-impact-medium)' );
 	} );
 
 	it( 'shows nothing for a band it does not know', () => {

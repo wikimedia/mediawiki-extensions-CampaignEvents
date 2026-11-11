@@ -16,12 +16,12 @@ const { CdxInfoChip } = require( './codex.js' );
  */
 const MESSAGES = {
 	// Messages used here:
-	// * campaignevents-event-details-worklist-card-impact-high
-	// * campaignevents-event-details-worklist-card-impact-medium
-	// * campaignevents-event-details-worklist-card-impact-low
-	high: 'campaignevents-event-details-worklist-card-impact-high',
-	medium: 'campaignevents-event-details-worklist-card-impact-medium',
-	low: 'campaignevents-event-details-worklist-card-impact-low'
+	// * campaignevents-card-impact-high
+	// * campaignevents-card-impact-medium
+	// * campaignevents-card-impact-low
+	high: 'campaignevents-card-impact-high',
+	medium: 'campaignevents-card-impact-medium',
+	low: 'campaignevents-card-impact-low'
 };
 
 /**
