@@ -383,9 +383,9 @@
 				}
 			],
 			"messages": [
-				"campaignevents-event-details-worklist-card-views-label",
-				"campaignevents-event-details-worklist-card-views-thousands",
-				"campaignevents-event-details-worklist-card-views-millions",
+				"campaignevents-card-views-label",
+				"campaignevents-card-views-thousands",
+				"campaignevents-card-views-millions",
 				"campaignevents-card-impact-high",
 				"campaignevents-card-impact-medium",
 				"campaignevents-card-impact-low"

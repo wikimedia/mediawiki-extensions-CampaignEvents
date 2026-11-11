@@ -37,12 +37,12 @@ function shorten( count ) {
 	const thousands = Math.round( count / THOUSAND );
 	if ( thousands < THOUSAND ) {
 		return mw.msg(
-			'campaignevents-event-details-worklist-card-views-thousands',
+			'campaignevents-card-views-thousands',
 			mw.language.convertNumber( thousands )
 		);
 	}
 	return mw.msg(
-		'campaignevents-event-details-worklist-card-views-millions',
+		'campaignevents-card-views-millions',
 		mw.language.convertNumber( Math.round( count / MILLION ) )
 	);
 }
@@ -74,7 +74,7 @@ module.exports = exports = defineComponent( {
 
 		return {
 			text,
-			label: mw.msg( 'campaignevents-event-details-worklist-card-views-label' ),
+			label: mw.msg( 'campaignevents-card-views-label' ),
 			cdxIconChartLine
 		};
 	}

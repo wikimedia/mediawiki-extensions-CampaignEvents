@@ -60,7 +60,7 @@ describe( 'WorklistArticleCard', () => {
 		// ViewCount.test.js tests how the count is shortened. This test checks that the card
 		// gives the count.
 		expect( mountCard( { views: { count: 20437 } } ).get( VIEWS ).text() )
-			.toContain( '(campaignevents-event-details-worklist-card-views-thousands, 20)' );
+			.toContain( '(campaignevents-card-views-thousands, 20)' );
 	} );
 
 	const SIGNALS = '.ext-campaignevents-worklist-card__signals';
