@@ -392,13 +392,13 @@
 				"campaignevents-card-impact-high",
 				"campaignevents-card-impact-medium",
 				"campaignevents-card-impact-low",
-				"campaignevents-event-details-worklist-card-signal-refs",
-				"campaignevents-event-details-worklist-card-signal-wikilinks",
-				"campaignevents-event-details-worklist-card-signal-headings",
-				"campaignevents-event-details-worklist-card-signal-media",
-				"campaignevents-event-details-worklist-card-signal-infobox",
-				"campaignevents-event-details-worklist-card-signal-categories",
-				"campaignevents-event-details-worklist-card-signal-characters"
+				"campaignevents-card-signal-refs",
+				"campaignevents-card-signal-wikilinks",
+				"campaignevents-card-signal-headings",
+				"campaignevents-card-signal-media",
+				"campaignevents-card-signal-infobox",
+				"campaignevents-card-signal-categories",
+				"campaignevents-card-signal-characters"
 			],
 			"dependencies": [
 				"vue",

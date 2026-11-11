@@ -55,13 +55,13 @@
 	 * different statement and outside what the criteria ask for.
 	 */
 	const SIGNALS = [
-		{ element: 'refs', message: 'campaignevents-event-details-worklist-card-signal-refs' },
-		{ element: 'wikilinks', message: 'campaignevents-event-details-worklist-card-signal-wikilinks' },
-		{ element: 'headings', message: 'campaignevents-event-details-worklist-card-signal-headings' },
-		{ element: 'media', message: 'campaignevents-event-details-worklist-card-signal-media' },
-		{ element: 'infobox', message: 'campaignevents-event-details-worklist-card-signal-infobox' },
-		{ element: 'categories', message: 'campaignevents-event-details-worklist-card-signal-categories' },
-		{ element: 'characters', message: 'campaignevents-event-details-worklist-card-signal-characters' }
+		{ element: 'refs', message: 'campaignevents-card-signal-refs' },
+		{ element: 'wikilinks', message: 'campaignevents-card-signal-wikilinks' },
+		{ element: 'headings', message: 'campaignevents-card-signal-headings' },
+		{ element: 'media', message: 'campaignevents-card-signal-media' },
+		{ element: 'infobox', message: 'campaignevents-card-signal-infobox' },
+		{ element: 'categories', message: 'campaignevents-card-signal-categories' },
+		{ element: 'characters', message: 'campaignevents-card-signal-characters' }
 	];
 
 	/**

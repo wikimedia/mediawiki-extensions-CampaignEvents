@@ -70,7 +70,7 @@ describe( 'qualityLoader', () => {
 		const signals = await qualityLoader.fetchQuality( PATH, [ article( 'Beavers' ) ] );
 
 		expect( signals.get( 'awiki|Beavers' ).signals )
-			.toEqual( [ '(campaignevents-event-details-worklist-card-signal-refs)' ] );
+			.toEqual( [ '(campaignevents-card-signal-refs)' ] );
 	} );
 
 	it( 'leaves out elements at or above the threshold', async () => {
@@ -96,7 +96,7 @@ describe( 'qualityLoader', () => {
 		// The booleans are the trap here: comparing them numerically would read `true` as 1 and
 		// `false` as 0, which happens to work for infobox and would invert any other boolean.
 		expect( signals.get( 'awiki|Beavers' ).signals )
-			.toEqual( [ '(campaignevents-event-details-worklist-card-signal-infobox)' ] );
+			.toEqual( [ '(campaignevents-card-signal-infobox)' ] );
 		expect( signals.get( 'awiki|Otters' ).signals ).toEqual( [] );
 	} );
 
@@ -122,9 +122,9 @@ describe( 'qualityLoader', () => {
 		// on the card from one page view to the next.
 		expect( ( await qualityLoader.fetchQuality( PATH, [ article( 'Beavers' ) ] ) ).get( 'awiki|Beavers' ).signals )
 			.toEqual( [
-				'(campaignevents-event-details-worklist-card-signal-refs)',
-				'(campaignevents-event-details-worklist-card-signal-media)',
-				'(campaignevents-event-details-worklist-card-signal-characters)'
+				'(campaignevents-card-signal-refs)',
+				'(campaignevents-card-signal-media)',
+				'(campaignevents-card-signal-characters)'
 			] );
 	} );
 
