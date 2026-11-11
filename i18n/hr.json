@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Neptune, the Mystic"
+			"Neptune, the Mystic",
+			"MaGa"
 		]
 	},
 	"nstab-event": "Događaj",
@@ -31,7 +32,7 @@
 	"campaignevents-edit-field-goal-type-total_links_added": "Poveznice dodane",
 	"campaignevents-edit-field-goal-type-total_links_removed": "Poveznice uklonjene",
 	"campaignevents-edit-form-questions-label": "Pitanja za sudionike",
-	"campaignevents-edit-too-many-organizers": "Ne možete dodati više od $1 organizatora.",
+	"campaignevents-edit-too-many-organizers": "Ne možete dodati više od $1 {{PLURAL:$1|organizatora}}.",
 	"campaignevents-edit-invalid-username": "»$1« nije valjano suradničko ime.",
 	"campaignevents-register-edit-btn": "Spremi promjene",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Da",
@@ -60,5 +61,6 @@
 	"campaignevents-event-details-tab-participants": "Sudionici",
 	"campaignevents-event-details-tab-event-details": "Podaci o događaju",
 	"campaignevents-event-details-tab-contributions": "Doprinosi",
-	"campaignevents-invitationlist-preference": "Uvrsti me u [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists popise uzvanika]."
+	"campaignevents-invitationlist-preference": "Uvrsti me u [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:CampaignEvents/Invitation_lists popise uzvanika]",
+	"campaignevents-eventdiscovery-preference-label": "Nakon što objavim uređivanje, obavještavaj me o značajnim događajima"
 }
