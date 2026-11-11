@@ -1,7 +1,9 @@
 'use strict';
 
-const worklistPageData = require(
-	'../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistPageData.js'
+const { ref } = require( 'vue' );
+const { flushPromises } = require( '@vue/test-utils' );
+const pageDataLoader = require(
+	'../../../resources/ext.campaignEvents.cardElements/pageDataLoader.js'
 );
 
 const LOCAL = { wiki: 'my_wiki', title: 'Bears', isLocal: true, apiUrl: null };
@@ -52,40 +54,40 @@ const pagesResponse = ( entries ) => ( {
 } );
 
 beforeEach( () => {
-	worklistPageData.clearCache();
+	pageDataLoader.clearCache();
 	jest.clearAllMocks();
 } );
 
 describe( 'summarise', () => {
 	it( 'totals every day the API returned', () => {
 		// The window is set on the request, so whatever comes back is what the card counts.
-		expect( worklistPageData.summarise( flat( 10, 30 ) ).count ).toBe( 300 );
+		expect( pageDataLoader.summarise( flat( 10, 30 ) ).count ).toBe( 300 );
 	} );
 
 	it( 'counts a day the API has no figure for as zero', () => {
 		// The current day is usually null, being incomplete; it must not lose the article.
 		const withNull = daily( new Array( 29 ).fill( 10 ).concat( [ null ] ) );
-		expect( worklistPageData.summarise( withNull ).count ).toBe( 290 );
+		expect( pageDataLoader.summarise( withNull ).count ).toBe( 290 );
 	} );
 
 	it( 'has nothing to report without any days', () => {
-		expect( worklistPageData.summarise( {} ) ).toBeNull();
-		expect( worklistPageData.summarise( undefined ) ).toBeNull();
+		expect( pageDataLoader.summarise( {} ) ).toBeNull();
+		expect( pageDataLoader.summarise( undefined ) ).toBeNull();
 	} );
 } );
 
 describe( 'thumbnailOf', () => {
 	it( 'renames the address to what Codex expects', () => {
 		// PageImages calls it `source`; Codex's thumbnail reads `url`.
-		expect( worklistPageData.thumbnailOf( {
+		expect( pageDataLoader.thumbnailOf( {
 			thumbnail: { source: 'https://example.org/beaver.jpg', width: 200, height: 150 }
 		} ) ).toEqual( { url: 'https://example.org/beaver.jpg', width: 200, height: 150 } );
 	} );
 
 	it( 'has no image for an article without one', () => {
 		// Also covers a wiki with no PageImages, which sends no thumbnail at all.
-		expect( worklistPageData.thumbnailOf( {} ) ).toBeNull();
-		expect( worklistPageData.thumbnailOf( { thumbnail: {} } ) ).toBeNull();
+		expect( pageDataLoader.thumbnailOf( {} ) ).toBeNull();
+		expect( pageDataLoader.thumbnailOf( { thumbnail: {} } ) ).toBeNull();
 	} );
 } );
 
@@ -94,7 +96,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, WINDOW_DAYS ) ] ] ) );
 
-		await worklistPageData.fetchPageData( [ FOREIGN ] );
+		await pageDataLoader.fetchPageData( [ FOREIGN ] );
 
 		// PageImages and the description answer for every title given; PageViewInfo answers for
 		// five. Sharing one request would mean asking for all of it five at a time.
@@ -107,7 +109,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [] ) );
 
-		await worklistPageData.fetchPageData( [ FOREIGN ] );
+		await pageDataLoader.fetchPageData( [ FOREIGN ] );
 
 		const views = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageviews' );
 		expect( views[ 0 ].pvipdays ).toBe( 30 );
@@ -120,7 +122,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [] ) );
 
-		await worklistPageData.fetchPageData( [ FOREIGN ] );
+		await pageDataLoader.fetchPageData( [ FOREIGN ] );
 
 		const images = get.mock.calls.find( ( call ) => call[ 0 ].prop === 'pageimages|description' );
 		expect( standard ).toContain( images[ 0 ].pithumbsize );
@@ -132,7 +134,7 @@ describe( 'fetchPageData', () => {
 			[ 'Beaver', flat( 2, 60 ), null, 'semiaquatic rodent' ]
 		] ) );
 
-		const data = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		const data = await pageDataLoader.fetchPageData( [ FOREIGN ] );
 		expect( data.get( 'enwiki|Beaver' ).description ).toBe( 'semiaquatic rodent' );
 	} );
 
@@ -141,7 +143,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Beaver', flat( 2, 60 ) ] ] ) );
 
-		const data = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		const data = await pageDataLoader.fetchPageData( [ FOREIGN ] );
 		expect( data.get( 'enwiki|Beaver' ).description ).toBeNull();
 	} );
 
@@ -151,7 +153,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [] ) );
 
-		await worklistPageData.fetchPageData( [ FOREIGN ] );
+		await pageDataLoader.fetchPageData( [ FOREIGN ] );
 
 		expect( get.mock.calls.length ).toBeGreaterThan( 0 );
 		get.mock.calls.forEach( ( call ) => {
@@ -171,7 +173,7 @@ describe( 'fetchPageData', () => {
 			[ 'Beaver', flat( 2, WINDOW_DAYS ), { source: 'https://example.org/b.jpg', width: 200, height: 200 } ]
 		] ) );
 
-		const views = await worklistPageData.fetchPageData( [ FOREIGN ] );
+		const views = await pageDataLoader.fetchPageData( [ FOREIGN ] );
 		expect( views.get( 'enwiki|Beaver' ).image.url ).toBe( 'https://example.org/b.jpg' );
 
 		expect( mw.ForeignApi ).toHaveBeenCalledWith(
@@ -185,7 +187,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, WINDOW_DAYS ) ] ] ) );
 
-		await worklistPageData.fetchPageData( [ LOCAL ] );
+		await pageDataLoader.fetchPageData( [ LOCAL ] );
 
 		expect( mw.Api ).toHaveBeenCalled();
 		expect( mw.ForeignApi ).not.toHaveBeenCalled();
@@ -195,7 +197,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		const unresolved = Object.assign( {}, FOREIGN, { apiUrl: null } );
 
-		const views = await worklistPageData.fetchPageData( [ unresolved ] );
+		const views = await pageDataLoader.fetchPageData( [ unresolved ] );
 
 		expect( get ).not.toHaveBeenCalled();
 		// Recorded as having no figure, so the card shows none and does not ask again.
@@ -214,7 +216,7 @@ describe( 'fetchPageData', () => {
 			( params.titles || [] ).map( ( title ) => [ title, flat( 3, WINDOW_DAYS ) ] )
 		) ) );
 
-		const data = await worklistPageData.fetchPageData( articles );
+		const data = await pageDataLoader.fetchPageData( articles );
 
 		const viewRequests = get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageviews' );
 		expect( viewRequests ).toHaveLength( 3 );
@@ -231,7 +233,7 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [] ) );
 
-		await worklistPageData.fetchPageData( [ LOCAL, FOREIGN ] );
+		await pageDataLoader.fetchPageData( [ LOCAL, FOREIGN ] );
 
 		// Two kinds of request per wiki, each against that wiki's own API.
 		expect( get ).toHaveBeenCalledTimes( 4 );
@@ -241,8 +243,8 @@ describe( 'fetchPageData', () => {
 		const get = mockApis();
 		get.mockResolvedValue( pagesResponse( [ [ 'Bears', flat( 1, WINDOW_DAYS ) ] ] ) );
 
-		await worklistPageData.fetchPageData( [ LOCAL ] );
-		await worklistPageData.fetchPageData( [ LOCAL ] );
+		await pageDataLoader.fetchPageData( [ LOCAL ] );
+		await pageDataLoader.fetchPageData( [ LOCAL ] );
 
 		// The second call is answered from the cache, so only the first asks.
 		expect( get ).toHaveBeenCalledTimes( 2 );
@@ -253,8 +255,98 @@ describe( 'fetchPageData', () => {
 		// A wiki without PageViewInfo answers with a warning rather than the data.
 		get.mockRejectedValue( new Error( 'unrecognized value for parameter "prop"' ) );
 
-		const views = await worklistPageData.fetchPageData( [ LOCAL ] );
+		const views = await pageDataLoader.fetchPageData( [ LOCAL ] );
 
 		expect( views.get( 'my_wiki|Bears' ).views ).toBeNull();
+	} );
+
+	it( 'combines the calls of one tick into the same batches', async () => {
+		// Twelve titles from twelve callers, for example one for each card on the screen.
+		const titles = Array.from( { length: 12 }, ( ignored, i ) => 'Article ' + i );
+		const get = mockApis();
+		get.mockImplementation( ( params ) => Promise.resolve( pagesResponse(
+			( params.titles || [] ).map( ( title ) => [ title, flat( 1, WINDOW_DAYS ) ] )
+		) ) );
+
+		const results = await Promise.all( titles.map(
+			( title ) => pageDataLoader.fetchPageData( [ {
+				wiki: 'enwiki', title: title, isLocal: false, apiUrl: FOREIGN.apiUrl
+			} ] )
+		) );
+
+		// The same batches as one call with all twelve: 5 titles for the views, 50 for the rest.
+		expect( get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageviews' ) )
+			.toHaveLength( 3 );
+		expect( get.mock.calls.filter( ( call ) => call[ 0 ].prop === 'pageimages|description' ) )
+			.toHaveLength( 1 );
+		results.forEach( ( result, i ) => {
+			expect( [ ...result.keys() ] ).toEqual( [ 'enwiki|' + titles[ i ] ] );
+			expect( result.get( 'enwiki|' + titles[ i ] ).views.count ).toBe( 30 );
+		} );
+	} );
+
+	it( 'shares a request that is in progress', async () => {
+		const get = mockApis();
+		const releases = [];
+		get.mockImplementation( () => new Promise( ( resolve ) => {
+			releases.push( () => resolve( pagesResponse( [ [ 'Bears', flat( 1, WINDOW_DAYS ) ] ] ) ) );
+		} ) );
+
+		const first = pageDataLoader.fetchPageData( [ LOCAL ] );
+		await Promise.resolve();
+		await Promise.resolve();
+		expect( get ).toHaveBeenCalledTimes( 2 );
+
+		// A second caller asks while the requests are in progress.
+		const second = pageDataLoader.fetchPageData( [ LOCAL ] );
+		releases.forEach( ( release ) => release() );
+
+		const [ a, b ] = await Promise.all( [ first, second ] );
+		expect( get ).toHaveBeenCalledTimes( 2 );
+		expect( b.get( 'my_wiki|Bears' ) ).toBe( a.get( 'my_wiki|Bears' ) );
+		expect( a.get( 'my_wiki|Bears' ).views.count ).toBe( 30 );
+	} );
+} );
+
+describe( 'usePageData', () => {
+	it( 'gives empty data while it loads, then the data', async () => {
+		const get = mockApis();
+		get.mockResolvedValue( pagesResponse( [
+			[ 'Bears', flat( 1, WINDOW_DAYS ), null, 'Large mammals' ]
+		] ) );
+
+		const { pageDataFor } = pageDataLoader.usePageData( ref( [ LOCAL ] ) );
+		expect( pageDataFor( LOCAL ) ).toEqual( { views: null, image: null, description: null } );
+
+		await flushPromises();
+		expect( pageDataFor( LOCAL ).views.count ).toBe( 30 );
+		expect( pageDataFor( LOCAL ).description ).toBe( 'Large mammals' );
+	} );
+
+	it( 'loads the new articles when the articles change', async () => {
+		const get = mockApis();
+		get.mockImplementation( ( params ) => Promise.resolve( pagesResponse(
+			params.titles.map( ( title ) => [ title, flat( 1, WINDOW_DAYS ) ] )
+		) ) );
+		const articles = ref( [ LOCAL ] );
+
+		const { pageDataFor } = pageDataLoader.usePageData( articles );
+		await flushPromises();
+		articles.value = [ FOREIGN ];
+		await flushPromises();
+
+		expect( pageDataFor( FOREIGN ).views.count ).toBe( 30 );
+		// The data of the articles of before stays.
+		expect( pageDataFor( LOCAL ).views.count ).toBe( 30 );
+	} );
+
+	it( 'gives empty data when the requests fail', async () => {
+		const get = mockApis();
+		get.mockRejectedValue( new Error( 'nope' ) );
+
+		const { pageDataFor } = pageDataLoader.usePageData( ref( [ LOCAL ] ) );
+		await flushPromises();
+
+		expect( pageDataFor( LOCAL ) ).toEqual( { views: null, image: null, description: null } );
 	} );
 } );

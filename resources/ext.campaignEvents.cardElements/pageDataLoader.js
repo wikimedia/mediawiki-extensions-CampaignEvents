@@ -2,7 +2,7 @@
 	'use strict';
 
 	/**
-	 * Data about worklist articles that only the wiki holding them can give.
+	 * Data about the articles on cards that only the wiki holding them can give.
 	 *
 	 * PageViewInfo's prop=pageviews returns daily counts for the days asked for
 	 * (see WINDOW_DAYS), which the card shows totalled.
@@ -14,6 +14,8 @@
 	 * Read from the wiki holding each article, not this one: a worklist spans wikis by design,
 	 * and that wiki's api.php comes back with the article.
 	 */
+
+	const createBatchLoader = require( './batchLoader.js' );
 
 	/**
 	 * Titles per request when asking for view counts.
@@ -45,7 +47,7 @@
 	 * participant, so the same screenful is asked for over and over across readers.
 	 *
 	 * `smaxage` only, not `maxage`: a shared cache is where that repetition is. Within one page
-	 * the Map above already answers, so a browser cache would do nothing but delay a reload
+	 * the batch loader already answers, so a browser cache would do nothing but delay a reload
 	 * meant to pick up a change.
 	 */
 	const SHARED_CACHE_SECONDS = 3600;
@@ -71,13 +73,6 @@
 	 * stored for good. See https://www.mediawiki.org/wiki/Common_thumbnail_sizes
 	 */
 	const THUMBNAIL_SIZE = 120;
-
-	/** Data held against `wiki|title`, so a title on two wikis is not confused for one. */
-	const cache = new Map();
-
-	function cacheKey( article ) {
-		return article.wiki + '|' + article.title;
-	}
 
 	/**
 	 * The API client for one wiki: its own when the article is elsewhere, this one otherwise.
@@ -137,31 +132,23 @@
 	}
 
 	/**
-	 * Read the data for the given articles, filling in any that are not already known.
-	 *
-	 * Articles the API says nothing about, or on a wiki missing the extension behind a piece of
-	 * data, are recorded as having none of it, so they are not asked about again.
+	 * Ask the wikis about one batch of articles.
 	 *
 	 * @param {Array<{wiki: string, title: string, isLocal: boolean, apiUrl: ?string}>} articles
 	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views, image, description }`
 	 */
-	function fetchPageData( articles ) {
-		const unknown = articles.filter( ( article ) => !cache.has( cacheKey( article ) ) );
-		if ( !unknown.length ) {
-			return Promise.resolve( cache );
-		}
-
+	function fetchPageDataBatch( articles ) {
 		// One request per wiki per batch of titles, against that wiki's own API.
 		const byWiki = new Map();
-		unknown.forEach( ( article ) => {
+		articles.forEach( ( article ) => {
 			if ( !byWiki.has( article.wiki ) ) {
 				byWiki.set( article.wiki, [] );
 			}
 			byWiki.get( article.wiki ).push( article );
 		} );
 
-		// Answers are collected here rather than written straight to the cache, because the two
-		// kinds of request each carry part of what a card needs and either may fail on its own.
+		// Answers are collected here, because the two kinds of request each carry part of what
+		// a card needs and either may fail on its own.
 		const found = new Map();
 		const requests = [];
 
@@ -230,30 +217,59 @@
 		} );
 
 		return Promise.all( requests ).then( () => {
+			const result = new Map();
 			found.forEach( ( data, key ) => {
-				cache.set( key, {
+				result.set( key, {
 					views: data.views || null,
 					image: data.image || null,
 					description: data.description || null
 				} );
 			} );
-			// Whatever the API did not answer for has nothing to show. Recording that stops the
-			// same articles being asked about on every page turn.
-			unknown.forEach( ( article ) => {
-				const key = cacheKey( article );
-				if ( !cache.has( key ) ) {
-					cache.set( key, { views: null, image: null, description: null } );
-				}
-			} );
-			return cache;
+			return result;
 		} );
+	}
+
+	const loader = createBatchLoader(
+		fetchPageDataBatch,
+		() => ( { views: null, image: null, description: null } )
+	);
+
+	/**
+	 * Read the data for the given articles, filling in any that are not already known.
+	 *
+	 * Calls in the same tick are combined. Articles the API says nothing about, or on a wiki
+	 * missing the extension behind a piece of data, are recorded as having none of it, so they
+	 * are not asked about again.
+	 *
+	 * @param {Array<{wiki: string, title: string, isLocal: boolean, apiUrl: ?string}>} articles
+	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ views, image, description }`
+	 */
+	function fetchPageData( articles ) {
+		return loader.load( articles );
+	}
+
+	/**
+	 * Composable: the data of the given articles, as reactive state.
+	 *
+	 * It loads the data when the articles change, for example when the reader goes to the next
+	 * page of cards. Calls from many components in one tick go into one batch.
+	 *
+	 * @param {Object|Function} articles Ref or getter of an array of
+	 *  `{ wiki, title, isLocal, apiUrl }`
+	 * @return {{pageDataFor: Function}} `pageDataFor( article )` gives
+	 *  `{ views, image, description }`. Each is null while the data loads, or when there is
+	 *  none.
+	 */
+	function usePageData( articles ) {
+		return { pageDataFor: loader.use( articles ) };
 	}
 
 	module.exports = {
 		fetchPageData,
+		usePageData,
 		// Exported for the tests, which pin the window the figure covers.
 		summarise,
 		thumbnailOf,
-		clearCache: () => cache.clear()
+		clearCache: loader.clear
 	};
 }() );

@@ -2,14 +2,16 @@
 	'use strict';
 
 	/**
-	 * Quality for worklist articles: the things an article most needs, taken from the
-	 * per-element scores behind its quality rating.
+	 * Quality for articles on cards: the impact band, and the things an article most needs,
+	 * taken from the per-element scores behind its quality rating.
 	 *
-	 * Asked for after the cards have rendered, as a screenful at a time. A score is real work for
-	 * the model behind the endpoint, so this never asks about the whole worklist, and answers are
-	 * kept against the article they describe: paging back over articles already seen costs
-	 * nothing, and a late response can only fill in the articles it was asked about.
+	 * The caller gives the path of the endpoint, for example the quality endpoint of an event
+	 * worklist. A score is real work for the model behind the endpoint, so callers ask only
+	 * about the articles on screen, and answers are kept against the article they describe:
+	 * paging back over articles already seen costs nothing.
 	 */
+
+	const createBatchLoader = require( './batchLoader.js' );
 
 	/** An element counts as a weakness below this. The acceptance criteria say 50%. */
 	const THRESHOLD = 0.5;
@@ -62,12 +64,13 @@
 		{ element: 'characters', message: 'campaignevents-event-details-worklist-card-signal-characters' }
 	];
 
-	/** Quality held against `wiki|title`, so a title on two wikis is not confused for one. */
-	const cache = new Map();
+	/**
+	 * Titles in one request. The endpoint takes at most ArticleQualityLookup::MAX_ARTICLES.
+	 */
+	const TITLES_PER_REQUEST = 30;
 
-	function cacheKey( article ) {
-		return article.wiki + '|' + article.title;
-	}
+	/** A loader for each endpoint path, as each endpoint can know different articles. */
+	const loaders = new Map();
 
 	/**
 	 * Whether an element counts as a weakness.
@@ -99,88 +102,114 @@
 	}
 
 	/**
-	 * Read the quality of the given articles, filling in any that are not already known.
+	 * Ask the endpoint about one batch of articles.
 	 *
-	 * Articles the endpoint says nothing about — it could not score them, or they are not in the
-	 * worklist — are recorded as having nothing to show, so they are not asked about again.
-	 *
+	 * @param {string} path REST path of the quality endpoint
 	 * @param {Array<{wiki: string, title: string}>} articles
 	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ signals, band }`
 	 */
-	function fetchQuality( articles ) {
-		const unknown = articles.filter( ( article ) => !cache.has( cacheKey( article ) ) );
-		if ( !unknown.length ) {
-			return Promise.resolve( cache );
-		}
-
-		// One request per wiki: the endpoint answers for a single wiki's titles at a time,
-		// because a worklist can hold the same title on more than one of them.
+	function fetchQualityBatch( path, articles ) {
+		// The endpoint answers for the titles of one wiki at a time, because a worklist can
+		// hold the same title on more than one wiki.
 		const byWiki = new Map();
-		unknown.forEach( ( article ) => {
+		articles.forEach( ( article ) => {
 			if ( !byWiki.has( article.wiki ) ) {
 				byWiki.set( article.wiki, [] );
 			}
 			byWiki.get( article.wiki ).push( article.title );
 		} );
+		const requests = [];
+		byWiki.forEach( ( titles, wiki ) => {
+			for ( let i = 0; i < titles.length; i += TITLES_PER_REQUEST ) {
+				requests.push( { wiki, titles: titles.slice( i, i + TITLES_PER_REQUEST ) } );
+			}
+		} );
 
-		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
+		const found = new Map();
 
 		/**
-		 * Ask one wiki, then the next.
+		 * Send one request, then the next.
 		 *
 		 * One at a time rather than all at once, as API etiquette asks: each request ends up at
 		 * LiftWing, a service outside the wiki. A worklist spans a handful of wikis at most, so
 		 * the wait is a handful of round trips.
 		 *
-		 * @param {Array<Array>} remaining Each entry a wiki and the titles to ask it about
+		 * @param {Array<{wiki: string, titles: string[]}>} remaining
 		 * @return {Promise}
 		 */
 		function askInTurn( remaining ) {
 			if ( !remaining.length ) {
 				return Promise.resolve();
 			}
-			const wiki = remaining[ 0 ][ 0 ];
-			const titles = remaining[ 0 ][ 1 ];
 			return new mw.Rest().get(
-				'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
-					'/' + encodeURIComponent( worklistPageInfo.namespace ) +
-					'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
-					'/pages/quality',
-				{ wiki: wiki, titles: titles.join( '|' ) }
+				path,
+				{ wiki: remaining[ 0 ].wiki, titles: remaining[ 0 ].titles.join( '|' ) }
 			).then( ( response ) => {
 				( response.articles || [] ).forEach( ( entry ) => {
-					cache.set( cacheKey( entry ), {
+					found.set( entry.wiki + '|' + entry.title, {
 						signals: signalsFor( entry.elements || {} ),
 						band: bandFor( entry.score )
 					} );
 				} );
 			}, () => {
 				// The card is complete without signals, so a failure is not surfaced. The
-				// articles it was asked about are recorded as having none, below, along with
-				// the ones the endpoint simply had nothing for, so a wiki that fails is not
-				// asked about again for the rest of the visit.
+				// articles of the request get no data, and the batch loader records that.
 			} ).then( () => askInTurn( remaining.slice( 1 ) ) );
 		}
 
-		return askInTurn( Array.from( byWiki ) ).then( () => {
-			// Whatever came back without a score has nothing to show, whether the endpoint had
-			// nothing for it or the request failed. Recording that stops the same articles being
-			// asked about on every page turn.
-			unknown.forEach( ( article ) => {
-				const key = cacheKey( article );
-				if ( !cache.has( key ) ) {
-					cache.set( key, { signals: [], band: null } );
-				}
-			} );
-			return cache;
-		} );
+		return askInTurn( requests ).then( () => found );
+	}
+
+	/**
+	 * Read the quality of the given articles, filling in any that are not already known.
+	 *
+	 * Calls in the same tick are combined. Articles the endpoint says nothing about — it could
+	 * not score them, or they are not in the list the endpoint is for — or whose request
+	 * failed, are recorded as having nothing to show, so they are not asked about again.
+	 *
+	 * @param {string} path REST path of the quality endpoint, for example the one of a worklist
+	 * @param {Array<{wiki: string, title: string}>} articles
+	 * @return {Promise} Resolves with a Map of `wiki|title` to `{ signals, band }`
+	 */
+	function fetchQuality( path, articles ) {
+		return loaderFor( path ).load( articles );
+	}
+
+	/**
+	 * @param {string} path
+	 * @return {Object} The batch loader of the endpoint
+	 */
+	function loaderFor( path ) {
+		if ( !loaders.has( path ) ) {
+			loaders.set( path, createBatchLoader(
+				( batch ) => fetchQualityBatch( path, batch ),
+				() => ( { signals: [], band: null } )
+			) );
+		}
+		return loaders.get( path );
+	}
+
+	/**
+	 * Composable: the quality of the given articles, as reactive state.
+	 *
+	 * It loads the quality when the articles change, for example when the reader goes to the
+	 * next page of cards. Calls from many components in one tick go into one batch.
+	 *
+	 * @param {string} path REST path of the quality endpoint
+	 * @param {Object|Function} articles Ref or getter of an array of `{ wiki, title }`
+	 * @return {{qualityFor: Function}} `qualityFor( article )` gives `{ signals, band }`. Both
+	 *  are empty while the quality loads, when there is no score, or when the request failed.
+	 */
+	function useQuality( path, articles ) {
+		return { qualityFor: loaderFor( path ).use( articles ) };
 	}
 
 	module.exports = {
 		fetchQuality,
+		useQuality,
 		// Exported for the tests, which pin the band edges the criteria specify.
 		bandFor,
 		// For tests, which would otherwise carry answers between cases.
-		clearCache: () => cache.clear()
+		clearCache: () => loaders.clear()
 	};
 }() );

@@ -19,6 +19,28 @@
 	}
 
 	/**
+	 * REST path of the pages of the worklist on this page.
+	 *
+	 * @return {string}
+	 */
+	function pagesPath() {
+		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
+		return '/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
+			'/' + encodeURIComponent( worklistPageInfo.namespace ) +
+			'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
+			'/pages';
+	}
+
+	/**
+	 * REST path of the quality endpoint of the worklist on this page, for the quality loader.
+	 *
+	 * @return {string}
+	 */
+	function qualityPath() {
+		return pagesPath() + '/quality';
+	}
+
+	/**
 	 * Read the articles in the worklist.
 	 *
 	 * The whole list comes back in one response, for the caller to search and paginate.
@@ -35,7 +57,6 @@
 	 * @return {jQuery.Promise} Resolves with { pages, paginationOffsets }
 	 */
 	function fetchPages( limit, offset, backwards, titleFilter ) {
-		const worklistPageInfo = mw.config.get( 'wgCampaignEventsWorklistPageInfo' );
 		const reqParams = {
 			limit: limit,
 			offset: offset,
@@ -45,13 +66,7 @@
 			// eslint-disable-next-line camelcase
 			reqParams.title_filter = titleFilter;
 		}
-		return new mw.Rest().get(
-			'/campaignevents/v0/worklist/' + encodeURIComponent( worklistPageInfo.wiki ) +
-				'/' + encodeURIComponent( worklistPageInfo.namespace ) +
-				'/' + encodeURIComponent( worklistPageInfo.dbkey ) +
-				'/pages',
-			reqParams
-		).then( ( response ) => ( {
+		return new mw.Rest().get( pagesPath(), reqParams ).then( ( response ) => ( {
 			// The endpoint speaks snake_case, like the extension's other endpoints; the rest of the
 			// frontend does not, so the shape is normalised here rather than in every component.
 			pages: response.pages.map( ( page ) => ( {
@@ -130,6 +145,7 @@
 
 	module.exports = {
 		fetchPages,
+		qualityPath,
 		removeArticle,
 		errorText
 	};

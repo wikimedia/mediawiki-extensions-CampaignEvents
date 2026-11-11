@@ -7,10 +7,40 @@ const { CdxCard } = require( '@wikimedia/codex' );
 const { nextTick } = require( 'vue' );
 const WorklistApp = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue' );
 const worklistPages = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/worklistPages.js' );
-const worklistPageData = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistPageData.js' );
-const worklistQuality = require( '../../../../../resources/ext.campaignEvents.specialPages/eventdetails/WorklistQuality.js' );
+// WorklistApp calls the composables on this object, so the tests replace them here.
+const cardElements = require( 'ext.campaignEvents.cardElements' );
+
+/**
+ * Replace the quality composable with one that gives the given quality at once.
+ *
+ * The tests of qualityLoader.js test the real composable: its requests, its batches and its
+ * failures. These tests check what the cards do with the data.
+ *
+ * @param {Map} known Quality against `wiki|title`
+ */
+const giveQuality = ( known ) => {
+	cardElements.useQuality.mockReturnValue( {
+		qualityFor: ( card ) => known.get( card.wiki + '|' + card.title ) ||
+			{ signals: [], band: null }
+	} );
+};
+
+/**
+ * Replace the page data composable with one that gives the given data at once.
+ *
+ * @param {Map} known Page data against `wiki|title`
+ */
+const givePageData = ( known ) => {
+	cardElements.usePageData.mockReturnValue( {
+		pageDataFor: ( card ) => Object.assign(
+			{ views: null, image: null, description: null },
+			known.get( card.wiki + '|' + card.title )
+		)
+	} );
+};
 
 const LOCAL_WIKI = 'my_wiki';
+const QUALITY_PATH = '/campaignevents/v0/worklist/my_wiki/1728/X/pages/quality';
 const CARD = '.ext-campaignevents-worklist-card';
 
 const article = ( title, overrides = {} ) => Object.assign( {
@@ -94,8 +124,11 @@ describe( 'WorklistApp', () => {
 		jest.spyOn( mw.user, 'isNamed' ).mockReturnValue( true );
 		jest.spyOn( worklistPages, 'fetchPages' ).mockResolvedValue( page( [ 'Bears' ] ) );
 		jest.spyOn( worklistPages, 'removeArticle' ).mockResolvedValue( {} );
-		jest.spyOn( worklistPageData, 'fetchPageData' ).mockResolvedValue( new Map() );
-		jest.spyOn( worklistQuality, 'fetchQuality' ).mockResolvedValue( new Map() );
+		jest.spyOn( worklistPages, 'qualityPath' ).mockReturnValue( QUALITY_PATH );
+		jest.spyOn( cardElements, 'usePageData' );
+		jest.spyOn( cardElements, 'useQuality' );
+		givePageData( new Map() );
+		giveQuality( new Map() );
 		global.$ = jest.fn();
 	} );
 
@@ -350,7 +383,7 @@ describe( 'WorklistApp', () => {
 	} );
 
 	it( 'shows the description of each article once it arrives', async () => {
-		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
+		givePageData( new Map( [
 			[ LOCAL_WIKI + '|Bears', { views: null, image: null,
 				description: 'Large omnivorous mammals' } ]
 		] ) );
@@ -371,7 +404,7 @@ describe( 'WorklistApp', () => {
 			} ) ],
 			paginationOffsets: {}
 		} );
-		worklistPageData.fetchPageData.mockResolvedValue( new Map( [
+		givePageData( new Map( [
 			[ 'otherwiki|Foreign article', { views: null, image: null,
 				description: 'an article elsewhere' } ]
 		] ) );
@@ -393,12 +426,10 @@ describe( 'WorklistApp', () => {
 	} );
 
 	it( 'fills the view counts in after the cards have rendered', async () => {
-		worklistPageData.fetchPageData.mockResolvedValue(
-			new Map( [ [ LOCAL_WIKI + '|Bears', {
-				views: { count: 20437 },
-				image: { url: 'https://example.org/bears.jpg', width: 200, height: 200 }
-			} ] ] )
-		);
+		givePageData( new Map( [ [ LOCAL_WIKI + '|Bears', {
+			views: { count: 20437 },
+			image: { url: 'https://example.org/bears.jpg', width: 200, height: 200 }
+		} ] ] ) );
 
 		const wrapper = mountApp();
 		await settle();
@@ -410,9 +441,8 @@ describe( 'WorklistApp', () => {
 			.toBe( 'https://example.org/bears.jpg' );
 	} );
 
-	it( 'still shows the cards when the view counts cannot be fetched', async () => {
-		worklistPageData.fetchPageData.mockRejectedValue( new Error( 'nope' ) );
-
+	it( 'still shows the cards without view counts', async () => {
+		// The composable gives no count when the request fails.
 		const wrapper = mountApp();
 		await settle();
 
@@ -422,9 +452,9 @@ describe( 'WorklistApp', () => {
 
 	it( 'fills the signals in after the cards have rendered', async () => {
 		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears' ] ) );
-		worklistQuality.fetchQuality.mockResolvedValue(
-			new Map( [ [ LOCAL_WIKI + '|Bears', { signals: [ 'Needs images' ], band: null } ] ] )
-		);
+		giveQuality( new Map( [
+			[ LOCAL_WIKI + '|Bears', { signals: [ 'Needs images' ], band: null } ]
+		] ) );
 
 		const wrapper = mountApp();
 		await settle();
@@ -433,9 +463,8 @@ describe( 'WorklistApp', () => {
 			.toContain( 'Needs images' );
 	} );
 
-	it( 'still shows the cards when the signals cannot be fetched', async () => {
-		worklistQuality.fetchQuality.mockRejectedValue( new Error( 'nope' ) );
-
+	it( 'still shows the cards without signals', async () => {
+		// The composable gives no signals when the request fails.
 		const wrapper = mountApp();
 		await settle();
 
@@ -443,9 +472,21 @@ describe( 'WorklistApp', () => {
 		expect( wrapper.find( '.ext-campaignevents-worklist-card__signals' ).exists() ).toBe( false );
 	} );
 
+	it( 'asks the quality endpoint of this worklist', async () => {
+		const wrapper = mountApp();
+		await settle();
+
+		expect( wrapper.findAll( CARD ) ).toHaveLength( 1 );
+		expect( cardElements.useQuality ).toHaveBeenCalledWith( QUALITY_PATH, expect.anything() );
+		// The composable gets the articles on screen, and follows them when they change.
+		const articles = cardElements.useQuality.mock.calls[ 0 ][ 1 ];
+		expect( articles.value.map( ( card ) => card.title ) ).toEqual( [ 'Bears' ] );
+		expect( cardElements.usePageData.mock.calls[ 0 ][ 0 ] ).toBe( articles );
+	} );
+
 	it( 'puts the impact chip on the card it belongs to', async () => {
 		worklistPages.fetchPages.mockResolvedValue( page( [ 'Bears', 'Otters' ] ) );
-		worklistQuality.fetchQuality.mockResolvedValue( new Map( [
+		giveQuality( new Map( [
 			[ LOCAL_WIKI + '|Bears', { signals: [], band: 'high' } ],
 			[ LOCAL_WIKI + '|Otters', { signals: [], band: null } ]
 		] ) );

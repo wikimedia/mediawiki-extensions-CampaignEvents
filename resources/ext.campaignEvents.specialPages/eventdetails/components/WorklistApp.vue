@@ -142,8 +142,8 @@ const AddWorklistArticleDialog = require( './AddWorklistArticleDialog.vue' );
 const RemoveWorklistArticleDialog = require( './RemoveWorklistArticleDialog.vue' );
 const WorklistArticleCard = require( './WorklistArticleCard.vue' );
 const worklistPages = require( '../worklistPages.js' );
-const worklistPageData = require( '../WorklistPageData.js' );
-const worklistQuality = require( '../WorklistQuality.js' );
+// Not destructured, so that the tests can replace the composables on the module object.
+const cardElements = require( 'ext.campaignEvents.cardElements' );
 
 // Enough cards to make paging rare on a wide screen without a long first load. The grid takes
 // as many columns as the viewport allows, so no page size can promise a full last row.
@@ -182,9 +182,6 @@ module.exports = exports = defineComponent( {
 	},
 	setup() {
 		const visiblePages = ref( [] );
-		// Per-article data held against `wiki|title`. A ref rather than a plain object so that
-		// filling one in after its card has rendered redraws that card.
-		const pageData = ref( new Map() );
 		const firstLoadDone = ref( false );
 		const isLoading = ref( true );
 		const errorMessage = ref( '' );
@@ -198,9 +195,13 @@ module.exports = exports = defineComponent( {
 		const nextPageOffset = ref( null );
 		const hasLastPage = ref( false );
 
-		// Quality held against `wiki|title`. A ref rather than a plain object so that filling one
-		// in after its card has rendered redraws that card.
-		const quality = ref( new Map() );
+		// The quality and the page data of the articles on screen, filled in after the cards
+		// have rendered. Only the visible articles are asked about: a worklist can hold
+		// thousands, and a quality score is real work for the model behind it. Whatever brings
+		// an article into view — paging, filtering, a reload — is a reason to ask for what it
+		// still lacks. The card is complete without this data, so a failure is not surfaced.
+		const { qualityFor } = cardElements.useQuality( worklistPages.qualityPath(), visiblePages );
+		const { pageDataFor } = cardElements.usePageData( visiblePages );
 
 		const isRemoveDialogOpen = ref( false );
 		const isRemoving = ref( false );
@@ -277,36 +278,11 @@ module.exports = exports = defineComponent( {
 		watch( searchTerm, mw.util.debounce( firstPage, SEARCH_DEBOUNCE_TIME ) );
 
 		/**
-		 * Fill in the quality of the articles now on screen.
-		 *
-		 * A second request, made once the cards are rendered: a quality score is real work for
-		 * the model behind it, and the list is what the reader is waiting for. Only the visible
-		 * articles are asked about, so paging or searching costs one small request rather than
-		 * one for the whole worklist.
-		 */
-		function loadQuality() {
-			const showing = visiblePages.value;
-			if ( !showing.length ) {
-				return;
-			}
-			worklistQuality.fetchQuality( showing ).then( ( known ) => {
-				// A new Map, so that Vue sees the change and redraws the cards.
-				quality.value = new Map( known );
-			}, () => {
-				// The card is complete without it, so a failure leaves the cards as they are
-				// rather than being surfaced to the reader.
-			} );
-		}
-
-		watch( visiblePages, loadQuality );
-
-		/**
 		 * @param {Object} article
 		 * @return {string[]}
 		 */
 		function signalsFor( article ) {
-			const known = quality.value.get( article.wiki + '|' + article.title );
-			return known ? known.signals : [];
+			return qualityFor( article ).signals;
 		}
 
 		/**
@@ -314,8 +290,7 @@ module.exports = exports = defineComponent( {
 		 * @return {string|null}
 		 */
 		function bandFor( article ) {
-			const known = quality.value.get( article.wiki + '|' + article.title );
-			return known ? known.band : null;
+			return qualityFor( article ).band;
 		}
 
 		function firstPage() {
@@ -335,36 +310,11 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Fill in the per-article data for the articles now on screen.
-		 *
-		 * A request per wiki, made once the cards are rendered. Only the articles on screen are
-		 * asked about: a worklist can hold thousands, and the reader is only looking at a page
-		 * of them. Whatever brings an article into view — paging, filtering, a reload — is a
-		 * reason to ask for what it still lacks.
-		 */
-		function loadPageData() {
-			const showing = visiblePages.value;
-			if ( !showing.length ) {
-				return;
-			}
-			worklistPageData.fetchPageData( showing ).then( ( known ) => {
-				// A new Map, so that Vue sees the change and redraws the cards.
-				pageData.value = new Map( known );
-			}, () => {
-				// The card is complete without it, so a failure leaves the cards as they are
-				// rather than being surfaced to the reader.
-			} );
-		}
-
-		watch( visiblePages, loadPageData );
-
-		/**
 		 * @param {Object} article
 		 * @return {?Object}
 		 */
 		function viewsFor( article ) {
-			const known = pageData.value.get( article.wiki + '|' + article.title );
-			return known ? known.views : null;
+			return pageDataFor( article ).views;
 		}
 
 		/**
@@ -372,8 +322,7 @@ module.exports = exports = defineComponent( {
 		 * @return {?string}
 		 */
 		function descriptionFor( article ) {
-			const known = pageData.value.get( article.wiki + '|' + article.title );
-			return known ? known.description : null;
+			return pageDataFor( article ).description;
 		}
 
 		/**
@@ -381,8 +330,7 @@ module.exports = exports = defineComponent( {
 		 * @return {?Object}
 		 */
 		function imageFor( article ) {
-			const known = pageData.value.get( article.wiki + '|' + article.title );
-			return known ? known.image : null;
+			return pageDataFor( article ).image;
 		}
 
 		function onRemoveRequested( article ) {

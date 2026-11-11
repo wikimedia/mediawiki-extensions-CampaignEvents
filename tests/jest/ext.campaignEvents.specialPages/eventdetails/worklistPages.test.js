@@ -171,3 +171,14 @@ describe( 'worklistPages.fetchPages', () => {
 		);
 	} );
 } );
+
+describe( 'worklistPages.qualityPath', () => {
+	afterEach( () => {
+		jest.resetAllMocks();
+	} );
+
+	it( 'gives the quality endpoint of the event\'s worklist', () => {
+		mockRest();
+		expect( worklistPages.qualityPath() ).toBe( EXPECTED_PATH + '/quality' );
+	} );
+} );

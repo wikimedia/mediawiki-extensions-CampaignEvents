@@ -374,6 +374,9 @@
 				"index.js",
 				"ImpactChip.vue",
 				"ViewCount.vue",
+				"batchLoader.js",
+				"qualityLoader.js",
+				"pageDataLoader.js",
 				{
 					"name": "icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -388,10 +391,19 @@
 				"campaignevents-card-views-millions",
 				"campaignevents-card-impact-high",
 				"campaignevents-card-impact-medium",
-				"campaignevents-card-impact-low"
+				"campaignevents-card-impact-low",
+				"campaignevents-event-details-worklist-card-signal-refs",
+				"campaignevents-event-details-worklist-card-signal-wikilinks",
+				"campaignevents-event-details-worklist-card-signal-headings",
+				"campaignevents-event-details-worklist-card-signal-media",
+				"campaignevents-event-details-worklist-card-signal-infobox",
+				"campaignevents-event-details-worklist-card-signal-categories",
+				"campaignevents-event-details-worklist-card-signal-characters"
 			],
 			"dependencies": [
-				"vue"
+				"vue",
+				"mediawiki.api",
+				"mediawiki.ForeignApi"
 			]
 		},
 		"ext.campaignEvents.specialPages": {
@@ -429,8 +441,6 @@
 				"ext.campaignEvents.specialPages/eventdetails/components/DeleteContributionDialog.vue",
 				"ext.campaignEvents.specialPages/eventdetails/Worklist.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistTableControls.vue",
-				"ext.campaignEvents.specialPages/eventdetails/WorklistPageData.js",
-				"ext.campaignEvents.specialPages/eventdetails/WorklistQuality.js",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistApp.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/WorklistArticleCard.vue",
 				"ext.campaignEvents.specialPages/eventdetails/components/AddWorklistArticleDialog.vue",
@@ -570,13 +580,6 @@
 				"campaignevents-event-details-worklist-load-error",
 				"campaignevents-event-details-worklist-card-added",
 				"campaignevents-event-details-worklist-card-added-recent",
-				"campaignevents-event-details-worklist-card-signal-refs",
-				"campaignevents-event-details-worklist-card-signal-wikilinks",
-				"campaignevents-event-details-worklist-card-signal-headings",
-				"campaignevents-event-details-worklist-card-signal-media",
-				"campaignevents-event-details-worklist-card-signal-infobox",
-				"campaignevents-event-details-worklist-card-signal-categories",
-				"campaignevents-event-details-worklist-card-signal-characters",
 				"campaignevents-event-details-worklist-card-signals",
 				"campaignevents-event-details-worklist-search-placeholder",
 				"campaignevents-event-details-worklist-search-no-results",
