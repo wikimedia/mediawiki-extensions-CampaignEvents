@@ -23,9 +23,18 @@ describe( 'ViewCount', () => {
 		[ 1000000, '(campaignevents-card-views-millions, 1)' ],
 		[ 2400000, '(campaignevents-card-views-millions, 2)' ]
 	] )( 'shows %s as %s', ( count, shown ) => {
-		// The text starts with the label of the icon.
-		expect( mountCount( count ).get( COUNT ).text() )
-			.toBe( '(campaignevents-card-views-label)' + shown );
+		// The figure, the exact count for PLURAL, and the days of the window.
+		expect( mountCount( count ).get( COUNT ).text() ).toBe(
+			'(campaignevents-card-views, ' + shown + ', ' + count + ', 30)'
+		);
+	} );
+
+	it( 'names the period that the page data loader asks for', () => {
+		const { WINDOW_DAYS } = require(
+			'../../../resources/ext.campaignEvents.cardElements/pageDataLoader.js'
+		);
+		expect( WINDOW_DAYS ).toBe( 30 );
+		expect( mountCount( 40 ).get( COUNT ).text() ).toMatch( /, 30\)$/ );
 	} );
 
 	it( 'shows the figure in the digits of the reader', () => {
@@ -47,10 +56,10 @@ describe( 'ViewCount', () => {
 		expect( wrapper.get( COUNT ).text() ).toContain( '40' );
 	} );
 
-	it( 'names the count with the icon, because the figure has no words', () => {
-		// Without a label, a screen reader reads "10" and nothing tells what it counts.
+	it( 'hides the icon from screen readers, because the text names the count', () => {
+		// Otherwise a screen reader would read the same thing twice.
 		const icon = mountCount( 10 ).get( 'svg' );
-		expect( icon.attributes( 'aria-hidden' ) ).toBeUndefined();
+		expect( icon.attributes( 'aria-hidden' ) ).toBe( 'true' );
 	} );
 
 	it( 'puts the icon before the figure, as in the design', () => {

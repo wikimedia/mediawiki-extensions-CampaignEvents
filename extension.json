@@ -415,7 +415,7 @@
 				}
 			],
 			"messages": [
-				"campaignevents-card-views-label",
+				"campaignevents-card-views",
 				"campaignevents-card-views-thousands",
 				"campaignevents-card-views-millions",
 				"campaignevents-card-impact-high",
@@ -432,7 +432,8 @@
 			"dependencies": [
 				"vue",
 				"mediawiki.api",
-				"mediawiki.ForeignApi"
+				"mediawiki.ForeignApi",
+				"mediawiki.jqueryMsg"
 			]
 		},
 		"ext.campaignEvents.specialPages": {

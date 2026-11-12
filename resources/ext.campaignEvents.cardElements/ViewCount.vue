@@ -2,12 +2,11 @@
 	<span v-if="text" class="ext-campaignevents-view-count">
 		<!-- A line of text, not a box, so that the count is on the same baseline as the text
 			after it, and wraps with it. -->
-		<!-- The figure has no words, so the icon tells what the figure counts. The icon has a
-			label, or a screen reader reads "20k" and nothing tells what it counts. -->
+		<!-- No label: the text tells what the figure counts, so Codex hides the icon from
+			screen readers. -->
 		<cdx-icon
 			class="ext-campaignevents-view-count__icon"
 			:icon="cdxIconChartLine"
-			:icon-label="label"
 			size="small"
 		></cdx-icon>{{ text }}
 	</span>
@@ -17,6 +16,7 @@
 const { computed, defineComponent } = require( 'vue' );
 const { CdxIcon } = require( './codex.js' );
 const { cdxIconChartLine } = require( './icons.json' );
+const { WINDOW_DAYS } = require( './pageDataLoader.js' );
 
 /** Counts of 1,000 and more are shortened. The suffix is a message, not a letter in code. */
 const THOUSAND = 1000;
@@ -48,7 +48,7 @@ function shorten( count ) {
 }
 
 /**
- * How often an article is read, as a short figure with a chart icon.
+ * How often an article is read, with a chart icon. For example: "20k views (30 days)".
  *
  * The card gives the count. The component shows nothing when there is no count: while the
  * count loads, when the wiki has no count, or when the request fails. It sets no layout: the
@@ -66,15 +66,22 @@ module.exports = exports = defineComponent( {
 		}
 	},
 	setup( props ) {
-		const text = computed(
-			() => typeof props.count === 'number' && isFinite( props.count ) ?
-				shorten( props.count ) :
-				''
-		);
+		const text = computed( () => {
+			if ( typeof props.count !== 'number' || !isFinite( props.count ) ) {
+				return '';
+			}
+			// The exact count is for PLURAL, so that the word agrees with the count, not with
+			// the shortened figure.
+			return mw.msg(
+				'campaignevents-card-views',
+				shorten( props.count ),
+				props.count,
+				mw.language.convertNumber( WINDOW_DAYS )
+			);
+		} );
 
 		return {
 			text,
-			label: mw.msg( 'campaignevents-card-views-label' ),
 			cdxIconChartLine
 		};
 	}

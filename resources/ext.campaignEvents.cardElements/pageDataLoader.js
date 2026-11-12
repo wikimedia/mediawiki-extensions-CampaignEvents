@@ -267,6 +267,8 @@
 	module.exports = {
 		fetchPageData,
 		usePageData,
+		// For ViewCount.vue, which names the period of the count.
+		WINDOW_DAYS,
 		// Exported for the tests, which pin the window the figure covers.
 		summarise,
 		thumbnailOf,
