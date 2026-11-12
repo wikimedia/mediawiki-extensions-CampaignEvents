@@ -88,36 +88,26 @@
 				></view-count>
 
 				<!-- What the article most needs, from the per-element scores behind its quality
-					rating. The first is shown in full and the rest summarised, so that a card with
-					six weaknesses is no taller than one with a single weakness. -->
-				<!-- `dir="auto"` because a signal is in the reader's language, which may run the
-					other way from the card around it. -->
-				<span
-					v-if="signals.length"
+					rating. Hidden entirely when there are none. -->
+				<article-signals
 					class="ext-campaignevents-worklist-card__signals"
-					dir="auto"
-				>
-					<cdx-icon
-						class="ext-campaignevents-worklist-card__signals-icon"
-						:icon="cdxIconLightbulbOutline"
-						size="small"
-					></cdx-icon>{{ signalsText }}
-				</span>
+					:signals="signals"
+				></article-signals>
 			</template>
 		</cdx-card>
 	</li>
 </template>
 
 <script>
-const { computed, defineComponent } = require( 'vue' );
+const { defineComponent } = require( 'vue' );
 const { CdxButton, CdxCard, CdxIcon } = require( '../../../codex.js' );
-const { ImpactChip, ViewCount } = require( 'ext.campaignEvents.cardElements' );
-const { cdxIconLightbulbOutline, cdxIconTrash } = require( '../../../icons.json' );
+const { ArticleSignals, ImpactChip, ViewCount } = require( 'ext.campaignEvents.cardElements' );
+const { cdxIconTrash } = require( '../../../icons.json' );
 
 // @vue/component
 module.exports = exports = defineComponent( {
 	name: 'WorklistArticleCard',
-	components: { CdxButton, CdxCard, CdxIcon, ImpactChip, ViewCount },
+	components: { ArticleSignals, CdxButton, CdxCard, CdxIcon, ImpactChip, ViewCount },
 	props: {
 		article: {
 			type: Object,
@@ -157,25 +147,9 @@ module.exports = exports = defineComponent( {
 		}
 	},
 	emits: [ 'remove' ],
-	setup( props ) {
-		// Only the first signal is written out; the rest are counted. One message rather than
-		// two joined here, so that the wording between them, the word order and the plural form
-		// of the count are all the translator's to decide. A lone signal is shown on its own,
-		// which keeps the message free of a branch for a count that can never be anything.
-		const signalsText = computed( () => {
-			const first = props.signals[ 0 ] || '';
-			const more = Math.max( props.signals.length - 1, 0 );
-			return more ? mw.msg(
-				'campaignevents-event-details-worklist-card-signals',
-				first,
-				mw.language.convertNumber( more )
-			) : first;
-		} );
-
+	setup() {
 		return {
-			signalsText,
 			removeLabel: mw.msg( 'campaignevents-worklist-table-remove-button-label' ),
-			cdxIconLightbulbOutline,
 			cdxIconTrash
 		};
 	}

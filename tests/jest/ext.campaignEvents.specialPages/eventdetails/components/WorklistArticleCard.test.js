@@ -88,33 +88,13 @@ describe( 'WorklistArticleCard', () => {
 		expect( mountCard().find( SIGNALS ).exists() ).toBe( false );
 	} );
 
-	it( 'writes a single signal out in full', () => {
-		const card = mountCard( { signals: [ 'Needs more citations' ] } );
-		expect( card.get( SIGNALS ).text() ).toContain( 'Needs more citations' );
-	} );
-
-	it( 'names the first signal and counts the rest, in one message', () => {
-		// The card stays the same height however many weaknesses an article has. One message,
-		// so the count and the punctuation joining it are the translator's to place.
-		const card = mountCard( {
-			signals: [ 'Needs more citations', 'Needs images', 'Needs an infobox' ]
-		} );
+	it( 'shows the signals of the article', () => {
+		// ArticleSignals.test.js tests the text. This test checks that the card gives the
+		// signals.
+		const card = mountCard( { signals: [ 'Needs more citations', 'Needs images' ] } );
 		expect( card.get( SIGNALS ).text() ).toBe(
-			'(campaignevents-event-details-worklist-card-signals, Needs more citations, 2)'
+			'(campaignevents-event-details-worklist-card-signals, Needs more citations, 1)'
 		);
-	} );
-
-	it( 'shows a lone signal on its own, with no count', () => {
-		// Nothing to count, so the joining message is not used at all and translators never see
-		// a branch for a number that cannot occur.
-		const card = mountCard( { signals: [ 'Needs images' ] } );
-		expect( card.get( SIGNALS ).text() ).toBe( 'Needs images' );
-	} );
-
-	it( 'keeps the lightbulb out of the accessibility tree', () => {
-		// It repeats what the words beside it say, so announcing it would say everything twice.
-		const card = mountCard( { signals: [ 'Needs images' ] } );
-		expect( card.get( SIGNALS ).find( 'svg' ).attributes( 'aria-hidden' ) ).toBe( 'true' );
 	} );
 
 	it( 'links the title to the article', () => {

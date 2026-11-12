@@ -14,6 +14,7 @@ const pageDataLoader = require( './pageDataLoader.js' );
 module.exports = {
 	ImpactChip: require( './ImpactChip.vue' ),
 	ViewCount: require( './ViewCount.vue' ),
+	ArticleSignals: require( './ArticleSignals.vue' ),
 	useQuality: qualityLoader.useQuality,
 	usePageData: pageDataLoader.usePageData
 };
