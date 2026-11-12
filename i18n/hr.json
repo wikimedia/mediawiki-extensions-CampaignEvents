@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Neptune, the Mystic"
+			"Neptune, the Mystic",
+			"MaGa"
 		]
 	},
 	"nstab-event": "Događaj",
@@ -28,7 +29,7 @@
 	"campaignevents-edit-field-country-placeholder": "Izaberite državu",
 	"campaignevents-edit-field-address": "Adresa",
 	"campaignevents-edit-form-questions-label": "Pitanja za sudionike",
-	"campaignevents-edit-too-many-organizers": "Ne možete dodati više od $1 organizatora.",
+	"campaignevents-edit-too-many-organizers": "Ne možete dodati više od $1 {{PLURAL:$1|organizatora}}.",
 	"campaignevents-edit-invalid-username": "»$1« nije valjano suradničko ime.",
 	"campaignevents-register-edit-btn": "Spremi promjene",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Da",
