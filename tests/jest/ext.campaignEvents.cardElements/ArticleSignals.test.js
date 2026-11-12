@@ -25,7 +25,7 @@ describe( 'ArticleSignals', () => {
 		// count and the words between are for the translator to place.
 		const signals = mountSignals( [ 'Needs more citations', 'Needs images', 'Needs an infobox' ] );
 		expect( signals.get( SIGNALS ).text() ).toBe(
-			'(campaignevents-event-details-worklist-card-signals, Needs more citations, 2)'
+			'(campaignevents-card-signals, Needs more citations, 2)'
 		);
 	} );
 

@@ -359,7 +359,7 @@
 	"campaignevents-card-signal-infobox": "Needs an infobox",
 	"campaignevents-card-signal-categories": "Needs more categories",
 	"campaignevents-card-signal-characters": "Needs expanding",
-	"campaignevents-event-details-worklist-card-signals": "$1 and {{PLURAL:$2|$2 more}}",
+	"campaignevents-card-signals": "$1 and {{PLURAL:$2|$2 more}}",
 	"campaignevents-event-details-worklist-search-placeholder": "Search pages",
 	"campaignevents-event-details-worklist-search-no-results": "No pages in this worklist match your search.",
 	"campaignevents-event-details-worklist-first-page": "First",

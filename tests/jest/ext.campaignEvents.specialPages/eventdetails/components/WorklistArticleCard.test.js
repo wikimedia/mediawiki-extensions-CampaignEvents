@@ -93,7 +93,7 @@ describe( 'WorklistArticleCard', () => {
 		// signals.
 		const card = mountCard( { signals: [ 'Needs more citations', 'Needs images' ] } );
 		expect( card.get( SIGNALS ).text() ).toBe(
-			'(campaignevents-event-details-worklist-card-signals, Needs more citations, 1)'
+			'(campaignevents-card-signals, Needs more citations, 1)'
 		);
 	} );
 

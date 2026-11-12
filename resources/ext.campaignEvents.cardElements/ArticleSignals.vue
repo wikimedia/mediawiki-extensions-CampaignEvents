@@ -52,7 +52,7 @@ module.exports = exports = defineComponent( {
 			const first = props.signals[ 0 ] || '';
 			const more = Math.max( props.signals.length - 1, 0 );
 			return more ? mw.msg(
-				'campaignevents-event-details-worklist-card-signals',
+				'campaignevents-card-signals',
 				first,
 				mw.language.convertNumber( more )
 			) : first;
