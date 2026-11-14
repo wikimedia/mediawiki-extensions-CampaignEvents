@@ -145,7 +145,7 @@ class EmailParticipantsModule {
 		);
 
 		$fields[] = new FieldLayout(
-			new MultiLineTextInputWidget( [
+			new MultilineTextInputWidget( [
 				'placeholder' => $msgFormatter->format(
 					MessageValue::new( 'campaignevents-event-details-email-message-placeholder' )
 				),
