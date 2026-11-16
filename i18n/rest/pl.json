@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"PanWor",
 			"Woytecr"
 		]
 	},
@@ -20,5 +21,6 @@
 	"campaignevents-rest-register-invalid-answer": "Nieprawidłowa odpowiedź na pytanie $1",
 	"campaignevents-rest-register-for-event-nonlocal-error-message": "Proszę o ukończenie rejestracji na wydarzenie na $1, czyli wiki, gdzie utworzono to wydarzenie.",
 	"campaignevents-rest-delete-event-nonlocal-error-message": "Proszę usunąć swoją rejestrację na wydarzenie na $1, czyli wiki, gdzie wydarzenie zostało utworzone.",
-	"campaignevents-rest-email-participants-nonlocal-error-message": "Proszę wysłać e-mail do uczestników na $1, czyli wiki, gdzie wydarzenie zostało utworzone."
+	"campaignevents-rest-email-participants-nonlocal-error-message": "Proszę wysłać e-mail do uczestników na $1, czyli wiki, gdzie wydarzenie zostało utworzone.",
+	"campaignevents-rest-get-pages-quality-desc": "Zwraca ocenę jakości żądanych stron w jednej wiki, przyznaną na podstawie modelu oceny jakości artykułów Wikimedia Foundation, niezależnego od języka. Strony, których model nie jest w stanie ocenić, są pomijane, dlatego w odpowiedzi może znajdować się mniej stron niż tych, o które poproszono."
 }
