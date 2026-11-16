@@ -58,14 +58,17 @@ class ReadingListsHandlerTest extends MediaWikiUnitTestCase {
 	}
 
 	public static function provideOnSpecialPageBeforeExecute(): Generator {
+		$page = ReadingListsHandler::SPECIAL_PAGE_NAME;
 		yield 'Another special page' => [ 'Watchlist', true, true, null, false ];
-		yield 'Flag off' => [ 'ReadingLists', false, true, null, false ];
-		yield 'Not named (anonymous or temporary user)' => [ 'ReadingLists', true, false, null, false ];
-		yield 'No edits' => [ 'ReadingLists', true, true, 0, false ];
+		// getName() returns the canonical name, so the old alias never matches.
+		yield 'Old page name' => [ 'ReadingLists', true, true, null, false ];
+		yield 'Flag off' => [ $page, false, true, null, false ];
+		yield 'Not named (anonymous or temporary user)' => [ $page, true, false, null, false ];
+		yield 'No edits' => [ $page, true, true, 0, false ];
 		yield 'One edit less than the minimum' => [
-			'ReadingLists', true, true, ReadingListsHandler::MIN_GLOBAL_EDITS - 1, false
+			$page, true, true, ReadingListsHandler::MIN_GLOBAL_EDITS - 1, false
 		];
-		yield 'Exactly the minimum' => [ 'ReadingLists', true, true, ReadingListsHandler::MIN_GLOBAL_EDITS, true ];
-		yield 'More than the minimum' => [ 'ReadingLists', true, true, 1000, true ];
+		yield 'Exactly the minimum' => [ $page, true, true, ReadingListsHandler::MIN_GLOBAL_EDITS, true ];
+		yield 'More than the minimum' => [ $page, true, true, 1000, true ];
 	}
 }

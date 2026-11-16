@@ -1,5 +1,5 @@
 /**
- * CampaignEvents features on Special:ReadingLists.
+ * CampaignEvents features on Special:Saved.
  *
  * ReadingListsHandler adds this module to the special page. All the code of the features is in
  * CampaignEvents. The ReadingLists extension has no code for them.

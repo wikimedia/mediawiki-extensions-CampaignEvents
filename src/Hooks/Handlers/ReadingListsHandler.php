@@ -9,7 +9,7 @@ use MediaWiki\Extension\CampaignEvents\MWEntity\GlobalEditCountLookup;
 use MediaWiki\SpecialPage\Hook\SpecialPageBeforeExecuteHook;
 
 /**
- * Adds the CampaignEvents features to Special:ReadingLists.
+ * Adds the CampaignEvents features to Special:Saved.
  *
  * The hook is in core, so the ReadingLists extension has no code for these features. When
  * ReadingLists is not installed, the special page does not exist, and this handler does
@@ -30,6 +30,9 @@ class ReadingListsHandler implements SpecialPageBeforeExecuteHook {
 	/** The number of global edits that a user must have to see the editing signals. */
 	public const MIN_GLOBAL_EDITS = 3;
 
+	/** The canonical name of the ReadingLists special page. */
+	public const SPECIAL_PAGE_NAME = 'Saved';
+
 	public function __construct(
 		private readonly Config $config,
 		private readonly GlobalEditCountLookup $globalEditCountLookup,
@@ -40,7 +43,7 @@ class ReadingListsHandler implements SpecialPageBeforeExecuteHook {
 	 * @inheritDoc
 	 */
 	public function onSpecialPageBeforeExecute( $special, $subPage ) {
-		if ( $special->getName() !== 'ReadingLists' ) {
+		if ( $special->getName() !== self::SPECIAL_PAGE_NAME ) {
 			return;
 		}
 		if ( !$this->config->get( 'CampaignEventsEnableReadingListsCardElements' ) ) {
