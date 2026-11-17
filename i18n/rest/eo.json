@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gilbert Ndihokubwayo"
+			"Gilbert Ndihokubwayo",
+			"Afrib"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Estas neniu evento kun ĉi tiu ID.",
