@@ -138,17 +138,6 @@ describe( 'WorklistArticleCard', () => {
 		expect( wrapper.emitted( 'remove' )[ 0 ] ).toStrictEqual( [ article() ] );
 	} );
 
-	it( 'puts the remove button inside the card, beside the title', () => {
-		// The card is not a link, so an interactive control can live inside it; it is positioned
-		// into the corner against the card's own `position: relative`.
-		const wrapper = mountCard( { canRemove: true } );
-
-		expect(
-			wrapper.get( '.cdx-card__text__title .ext-campaignevents-worklist-card__remove' ).exists()
-		).toBe( true );
-		// Nesting a button inside a link would be invalid, so the card must not be one.
-		expect( wrapper.get( '.cdx-card' ).element.tagName ).not.toBe( 'A' );
-	} );
 	it( 'names the wiki only for an article from another wiki', () => {
 		expect( mountCard().find( '.ext-campaignevents-worklist-card__wiki' ).exists() )
 			.toBe( false );

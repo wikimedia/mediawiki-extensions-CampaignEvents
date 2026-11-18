@@ -1,17 +1,5 @@
 <template>
 	<li class="ext-campaignevents-worklist-card">
-		<!-- How much the article could gain from being worked on, across the top of the card
-			because it is what the reader is scanning for. Outside the Codex card rather than in
-			its title slot: that slot sits in the text column beside the thumbnail, which would
-			put the chip alongside the image instead of above it. The card's own frame is
-			therefore drawn by this element. Framed as the size of the opportunity, not as a
-			fault — the words carry the difference and every band looks the same, because
-			grading them by colour would rank one reader's article above another's. -->
-		<impact-chip
-			class="ext-campaignevents-worklist-card__impact"
-			:band="impactBand"
-		></impact-chip>
-
 		<!-- No `url`: the card is a plain element rather than a link, so the remove control can
 			sit inside it and the title can carry the red-link class of its own. -->
 		<!-- Every card carries a thumbnail slot whether or not the article has an image, so the
@@ -22,21 +10,15 @@
 			:thumbnail="image"
 			force-thumbnail
 		>
-			<template #title>
-				<!-- The server renders the link, so a page still to be created carries core's
-					red-link class and an article on another wiki carries `external`, exactly as in
-					the worklist table. A title the wiki cannot parse has no URL to link to, and an
-					empty href would send the reader back to the page they are on. -->
-				<a
-					v-if="article.url"
-					:class="article.classes"
-					:href="article.url"
-				>{{ article.title }}</a>
-				<span v-else>{{ article.title }}</span>
-
-				<!-- Positioned into the card's corner against the `position: relative` the Codex
-					card already carries. It sits in this slot rather than a later one so that it
-					is read straight after the article it removes. -->
+			<template v-if="impactBand" #header-start>
+				<!-- How much the article could gain from being worked on, across the top of the
+					card because it is what the reader is scanning for. -->
+				<impact-chip
+					class="ext-campaignevents-worklist-card__impact"
+					:band="impactBand"
+				></impact-chip>
+			</template>
+			<template v-if="canRemove" #header-end>
 				<cdx-button
 					v-if="canRemove"
 					class="ext-campaignevents-worklist-card__remove"
@@ -48,6 +30,18 @@
 				>
 					<cdx-icon :icon="cdxIconTrash"></cdx-icon>
 				</cdx-button>
+			</template>
+			<template #title>
+				<!-- The server renders the link, so a page still to be created carries core's
+					red-link class and an article on another wiki carries `external`, exactly as in
+					the worklist table. A title the wiki cannot parse has no URL to link to, and an
+					empty href would send the reader back to the page they are on. -->
+				<a
+					v-if="article.url"
+					:class="article.classes"
+					:href="article.url"
+				>{{ article.title }}</a>
+				<span v-else>{{ article.title }}</span>
 			</template>
 
 			<!-- Left out entirely when there is no description: the card renders its container,
