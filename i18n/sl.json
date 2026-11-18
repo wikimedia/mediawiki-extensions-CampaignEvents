@@ -335,6 +335,7 @@
 	"campaignevents-event-details-worklist-add-dialog-submit": "Dodaj",
 	"campaignevents-event-details-worklist-add-dialog-success": "{{PLURAL:$1|Članek je bil dodan|Članki so bili dodani}} na delovni seznam. {{PLURAL:$1|Nov članek se bo pojavil|Novi članki se bodo pojavili}} v nekaj sekundah.",
 	"campaignevents-event-details-worklist-add-dialog-error": "Člankov ni bilo mogoče dodati na delovni seznam: $1",
+	"campaignevents-card-views": "$1 {{PLURAL:$2|ogled|ogleda|ogledi|ogledov}} ($3 {{PLURAL:$3|dan|dni}})",
 	"campaignevents-worklist-table-header": "Delovni seznam",
 	"campaignevents-worklist-table-article-column-header": "Stran",
 	"campaignevents-worklist-table-wiki-column-header": "Viki",
