@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wikuiser"
+		]
+	},
+	"campaignevents-card-views": "$1 $2 {{PLURAL:$2|қаралым}} ($3 {{PLURAL:$3|күн}})"
+}

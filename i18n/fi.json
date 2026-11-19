@@ -348,6 +348,7 @@
 	"campaignevents-event-details-worklist-loading": "Ladataan sivuja…",
 	"campaignevents-event-details-worklist-history-button-label": "Näytä historia",
 	"campaignevents-event-details-worklist-load-error": "Työlistaa ei voitu ladata. $1",
+	"campaignevents-card-views": "$1 {{PLURAL:$2| näyttökerta|näyttökertaa}} ( $3 {{PLURAL:$3| päivä|päivää}})",
 	"campaignevents-event-details-worklist-card-added": "Lisättiin $1",
 	"campaignevents-event-details-worklist-card-added-recent": "Lisätty vähän aikaa sitten",
 	"campaignevents-card-impact-high": "Korkea vaikutusmahdollisuus",
