@@ -269,7 +269,7 @@
 	"campaignevents-event-details-participants-private": "$1 {{PLURAL:$1|người tham gia}} đã đăng ký ẩn danh.",
 	"campaignevents-event-details-dates": "$1 đến $4",
 	"campaignevents-event-details-timezone": "<strong>Múi giờ:</strong> $1",
-	"campaignevents-event-details-participation-options-header": "Các lựa chọn tham gia",
+	"campaignevents-event-details-participation-options-header": "Các hình thức tham gia",
 	"campaignevents-event-details-in-person-event-label": "Sự kiện trực tiếp",
 	"campaignevents-event-details-online-label": "Sự kiện trực tuyến",
 	"campaignevents-event-details-tracking-tool-p&e-dashboard-synced": "Tên thành viên của người tham gia đã được cập nhật trên Bảng điều khiển",

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gilbert Ndihokubwayo"
+			"Gilbert Ndihokubwayo",
+			"Afrib"
 		]
 	},
 	"campaignevents-rest-event-not-found": "Nta gikorwa kiriho kuri ino ndangakintu.",
