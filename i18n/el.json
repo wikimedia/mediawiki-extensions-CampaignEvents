@@ -8,7 +8,8 @@
 			"MDShanks",
 			"Norhorn",
 			"Pablothecat",
-			"Spyridon Eftychios Kokotos"
+			"Spyridon Eftychios Kokotos",
+			"Warudo"
 		]
 	},
 	"campaignevents-desc": "Παρέχει λειτουργίες για τους διοργανωτές και τους συμμετέχοντες στην εκστρατεία.",
@@ -150,7 +151,7 @@
 	"campaignevents-eventpage-register-notification-more": "Επισκεφθείτε τη <strong>[[Special:AllEvents|λίστα Συνεργασιών]]</strong> για να βρείτε περισσότερες εκδηλώσεις και κοινότητες.",
 	"campaignevents-eventpage-register-notification-edit": "Τα στοιχεία εγγραφής σας ενημερώθηκαν.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Ακύρωση εγγραφής",
-	"campaignevents-eventpage-unregister-confirmation-body": "Είστε σίγουροι ότι θέλετε να ακυρώσετε την εγγραφή σας;",
+	"campaignevents-eventpage-unregister-confirmation-body": "Είστε {{GENDER:|σίγουρος|σίγουρη}} ότι θέλετε να ακυρώσετε την εγγραφή σας;",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ναι",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Όχι",
 	"campaignevents-eventpage-register-dialog-register": "Εγγραφή",
