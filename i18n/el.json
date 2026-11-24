@@ -8,7 +8,8 @@
 			"Pablothecat",
 			"Spyridon Eftychios Kokotos",
 			"Jimkats",
-			"Geraki"
+			"Geraki",
+			"Warudo"
 		]
 	},
 	"campaignevents-desc": "Παρέχει λειτουργίες για τους διοργανωτές και τους συμμετέχοντες στην εκστρατεία.",
@@ -113,7 +114,7 @@
 	"campaignevents-eventpage-register-notification": "Είστε πλέον εγγεγραμμένος/η για $1 .",
 	"campaignevents-eventpage-register-notification-edit": "Τα στοιχεία εγγραφής σας ενημερώθηκαν.",
 	"campaignevents-eventpage-unregister-confirmation-title": "Ακύρωση εγγραφής",
-	"campaignevents-eventpage-unregister-confirmation-body": "Είστε σίγουροι ότι θέλετε να ακυρώσετε την εγγραφή σας;",
+	"campaignevents-eventpage-unregister-confirmation-body": "Είστε {{GENDER:|σίγουρος|σίγουρη}} ότι θέλετε να ακυρώσετε την εγγραφή σας;",
 	"campaignevents-eventpage-unregister-confirmation-confirm": "Ναι",
 	"campaignevents-eventpage-unregister-confirmation-dismiss": "Όχι",
 	"campaignevents-eventpage-register-dialog-register": "Εγγραφή",
