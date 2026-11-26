@@ -178,6 +178,7 @@
 	"campaignevents-register-error-event-not-found": "没有此ID的活动。",
 	"campaignevents-register-success": "您已完成活动报名。",
 	"campaignevents-register-success-edit": "已更新您的报名信息。",
+	"campaignevents-register-back-to-event-page": "返回活动页面",
 	"campaignevents-register-confirmation-top": "确认报名",
 	"campaignevents-register-edit-legend": "编辑报名",
 	"campaignevents-register-confirmation-btn": "报名",

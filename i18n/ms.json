@@ -158,6 +158,7 @@
 	"campaignevents-register-error-event-not-found": "Tidak wujud acara dengan ID ini.",
 	"campaignevents-register-success": "Anda kini berdaftar untuk acara ini.",
 	"campaignevents-register-success-edit": "Maklumat pendaftaran anda telah dikemas kini.",
+	"campaignevents-register-back-to-event-page": "Kembali ke laman acara",
 	"campaignevents-register-confirmation-top": "Sahkan pendaftaran",
 	"campaignevents-register-edit-legend": "Sunting pendaftaran",
 	"campaignevents-register-confirmation-btn": "Daftar",
