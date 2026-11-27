@@ -163,6 +163,7 @@
 	"campaignevents-register-error-event-not-found": "Tällä tunnisteella ei ole tapahtumaa.",
 	"campaignevents-register-success": "Olet nyt ilmoittautunut tähän tapahtumaan.",
 	"campaignevents-register-success-edit": "Ilmoittautumistietosi on päivitetty.",
+	"campaignevents-register-back-to-event-page": "Takaisin tapahtumasivulle",
 	"campaignevents-register-confirmation-top": "Vahvista ilmoittautuminen",
 	"campaignevents-register-edit-legend": "Muokkaa ilmoittautumista",
 	"campaignevents-register-confirmation-btn": "Ilmoittaudu",

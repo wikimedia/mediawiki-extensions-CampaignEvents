@@ -158,6 +158,7 @@
 	"campaignevents-register-error-event-not-found": "Dogodek s tem ID-jem ne obstaja.",
 	"campaignevents-register-success": "Zdaj ste prijavljeni na ta dogodek.",
 	"campaignevents-register-success-edit": "Vaši registracijski podatki so posodobljeni.",
+	"campaignevents-register-back-to-event-page": "Nazaj na stran dogodka",
 	"campaignevents-register-confirmation-top": "Potrdite registracijo",
 	"campaignevents-register-edit-legend": "Uredi registracijo",
 	"campaignevents-register-confirmation-btn": "Prijava",
